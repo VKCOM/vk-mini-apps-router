@@ -1,0 +1,38 @@
+{
+  "name": "router-simlpe",
+  "version": "1.0.0",
+  "description": "A router lib based on @remix-run/router",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "author": "Nikita Shvyryaev",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint:js": "eslint src/ --ext ts,tsx --fix",
+    "lint:css": "stylelint \"./src/**/*.css\" --fix"
+  },
+  "peerDependencies": {
+    "@vkontakte/vk-bridge": "^2.7.2",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@vkontakte-internal/tsconfig.json": "^1.0.0",
+    "@vkontakte/eslint-config": "^3.1.0",
+    "@vkontakte/prettier-config": "^0.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "install-peers": "^1.0.4",
+    "typescript": "^4.9.5"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "dependencies": {
+    "@remix-run/router": "^1.5.0"
+  }
+}
