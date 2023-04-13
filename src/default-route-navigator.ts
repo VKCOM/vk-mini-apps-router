@@ -1,5 +1,6 @@
 import { RouteNavigator } from './contexts';
-import { Router } from '@remix-run/router';
+import { AgnosticDataRouteObject, AgnosticRouteMatch, Router } from '@remix-run/router';
+import { resolveRouteToPath } from './utils';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
@@ -8,8 +9,12 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.router = router;
   }
 
-  public push(path: string): void {
-    this.router.navigate(path);
+  public push(to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void {
+    if (typeof to === 'string') {
+      this.router.navigate(to);
+    } else {
+      this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params));
+    }
   }
 
   public replace(path: string): void {

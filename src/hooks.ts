@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { RouteContext, RouterContext, RouterContextObject } from './contexts';
-import { ActiveVkuiLocationObject, PanelRouteObject } from './type';
-import { Params } from '@remix-run/router';
+import { ActiveVkuiLocationObject } from './type';
+import { AgnosticRouteMatch, Params } from '@remix-run/router';
 
 export function useRouterContext(): RouterContextObject | null {
   return useContext(RouterContext);
@@ -26,9 +26,9 @@ export function useModalParams<T extends string = string>(): Params<T> | undefin
   return routeContext?.modalMatch?.params;
 }
 
-export function useModalParentRoute<T extends string = string>(): PanelRouteObject | undefined {
+export function useModalParentRoute<T extends string = string>(): AgnosticRouteMatch | undefined {
   const routeContext = useContext(RouteContext);
-  return routeContext?.panelMatch?.route;
+  return routeContext?.panelMatch;
 }
 
 export function useForceUpdate() {

@@ -1,9 +1,11 @@
-import { AgnosticRouteMatch, Router } from '@remix-run/router';
+import { AgnosticDataRouteObject, AgnosticRouteMatch, Router } from '@remix-run/router';
 import React from 'react';
 import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from './type';
 
 export interface RouteNavigator {
   push(path: string): void;
+  push(path: AgnosticRouteMatch<string, AgnosticDataRouteObject>): void;
+  push(path: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void;
   replace(path: string): void;
   get activeViewHistory(): string[];
 }
