@@ -1,6 +1,6 @@
 import { AgnosticRouteMatch, Router } from '@remix-run/router';
 import React from 'react';
-import { PanelRouteObject, ViewRouteObject } from './type';
+import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from './type';
 
 export interface RouteNavigator {
   push(path: string): void;
@@ -18,6 +18,7 @@ export const RouterContext = React.createContext<RouterContextObject | null>(nul
 export interface RouteContextObject {
   viewMatch?: AgnosticRouteMatch<string, ViewRouteObject> | undefined;
   panelMatch?: AgnosticRouteMatch<string, PanelRouteObject> | undefined;
+  modalMatch?: AgnosticRouteMatch<string, ModalRouteObject> | undefined;
 }
 
 export const RouteContext = React.createContext<RouteContextObject | null>(null);

@@ -8,6 +8,8 @@ export {
   useRouterContext,
   useActiveVkuiLocation,
   usePanelParams,
+  useModalParams,
+  useModalParentRoute,
 } from './hooks';
 
 export function createHashRouter(

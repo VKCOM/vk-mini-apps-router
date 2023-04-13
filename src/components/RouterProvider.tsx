@@ -2,7 +2,7 @@ import { AgnosticRouteMatch, matchRoutes, Router } from '@remix-run/router';
 import { RouteContext, RouteContextObject, RouteNavigator, RouterContext } from '../contexts';
 import React from 'react';
 import { DefaultRouteNavigator } from '../default-route-navigator';
-import { PanelRouteObject, ViewRouteObject } from '../type';
+import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from '../type';
 import { useForceUpdate } from '../hooks';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
@@ -26,11 +26,13 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     }
   }, [router]);
   const location = router.state.location;
-  const matches = matchRoutes<ViewRouteObject | PanelRouteObject>(router.routes as ViewRouteObject[], location);
+  const matches = matchRoutes<ViewRouteObject | PanelRouteObject | ModalRouteObject>(router.routes as ViewRouteObject[], location);
   const routeContext: RouteContextObject = {
     viewMatch: matches?.[0] as AgnosticRouteMatch<string, ViewRouteObject>,
     panelMatch: matches?.[1] as AgnosticRouteMatch<string, PanelRouteObject>,
+    modalMatch: matches?.[2] as AgnosticRouteMatch<string, ModalRouteObject>,
   };
+  console.log(matches, router.routes);
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
     const navigator: RouteNavigator = new DefaultRouteNavigator(router);
