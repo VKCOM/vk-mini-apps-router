@@ -21,3 +21,8 @@ export interface ViewRouteObject extends NonIndexRouteObject {
 export interface PanelRouteObject extends NonIndexRouteObject {
   panel: string;
 }
+
+export interface ActiveVkuiLocationObject {
+  view?: string | null;
+  panel?: string | null;
+}
