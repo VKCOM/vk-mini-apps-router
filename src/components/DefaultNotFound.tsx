@@ -8,7 +8,7 @@ const DivStyles = {
   overflow: 'hidden',
   margin: '0',
   cursor: 'pointer',
-}
+};
 
 export type DefaultNotFoundProps = {
   navigator: RouteNavigator;

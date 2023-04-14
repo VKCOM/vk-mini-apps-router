@@ -4,14 +4,14 @@ export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: Agnos
   const parentRoutes = route.id
     .split('-')
     .reduce<AgnosticDataRouteObject[]>((acc, id) => {
-      if (!acc.length) {
-        acc.push(routes[parseInt(id)]);
-      } else {
-        const child = acc[acc.length - 1]?.children?.[parseInt(id)];
-        if (child) acc.push(child);
-      }
-      return acc;
-    }, []);
+    if (!acc.length) {
+      acc.push(routes[parseInt(id)]);
+    } else {
+      const child = acc[acc.length - 1]?.children?.[parseInt(id)];
+      if (child) acc.push(child);
+    }
+    return acc;
+  }, []);
   const pathFromRoute = parentRoutes
     .map((route) => route.path)
     .filter(Boolean)

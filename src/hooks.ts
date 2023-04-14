@@ -26,7 +26,7 @@ export function useModalParams<T extends string = string>(): Params<T> | undefin
   return routeContext?.modalMatch?.params;
 }
 
-export function useModalParentRoute<T extends string = string>(): AgnosticRouteMatch | undefined {
+export function useModalParentRoute(): AgnosticRouteMatch | undefined {
   const routeContext = useContext(RouteContext);
   return routeContext?.panelMatch;
 }

@@ -1,5 +1,4 @@
 import { AgnosticIndexRouteObject, LazyRouteFunction } from '@remix-run/router';
-import { ReactElement } from 'react';
 
 interface CommonRouteObject {
   caseSensitive?: AgnosticIndexRouteObject['caseSensitive'];
