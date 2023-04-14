@@ -1,11 +1,17 @@
 {
-  "name": "@vkontakte-internal/router-simple",
+  "name": "@vkontakte/miniapp-router",
   "version": "1.0.0",
-  "description": "A router lib based on @remix-run/router",
+  "description": "React-роутер для мини-приложений ВКонтакте, построенных на VKUI",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
-  "author": "Nikita Shvyryaev",
-  "license": "MIT",
+  "author": "VK Team <https://vk.com/team>",
+  "license": "UNLICENSED",
+  "contributors": [
+    {
+      "name": "Nikita Shvyryaev",
+      "url": "https://vk.com/shvyryaevng"
+    }
+  ],
   "scripts": {
     "build": "tsc",
     "lint:js": "eslint src/ --ext ts,tsx --fix",
