@@ -32,7 +32,6 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     panelMatch: matches?.[1] as AgnosticRouteMatch<string, PanelRouteObject>,
     modalMatch: matches?.[2] as AgnosticRouteMatch<string, ModalRouteObject>,
   };
-  console.log(matches, router.routes);
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
     const navigator: RouteNavigator = new DefaultRouteNavigator(router);
