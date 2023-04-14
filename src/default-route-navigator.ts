@@ -1,5 +1,5 @@
 import { RouteNavigator } from './contexts';
-import { AgnosticDataRouteObject, AgnosticRouteMatch, Router } from '@remix-run/router';
+import { AgnosticDataRouteObject, AgnosticRouteMatch, Router, RouterNavigateOptions } from '@remix-run/router';
 import { resolveRouteToPath } from './utils';
 
 export class DefaultRouteNavigator implements RouteNavigator {
@@ -10,15 +10,22 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public push(to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void {
-    if (typeof to === 'string') {
-      this.router.navigate(to);
-    } else {
-      this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params));
-    }
+    this.navigate(to);
   }
 
-  public replace(path: string): void {
-    this.router.navigate(path, { replace: true });
+  public replace(to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void {
+    this.navigate(to, { replace: true });
+  }
+
+  private async navigate(
+    to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>,
+    opts?: RouterNavigateOptions | undefined,
+  ): Promise<void> {
+    if (typeof to === 'string') {
+      await this.router.navigate(to, opts);
+    } else {
+      await this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params), opts);
+    }
   }
 
   public get activeViewHistory(): string[] {
