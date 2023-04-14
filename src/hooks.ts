@@ -13,6 +13,7 @@ export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
     view: routeContext?.viewMatch?.route.view,
     panel: routeContext?.panelMatch?.route.panel,
     modal: routeContext?.modalMatch?.route.modal,
+    panelsHistory: routeContext?.panelsHistory,
   };
 }
 

@@ -17,6 +17,10 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.navigate(to, { replace: true });
   }
 
+  public back(): void {
+    this.router.navigate(-1);
+  }
+
   private async navigate(
     to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>,
     opts?: RouterNavigateOptions | undefined,
@@ -26,10 +30,5 @@ export class DefaultRouteNavigator implements RouteNavigator {
     } else {
       await this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params), opts);
     }
-  }
-
-  public get activeViewHistory(): string[] {
-    console.log('activeViewHistory');
-    return [];
   }
 }

@@ -1,4 +1,6 @@
-import { AgnosticDataRouteObject, Params } from '@remix-run/router';
+import { AgnosticDataRouteObject, AgnosticRouteMatch, Params, RouterState } from '@remix-run/router';
+import { RouteContextObject } from './contexts';
+import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from './type';
 
 export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: AgnosticDataRouteObject[], params: Params = {}): string {
   const parentRoutes = route.id
@@ -28,4 +30,12 @@ export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: Agnos
     return acc.replace(param, params[paramName] as string);
   };
   return parameters ? parameters.reduce(paramInjector, pathFromRoute) : pathFromRoute;
+}
+
+export function getContextFromState(state: RouterState): RouteContextObject {
+  return {
+    viewMatch: state.matches[0] as AgnosticRouteMatch<string, ViewRouteObject>,
+    panelMatch: state.matches[1] as AgnosticRouteMatch<string, PanelRouteObject>,
+    modalMatch: state.matches[2] as AgnosticRouteMatch<string, ModalRouteObject>,
+  };
 }

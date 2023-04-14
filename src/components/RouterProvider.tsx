@@ -1,11 +1,11 @@
-import { AgnosticRouteMatch, matchRoutes, Router } from '@remix-run/router';
-import { RouteContext, RouteContextObject, RouteNavigator, RouterContext } from '../contexts';
-import React from 'react';
+import { Action, Router } from '@remix-run/router';
+import { RouteContext, RouteNavigator, RouterContext } from '../contexts';
+import React, { useState } from 'react';
 import { DefaultRouteNavigator } from '../default-route-navigator';
-import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from '../type';
-import { useForceUpdate } from '../hooks';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
+import { getContextFromState } from '../utils';
+import { ViewHistory } from '../view-history';
 
 export interface RouterProviderProps {
   router: Router;
@@ -15,9 +15,16 @@ export interface RouterProviderProps {
 }
 
 export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): React.ReactElement {
-  const forceUpdate = useForceUpdate();
+  const routeContext = getContextFromState(router.state);
+  const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   React.useEffect(() => {
-    router.subscribe(forceUpdate);
+    const viewHistory = new ViewHistory();
+    viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
+    setPanelsHistory(viewHistory.panelsHistory);
+    router.subscribe((state) => {
+      viewHistory.updateNavigation(state);
+      setPanelsHistory(viewHistory.panelsHistory);
+    });
     if (useBridge) {
       router.subscribe((state) => {
         const location = `${state.location.pathname}${state.location.search}${state.location.hash}`;
@@ -25,13 +32,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
       });
     }
   }, [router]);
-  const location = router.state.location;
-  const matches = matchRoutes<ViewRouteObject | PanelRouteObject | ModalRouteObject>(router.routes as ViewRouteObject[], location);
-  const routeContext: RouteContextObject = {
-    viewMatch: matches?.[0] as AgnosticRouteMatch<string, ViewRouteObject>,
-    panelMatch: matches?.[1] as AgnosticRouteMatch<string, PanelRouteObject>,
-    modalMatch: matches?.[2] as AgnosticRouteMatch<string, ModalRouteObject>,
-  };
+  routeContext.panelsHistory = panelsHistory;
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
     const navigator: RouteNavigator = new DefaultRouteNavigator(router);

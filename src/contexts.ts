@@ -5,7 +5,7 @@ import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from './type';
 export interface RouteNavigator {
   push(path: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void;
   replace(path: string): void;
-  get activeViewHistory(): string[];
+  back(): void;
 }
 
 export interface RouterContextObject {
@@ -19,6 +19,7 @@ export interface RouteContextObject {
   viewMatch?: AgnosticRouteMatch<string, ViewRouteObject> | undefined;
   panelMatch?: AgnosticRouteMatch<string, PanelRouteObject> | undefined;
   modalMatch?: AgnosticRouteMatch<string, ModalRouteObject> | undefined;
+  panelsHistory?: string[];
 }
 
 export const RouteContext = React.createContext<RouteContextObject | null>(null);

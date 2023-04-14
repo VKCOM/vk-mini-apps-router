@@ -41,4 +41,11 @@ export interface ActiveVkuiLocationObject {
   view?: string | null;
   panel?: string | null;
   modal?: string | null;
+  panelsHistory?: string[];
 }
+
+export type ViewNavigationRecord = {
+  view: string;
+  panel: string;
+  locationKey: string;
+};
