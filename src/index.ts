@@ -1,4 +1,4 @@
-import { ViewRouteObject } from './type';
+import { RootRouteObject, ViewRouteObject } from './type';
 import { createHashHistory, createRouter, Router as RemixRouter } from '@remix-run/router';
 
 export type { RouterProviderProps } from './components/RouterProvider';
@@ -12,9 +12,7 @@ export {
   useModalParentRoute,
 } from './hooks';
 
-export function createHashRouter(
-  routes: ViewRouteObject[],
-): RemixRouter {
+export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]): RemixRouter {
   return createRouter({
     history: createHashHistory(),
     routes,

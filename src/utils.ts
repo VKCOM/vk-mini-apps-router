@@ -1,6 +1,6 @@
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Params, RouterState } from '@remix-run/router';
 import { RouteContextObject } from './contexts';
-import { ModalRouteObject, PanelRouteObject, ViewRouteObject } from './type';
+import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from './type';
 
 export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: AgnosticDataRouteObject[], params: Params = {}): string {
   const parentRoutes = route.id
@@ -32,10 +32,15 @@ export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: Agnos
   return parameters ? parameters.reduce(paramInjector, pathFromRoute) : pathFromRoute;
 }
 
-export function getContextFromState(state: RouterState): RouteContextObject {
+export function getContextFromState({ matches }: RouterState): RouteContextObject {
+  const rootMatch = matches.find((item) => 'root' in item.route);
+  const viewMatch = matches.find((item) => 'view' in item.route);
+  const panelMatch = matches.find((item) => 'panel' in item.route);
+  const modalMatch = matches.find((item) => 'modal' in item.route);
   return {
-    viewMatch: state.matches[0] as AgnosticRouteMatch<string, ViewRouteObject>,
-    panelMatch: state.matches[1] as AgnosticRouteMatch<string, PanelRouteObject>,
-    modalMatch: state.matches[2] as AgnosticRouteMatch<string, ModalRouteObject>,
+    rootMatch: rootMatch as AgnosticRouteMatch<string, RootRouteObject>,
+    viewMatch: viewMatch as AgnosticRouteMatch<string, ViewRouteObject>,
+    panelMatch: panelMatch as AgnosticRouteMatch<string, PanelRouteObject>,
+    modalMatch: modalMatch as AgnosticRouteMatch<string, ModalRouteObject>,
   };
 }

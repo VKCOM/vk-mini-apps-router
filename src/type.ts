@@ -20,6 +20,12 @@ interface IndexRouteObject extends CommonRouteObject {
   index: true;
 }
 
+export interface RootRouteObject extends NonIndexRouteObject<ViewRouteObject> {
+  root: string;
+  children?: ViewRouteObject[];
+  lazy?: LazyRouteFunction<RootRouteObject>;
+}
+
 export interface ViewRouteObject extends NonIndexRouteObject<PanelRouteObject> {
   view: string;
   children?: PanelRouteObject[];
@@ -38,6 +44,7 @@ export interface ModalRouteObject extends IndexRouteObject {
 }
 
 export interface ActiveVkuiLocationObject {
+  root?: string | null;
   view?: string | null;
   panel?: string | null;
   modal?: string | null;

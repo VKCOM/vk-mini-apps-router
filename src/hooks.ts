@@ -10,6 +10,7 @@ export function useRouterContext(): RouterContextObject | null {
 export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
   const routeContext = useContext(RouteContext);
   return {
+    root: routeContext?.rootMatch?.route.root,
     view: routeContext?.viewMatch?.route.view,
     panel: routeContext?.panelMatch?.route.panel,
     modal: routeContext?.modalMatch?.route.modal,
