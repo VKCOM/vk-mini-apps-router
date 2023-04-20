@@ -32,15 +32,17 @@ export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: Agnos
   return parameters ? parameters.reduce(paramInjector, pathFromRoute) : pathFromRoute;
 }
 
-export function getContextFromState({ matches }: RouterState): RouteContextObject {
-  const rootMatch = matches.find((item) => 'root' in item.route);
-  const viewMatch = matches.find((item) => 'view' in item.route);
-  const panelMatch = matches.find((item) => 'panel' in item.route);
-  const modalMatch = matches.find((item) => 'modal' in item.route);
+export function getContextFromState(state: RouterState): RouteContextObject {
+  const rootMatch = state.matches.find((item) => 'root' in item.route);
+  const viewMatch = state.matches.find((item) => 'view' in item.route);
+  const panelMatch = state.matches.find((item) => 'panel' in item.route);
+  const modalMatch = state.matches.find((item) => 'modal' in item.route);
   return {
+    state,
     rootMatch: rootMatch as AgnosticRouteMatch<string, RootRouteObject>,
     viewMatch: viewMatch as AgnosticRouteMatch<string, ViewRouteObject>,
     panelMatch: panelMatch as AgnosticRouteMatch<string, PanelRouteObject>,
     modalMatch: modalMatch as AgnosticRouteMatch<string, ModalRouteObject>,
+    panelsHistory: [],
   };
 }

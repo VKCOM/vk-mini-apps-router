@@ -10,7 +10,8 @@ export {
   usePanelParams,
   useModalParams,
   useModalParentRoute,
-} from './hooks';
+} from './hooks/hooks';
+export { useSearchParams } from './hooks/useSearchParams';
 
 export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]): RemixRouter {
   return createRouter({
