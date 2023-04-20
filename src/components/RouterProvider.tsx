@@ -26,6 +26,11 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
       setPanelsHistory(viewHistory.panelsHistory);
     });
     if (useBridge) {
+      bridge.subscribe((event) => {
+        if (event.detail.type === 'VKWebAppChangeFragment') {
+          router.navigate(event.detail.data.location, { replace: true });
+        }
+      });
       router.subscribe((state) => {
         const location = `${state.location.pathname}${state.location.search}${state.location.hash}`;
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
