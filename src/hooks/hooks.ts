@@ -3,7 +3,7 @@ import { RouteContext, RouterContext, RouterContextObject } from '../contexts';
 import { ActiveVkuiLocationObject } from '../type';
 import { AgnosticRouteMatch, Location, Params } from '@remix-run/router';
 
-export function useRouterContext(): RouterContextObject | null {
+export function useRouterContext(): RouterContextObject {
   return useContext(RouterContext);
 }
 
