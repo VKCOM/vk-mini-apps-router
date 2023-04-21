@@ -44,10 +44,10 @@ export interface ModalRouteObject extends IndexRouteObject {
 }
 
 export interface ActiveVkuiLocationObject {
-  root?: string | null;
-  view?: string | null;
-  panel?: string | null;
-  modal?: string | null;
+  root?: string;
+  view?: string;
+  panel?: string;
+  modal?: string;
   panelsHistory?: string[];
 }
 

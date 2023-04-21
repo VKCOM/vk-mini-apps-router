@@ -19,3 +19,5 @@ export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]):
     routes,
   }).initialize();
 }
+
+export { AgnosticDataRouteObject, AgnosticRouteMatch } from '@remix-run/router';
