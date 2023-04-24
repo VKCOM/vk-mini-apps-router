@@ -1,5 +1,5 @@
 {
-  "name": "@vkontakte/miniapp-router",
+  "name": "@vkontakte/vk-mini-app-router",
   "version": "1.0.0",
   "description": "React-роутер для мини-приложений ВКонтакте, построенных на VKUI",
   "main": "./dist/index.js",
