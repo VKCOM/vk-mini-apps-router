@@ -16,7 +16,8 @@
     "build": "tsc",
     "lint:js": "eslint src/ --ext ts,tsx --fix",
     "lint:css": "stylelint \"./src/**/*.css\" --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate:types": "node bin/generate-types.js"
   },
   "publishConfig": {
     "registry": "https://artifactory.mvk.com/api/npm/npm-vkontakte/"

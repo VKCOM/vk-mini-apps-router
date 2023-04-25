@@ -37,8 +37,8 @@ function renderCreateRoutesForRoots([roots, views, panels, modals]) {
   return `declare function createRoutesForRoots<\n  ${genericTypes}\n>(data: ${argumentType}): ${outputTypes};`;
 }
 
-function renderCreateRoutesForRootsGenericTypes([roots, views, panels, modals]) {
-  const parameters = calculateParameters([roots, views, panels, modals]).map((val) => `${val} extends string`);
+function renderCreateRoutesForRootsGenericTypes(arguments) {
+  const parameters = calculateParameters(arguments).map((val) => `${val} extends string`);
   return renderGroupedInLines(parameters, 4);
 }
 
@@ -51,7 +51,7 @@ function renderCreateRoutesForRootsArgumentTypes([roots, views, panels, modals])
 }
 
 function renderCreateRoutesForRootParameterTypes([views, panels, modals], [ri]) {
-  const parameters = calculateRootParameters([views, panels, modals], ri);
+  const parameters = calculateParametersForItem([views, panels, modals], ri);
   const renderedTypeParameters = renderGroupedInLines(parameters, 10, 4);
   return `  RootConfig<${renderedTypeParameters}>?`;
 }
@@ -59,13 +59,13 @@ function renderCreateRoutesForRootParameterTypes([views, panels, modals], [ri]) 
 function renderCreateRoutesForRootsOutputTypes([roots, views, panels, modals]) {
   const renderedRoots = [];
   for (let i = 0; i < roots; i += 1) {
-    renderedRoots.push(renderRootOutput([views, panels, modals], [i]));
+    renderedRoots.push(renderPreparedRoute([views, panels, modals], [i]));
   }
   return renderedRoots.join(' & ');
 }
 
 function renderCreateRoutesForViews([, views, panels, modals]) {
-  const genericTypes = renderCreateRoutesForRootsGenericTypes([0, views, panels, modals]);
+  const genericTypes = renderCreateRoutesForRootsGenericTypes([views, panels, modals]);
   const argumentType = renderCreateRoutesForViewsArgumentTypes([views, panels, modals]);
   const outputTypes = renderCreateRoutesForViewsOutputTypes([views, panels, modals]);
   return `declare function createRoutesForViews<\n  ${genericTypes}\n>(data: ${argumentType}): ${outputTypes};`;
@@ -73,12 +73,14 @@ function renderCreateRoutesForViews([, views, panels, modals]) {
 
 function renderCreateRoutesForViewsArgumentTypes([views, panels, modals]) {
   const viewTypes = [];
-  viewTypes.push(renderCreateRoutesForViewParameterTypes([views, panels, modals]));
+  for (let i = 0; i < views; i += 1) {
+    viewTypes.push(renderCreateRoutesForViewParameterTypes([panels, modals], i));
+  }
   return `[\n${viewTypes.join(',\n')}\n]`;
 }
 
-function renderCreateRoutesForViewParameterTypes([views, panels, modals]) {
-  const parameters = calculateRootParameters([views, panels, modals], 0);
+function renderCreateRoutesForViewParameterTypes([panels, modals], index) {
+  const parameters = calculateParametersForItem([panels, modals], index);
   const renderedTypeParameters = renderGroupedInLines(parameters, 10, 4);
   return `  ViewConfig<${renderedTypeParameters}>?`;
 }
@@ -86,7 +88,7 @@ function renderCreateRoutesForViewParameterTypes([views, panels, modals]) {
 function renderCreateRoutesForViewsOutputTypes([views, panels, modals]) {
   const renderedViews = [];
   for (let i = 0; i < views; i += 1) {
-    renderedViews.push(renderViewOutput([panels, modals], [0, i]));
+    renderedViews.push(renderPreparedRoute([panels, modals], i));
   }
   return renderedViews.join(' & ');
 }
@@ -100,94 +102,39 @@ function renderGroupedInLines(parameters, inOneLine, indent = 2) {
   return groupedParams.map((val) => `${val}`).join(`,\n${indentStr}`);
 }
 
-function calculateParameters([roots, views, panels, modals]) {
+function calculateParameters(childrenArguments, baseName = '') {
   const parameters = [];
-  if (roots === 0) {
-    parameters.push(...calculateRootParameters([views, panels, modals], 0));
-  } else {
-    for(let ri = 0; ri < roots; ri += 1) {
-      const rootName = buildRouteName([ri]);
-      parameters.push(`${rootName}${NAME}`);
-      parameters.push(`${rootName}${PARAMS}`);
-      parameters.push(...calculateRootParameters([views, panels, modals], ri));
-    }
+  for(let i = 0; i < childrenArguments[0]; i += 1) {
+      parameters.push(...calculateParametersForItem(childrenArguments.slice(1), i, baseName));
   }
   return parameters;
 }
 
-function calculateRootParameters([views, panels, modals], ri) {
+function calculateParametersForItem(childrenArguments, index, baseName = '') {
   const parameters = [];
-  for(let vi = 0; vi < views; vi += 1) {
-    const viewName = buildRouteName([ri, vi]);
-    parameters.push(`${viewName}${NAME}`);
-    parameters.push(`${viewName}${PARAMS}`);
-    for(let pi = 0; pi < panels; pi += 1) {
-      const panelName = buildRouteName([ri, vi, pi]);
-      parameters.push(`${panelName}${NAME}`);
-      parameters.push(`${panelName}${PARAMS}`);
-      for(let mi = 0; mi < modals; mi += 1) {
-        const modalName = buildRouteName([ri, vi, pi, mi]);
-        parameters.push(`${modalName}${NAME}`);
-        parameters.push(`${modalName}${PARAMS}`);
-      }
-    }
+  const name = buildRouteName(baseName, childrenArguments.length + 1, index);
+  parameters.push(`${name}${NAME}`);
+  parameters.push(`${name}${PARAMS}`);
+  if (childrenArguments.length > 0) {
+    parameters.push(...calculateParameters(childrenArguments, name));
   }
   return parameters;
 }
 
 function renderPreparedRoute(childrenArguments, index, baseName = '', baseParams = [], indent = 2) {
   const indentStr = new Array(indent).fill(' ').join('');
-  const biggerIndentStr = new Array(indent).fill(' ').join('');
+  const biggerIndentStr = new Array(indent + 2).fill(' ').join('');
   const children = [];
-  const name = `${baseName}${ROUTE_TYPE_LETTERS[ROUTE_TYPE_LETTERS - childrenArguments.length - 1]}`;
+  const name = buildRouteName(baseName, childrenArguments.length + 1, index);
   const params = baseParams.slice().concat(`${name}${PARAMS}`);
   for (let i = 0; i < childrenArguments[0] ?? 0; i += 1) {
     children.push(renderPreparedRoute(childrenArguments.slice(1), i, name, params, indent + 2));
   }
-  const renderedChildren = children.length ? `,\n${biggerIndentStr}${children.join(', ')}\n${indentStr}` : '';
+  const childSeparator = childrenArguments.length > 1 ? ', ' : `,\n${biggerIndentStr}`;
+  const renderedChildren = children.length ? `,\n${biggerIndentStr}${children.join(childSeparator)}\n${indentStr}` : '';
   return `${PREPARED_ROUTE_TYPE}<${name}${NAME}, ${CLEANED_UP_PARAMS_TYPE}<${params.join(', ')}>${renderedChildren}>`;
 }
 
-function renderRootOutput([views, panels, modals], [ri]) {
-  const renderedViews = [];
-  const name = buildRouteName([ri]);
-  const params = buildRouteParams([ri]);
-  for (let i = 0; i < views; i += 1) {
-    renderedViews.push(renderViewOutput([panels, modals], [ri, i]));
-  }
-  return `${PREPARED_ROUTE_TYPE}<${name}${NAME}, ${CLEANED_UP_PARAMS_TYPE}<${params}>,\n    ${renderedViews.join(', ')}\n  >`;
-}
-
-function renderViewOutput([panels, modals], [ri, vi]) {
-  const renderedViews = [];
-  const name = buildRouteName([ri, vi]);
-  const params = buildRouteParams([ri, vi]);
-  for (let i = 0; i < panels; i += 1) {
-    renderedViews.push(renderPanelOutput([modals], [ri, vi, i]));
-  }
-  return `${PREPARED_ROUTE_TYPE}<${name}${NAME}, ${CLEANED_UP_PARAMS_TYPE}<${params}>,\n      ${renderedViews.join(', ')}\n    >`;
-}
-
-function renderPanelOutput([modals], [ri, vi, pi]) {
-  const renderedViews = [];
-  const name = buildRouteName([ri, vi, pi]);
-  const params = buildRouteParams([ri, vi, pi]);
-  for (let i = 0; i < modals; i += 1) {
-    renderedViews.push(renderModalOutput([ri, vi, pi, i]));
-  }
-  return `${PREPARED_ROUTE_TYPE}<${name}${NAME}, ${CLEANED_UP_PARAMS_TYPE}<${params}>,\n${renderedViews.join(',\n')}\n      >`;
-}
-
-function renderModalOutput([ri, vi, pi, mi]) {
-  const name = buildRouteName([ri, vi, pi, mi]);
-  const params = buildRouteParams([ri, vi, pi, mi]);
-  return `        ${PREPARED_ROUTE_TYPE}<${name}${NAME}, ${CLEANED_UP_PARAMS_TYPE}<${params}>>`;
-}
-
-function buildRouteName(indexes) {
-  return indexes.map((num, index) => `${ROUTE_TYPE_LETTERS[index]}${num}`).join('');
-}
-
-function buildRouteParams(indexes) {
-  return indexes.map((num, index, arr) => `${buildRouteName(arr.slice(0, index + 1))}${PARAMS}`).join(', ');
+function buildRouteName(baseName, depth, index) {
+  return `${baseName}${ROUTE_TYPE_LETTERS[ROUTE_TYPE_LETTERS.length - depth]}${index}`;
 }
