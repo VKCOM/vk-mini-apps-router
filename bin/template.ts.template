@@ -1,0 +1,35 @@
+type ModalConfig<Name extends string, ParamKeys extends string> = {
+  modal: Name;
+  path: string;
+  params?: ParamKeys[];
+};
+
+type NeverToUndefined<T = never> = [T] extends [never] ? undefined : T;
+
+type CUP<P1 extends string, P2 extends string = string, P3 extends string = string, P4 extends string = string> =
+  NeverToUndefined<('' extends P1 ? never : P1) | ('' extends P2 ? never : P2) | ('' extends P3 ? never : P3) | ('' extends P4 ? never : P4)>;
+
+type PR<
+  Name extends string = string,
+  ParamKeys extends string | undefined = undefined,
+  Sub1 extends {} = {},
+  Sub2 extends {} = {},
+  Sub3 extends {} = {},
+  Sub4 extends {} = {},
+  Sub5 extends {} = {},
+  Sub6 extends {} = {},
+  Sub7 extends {} = {},
+  Sub8 extends {} = {},
+  Sub9 extends {} = {},
+  Sub10 extends {} = {},
+  Sub11 extends {} = {},
+  Sub12 extends {} = {},
+  Sub13 extends {} = {},
+  Sub14 extends {} = {},
+  Sub15 extends {} = {},
+> = {
+  [key in Name]: {
+    path: string,
+    params: ParamKeys,
+  } & Sub1 & Sub2 & Sub3 & Sub4 & Sub5 & Sub6 & Sub7 & Sub8 & Sub9 & Sub10 & Sub11 & Sub12 & Sub13 & Sub14 & Sub15
+};
