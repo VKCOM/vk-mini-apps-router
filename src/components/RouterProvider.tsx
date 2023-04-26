@@ -6,7 +6,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
 import { getContextFromState } from '../utils';
 import { ViewHistory } from '../view-history';
-import { STATE_KEY_CLEAR_FUTURE } from '../const';
+import { useRemoveFutureHistoryOnModalClose } from '../hooks/useRemoveFutureHistoryOnModalClose';
 
 export interface RouterProviderProps {
   router: Router;
@@ -18,28 +18,17 @@ export interface RouterProviderProps {
 export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): React.ReactElement {
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
-  let inCleaning = false;
-  let cleanLocation: Location;
+  const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
+  useRemoveFutureHistoryOnModalClose(router, viewHistory);
   React.useEffect(() => {
-    const viewHistory = new ViewHistory();
+    setViewHistory(new ViewHistory());
+  }, [router, setViewHistory]);
+  React.useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
     router.subscribe((state) => {
       viewHistory.updateNavigation(state);
       setPanelsHistory(viewHistory.panelsHistory);
-    });
-    window.addEventListener('popstate', (event) => {
-      if (inCleaning) {
-        inCleaning = false;
-        router.navigate(cleanLocation);
-      }
-      if (event.state?.usr?.[STATE_KEY_CLEAR_FUTURE] && viewHistory.position) {
-        const cleanState = { ...router.state.location.state };
-        delete cleanState[STATE_KEY_CLEAR_FUTURE];
-        cleanLocation = { ...router.state.location, state: cleanState };
-        window.history.back();
-        inCleaning = true;
-      }
     });
     if (useBridge) {
       bridge.subscribe((event) => {
@@ -52,7 +41,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
-  }, [router]);
+  }, [router, viewHistory]);
   routeContext.panelsHistory = panelsHistory;
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
