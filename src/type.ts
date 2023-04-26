@@ -32,11 +32,18 @@ export interface ViewRouteObject extends NonIndexRouteObject<PanelRouteObject> {
   lazy?: LazyRouteFunction<ViewRouteObject>;
 }
 
-export interface PanelRouteObject extends NonIndexRouteObject<ModalRouteObject> {
+export interface PanelIndexRouteObject extends IndexRouteObject {
+  panel: string;
+  lazy?: LazyRouteFunction<PanelRouteObject>;
+}
+
+export interface PanelNonIndexRouteObject extends NonIndexRouteObject<ModalRouteObject> {
   panel: string;
   children?: ModalRouteObject[];
   lazy?: LazyRouteFunction<PanelRouteObject>;
 }
+
+export type PanelRouteObject = PanelIndexRouteObject | PanelNonIndexRouteObject;
 
 export interface ModalRouteObject extends IndexRouteObject {
   modal: string;
