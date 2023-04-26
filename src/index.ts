@@ -3,15 +3,14 @@ import { createHashHistory, createRouter, Router as RemixRouter } from '@remix-r
 
 export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
-export type { RouterContextObject } from './contexts';
+export type { RouterContextObject, RouteNavigator } from './contexts';
 export {
   useRouterContext,
-  useActiveVkuiLocation,
   usePanelParams,
   useModalParams,
-  useModalParentRoute,
 } from './hooks/hooks';
 export { useSearchParams } from './hooks/useSearchParams';
+export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 
 export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]): RemixRouter {
   return createRouter({

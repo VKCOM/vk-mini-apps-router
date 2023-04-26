@@ -1,6 +1,6 @@
 import { RouteNavigator } from './contexts';
-import { AgnosticDataRouteObject, AgnosticRouteMatch, Router, RouterNavigateOptions } from '@remix-run/router';
-import { resolveRouteToPath } from './utils';
+import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
+import { isModalShown, resolveRouteToPath } from './utils';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
@@ -9,11 +9,11 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.router = router;
   }
 
-  public push(to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void {
+  public push(to: string): void {
     this.navigate(to);
   }
 
-  public replace(to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>): void {
+  public replace(to: string): void {
     this.navigate(to, { replace: true });
   }
 
@@ -21,11 +21,26 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.router.navigate(-1);
   }
 
+  public showModal(id: string): void {
+    this.navigate(this.router.state.location, { state: { showModal: id }, replace: isModalShown(this.router.state.location) });
+  }
+
+  public hideModal(): void {
+    if (isModalShown(this.router.state.location)) {
+      this.router.navigate(-1);
+    } else {
+      const modalMatchIndex = this.router.state.matches.findIndex((match) => 'modal' in match.route);
+      if (modalMatchIndex > -1) {
+        this.navigate(this.router.state.matches[modalMatchIndex - 1]);
+      }
+    }
+  }
+
   private async navigate(
-    to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject>,
+    to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject> | Location,
     opts?: RouterNavigateOptions | undefined,
   ): Promise<void> {
-    if (typeof to === 'string') {
+    if (typeof to === 'string' || 'key' in to) {
       await this.router.navigate(to, opts);
     } else {
       await this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params), opts);
