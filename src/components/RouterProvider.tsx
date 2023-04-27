@@ -6,6 +6,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
 import { getContextFromState } from '../utils';
 import { ViewHistory } from '../view-history';
+import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 
 export interface RouterProviderProps {
   router: Router;
@@ -17,8 +18,14 @@ export interface RouterProviderProps {
 export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): React.ReactElement {
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
+  const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
+
+  useBlockForwardToModals(router, viewHistory);
+
   React.useEffect(() => {
-    const viewHistory = new ViewHistory();
+    setViewHistory(new ViewHistory());
+  }, [router, setViewHistory]);
+  React.useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
     router.subscribe((state) => {
@@ -36,7 +43,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
-  }, [router]);
+  }, [router, viewHistory]);
   routeContext.panelsHistory = panelsHistory;
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
