@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Blocker, BlockerFunction, Router } from '@remix-run/router';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION } from '../const';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL } from '../const';
 import { ViewHistory } from '../view-history';
 
 let blockerId = 0;
+const processedKeys: string[] = [];
 
 export function useBlockForwardToModals(router: Router, viewHistory: ViewHistory): Blocker {
   const [blockerKey] = useState(() => String(++blockerId));
@@ -21,8 +22,16 @@ export function useBlockForwardToModals(router: Router, viewHistory: ViewHistory
       router.subscribe((state) => {
         const key = state.location.key;
         const isPopBackward = viewHistory.isPopBackward(state.historyAction, key);
-        if (isPopBackward && state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) {
-          router.navigate(-1);
+        if (isPopBackward && state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION] && !processedKeys.includes(key)) {
+          processedKeys.push(key);
+          const replaceState = { ...window.history.state };
+          if (replaceState.usr?.[STATE_KEY_SHOW_MODAL]) {
+            replaceState.usr = { ...replaceState.usr };
+            delete replaceState.usr?.[STATE_KEY_SHOW_MODAL];
+            delete replaceState.usr?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION];
+          }
+          window.history.replaceState(replaceState, '');
+          router.navigate(-1).then(() => processedKeys.splice(processedKeys.findIndex((name) => name === key), 1));
         }
       });
 
