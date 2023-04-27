@@ -51,3 +51,7 @@ export function getContextFromState(state: RouterState): RouteContextObject {
 export function isModalShown(location: Location): boolean {
   return location.state && STATE_KEY_SHOW_MODAL in location.state;
 }
+
+export function createKey() {
+  return Math.random().toString(36).substring(2, 9);
+}

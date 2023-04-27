@@ -6,6 +6,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
 import { getContextFromState } from '../utils';
 import { ViewHistory } from '../view-history';
+import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 
 export interface RouterProviderProps {
   router: Router;
@@ -19,16 +20,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
 
-  /*
-   useRemoveFutureHistoryOnModalClose не позволяет сделать навигацию вперед после закрытия модального окна.
-   Единственный способ удалить записи в будущем - сделать push-навигацию.
-   Чтобы шагнуть вперед на текущий URL с push, нужно сначала сделать шаг назад.
-
-   Хук выключен потому что на mvk есть анимация перехода между вьюхами, которая проигрывается при шаге назад-вперед.
-   К тому же, из-за такого быстрого перехода VKUI ошибается и не сбрасывает класс перехода с вьюхи,
-   в результате чего она остается не кликабельной.
-  */
-  // useRemoveFutureHistoryOnModalClose(router, viewHistory);
+  useBlockForwardToModals(router, viewHistory);
 
   React.useEffect(() => {
     setViewHistory(new ViewHistory());

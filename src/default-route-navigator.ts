@@ -1,7 +1,7 @@
 import { RouteNavigator } from './contexts';
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
 import { isModalShown, resolveRouteToPath } from './utils';
-import { STATE_KEY_CLEAR_FUTURE, STATE_KEY_SHOW_MODAL } from './const';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL } from './const';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
@@ -11,7 +11,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public push(to: string): void {
-    this.navigate(to);
+    this.navigate(to, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
   }
 
   public replace(to: string): void {
@@ -23,11 +23,8 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public showModal(id: string): void {
-    if (!isModalShown(this.router.state.location)) {
-      this.navigate(this.router.state.location, { state: { [STATE_KEY_CLEAR_FUTURE]: true }, replace: true });
-    }
     this.navigate(this.router.state.location, {
-      state: { [STATE_KEY_SHOW_MODAL]: id },
+      state: { [STATE_KEY_SHOW_MODAL]: id, [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
       replace: isModalShown(this.router.state.location),
     });
   }

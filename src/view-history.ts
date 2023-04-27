@@ -14,7 +14,12 @@ export class ViewHistory {
           this.push(record);
           break;
         case Action.Pop:
-          this.pop(record);
+          if (this.hasKey(record.locationKey)) {
+            this.pop(record);
+          } else {
+            // В случае, если пользователь введет в адресную строку новый хэш, мы поймаем POP событие с новой локацией.
+            this.push(record);
+          }
           break;
         case Action.Replace:
           this.replace(record);
@@ -38,6 +43,16 @@ export class ViewHistory {
     return this.positionInternal;
   }
 
+  isPopForward(historyAction: Action, key: string): boolean {
+    const newPosition = this.history.findIndex(({ locationKey }) => locationKey === key);
+    return historyAction === Action.Pop && newPosition > this.position;
+  }
+
+  isPopBackward(historyAction: Action, key: string): boolean {
+    const newPosition = this.history.findIndex(({ locationKey }) => locationKey === key);
+    return historyAction === Action.Pop && newPosition <= this.position;
+  }
+
   private push(record: ViewNavigationRecord): void {
     this.history = this.history.slice(0, this.positionInternal + 1);
     this.history.push(record);
@@ -50,6 +65,10 @@ export class ViewHistory {
 
   private pop(record: ViewNavigationRecord): void {
     this.positionInternal = this.history.findIndex(({ locationKey }) => locationKey === record.locationKey);
+  }
+
+  private hasKey(key: string): boolean {
+    return Boolean(this.history.find(({ locationKey }) => locationKey === key));
   }
 
   private getViewRecordFromState(state: RouterState): ViewNavigationRecord | undefined {
