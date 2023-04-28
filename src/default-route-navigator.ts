@@ -44,16 +44,31 @@ export class DefaultRouteNavigator implements RouteNavigator {
 
   public showPopout(popout: JSX.Element | null): void {
     this.setPopout(popout);
-    this.navigate(this.router.state.location, {
-      state: { [STATE_KEY_SHOW_POPOUT]: createKey(), [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
-      replace: isPopoutShown(this.router.state.location),
-    });
+    const state: any = {
+      [STATE_KEY_SHOW_POPOUT]: createKey(),
+      [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
+    };
+    if (isModalShown(this.router.state.location)) {
+      state[STATE_KEY_SHOW_MODAL] = this.router.state.location.state[STATE_KEY_SHOW_MODAL];
+    }
+    const replace = isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
+    this.navigate(this.router.state.location, { state, replace });
   }
 
   public hidePopout(): void {
     if (isPopoutShown(this.router.state.location)) {
       this.setPopout(null);
-      this.router.navigate(-1);
+      if (isModalShown(this.router.state.location)) {
+        this.navigate(this.router.state.location, {
+          state: {
+            [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
+            [STATE_KEY_SHOW_MODAL]: this.router.state.location.state[STATE_KEY_SHOW_MODAL],
+          },
+          replace: true,
+        });
+      } else {
+        this.router.navigate(-1);
+      }
     }
   }
 
