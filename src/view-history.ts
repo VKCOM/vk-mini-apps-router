@@ -1,6 +1,7 @@
 import { ViewNavigationRecord } from './type';
 import { Action, RouterState } from '@remix-run/router';
 import { getContextFromState } from './utils';
+import { STATE_KEY_SHOW_POPOUT } from './const';
 
 export class ViewHistory {
   private history: ViewNavigationRecord[] = [];
@@ -35,7 +36,10 @@ export class ViewHistory {
     const currentView = this.history[this.positionInternal].view;
     const reversedClone = this.history.slice(0, this.positionInternal + 1).reverse();
     const rightLimit = reversedClone.findIndex((item) => item.view !== currentView);
-    const historyCopy = reversedClone.slice(0, rightLimit > -1 ? rightLimit : reversedClone.length).reverse();
+    const historyCopy = reversedClone
+      .slice(0, rightLimit > -1 ? rightLimit : reversedClone.length)
+      .filter((item) => !item.modal && !item.popout)
+      .reverse();
     return historyCopy.map(({ panel }) => panel);
   }
 
@@ -77,6 +81,8 @@ export class ViewHistory {
       return {
         view: context.viewMatch.route.view,
         panel: context.panelMatch.route.panel,
+        modal: context.modalMatch?.route.modal,
+        popout: state.location.state?.[STATE_KEY_SHOW_POPOUT],
         locationKey: state.location.key,
       };
     }

@@ -31,8 +31,8 @@ export class DefaultRouteNavigator implements RouteNavigator {
     });
   }
 
-  public hideModal(): void {
-    if (isModalShown(this.router.state.location)) {
+  public hideModal(pushPanel = false): void {
+    if (!pushPanel || isModalShown(this.router.state.location)) {
       this.router.navigate(-1);
     } else {
       const modalMatchIndex = this.router.state.matches.findIndex((match) => 'modal' in match.route);
