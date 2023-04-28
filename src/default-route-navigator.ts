@@ -1,13 +1,15 @@
 import { RouteNavigator } from './contexts';
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
-import { isModalShown, resolveRouteToPath } from './utils';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL } from './const';
+import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from './utils';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from './const';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
+  private setPopout: (popout: JSX.Element | null) => void;
 
-  constructor(router: Router) {
+  constructor(router: Router, setPopout: (popout: JSX.Element | null) => void) {
     this.router = router;
+    this.setPopout = setPopout;
   }
 
   public push(to: string): void {
@@ -37,6 +39,21 @@ export class DefaultRouteNavigator implements RouteNavigator {
       if (modalMatchIndex > -1) {
         this.navigate(this.router.state.matches[modalMatchIndex - 1]);
       }
+    }
+  }
+
+  public showPopout(popout: JSX.Element | null): void {
+    this.setPopout(popout);
+    this.navigate(this.router.state.location, {
+      state: { [STATE_KEY_SHOW_POPOUT]: createKey(), [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
+      replace: isPopoutShown(this.router.state.location),
+    });
+  }
+
+  public hidePopout(): void {
+    if (isPopoutShown(this.router.state.location)) {
+      this.setPopout(null);
+      this.router.navigate(-1);
     }
   }
 

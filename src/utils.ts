@@ -1,7 +1,7 @@
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
 import { RouteContextObject } from './contexts';
 import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from './type';
-import { STATE_KEY_SHOW_MODAL } from './const';
+import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from './const';
 
 export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: AgnosticDataRouteObject[], params: Params = {}): string {
   const parentRoutes = route.id
@@ -50,6 +50,10 @@ export function getContextFromState(state: RouterState): RouteContextObject {
 
 export function isModalShown(location: Location): boolean {
   return location.state && STATE_KEY_SHOW_MODAL in location.state;
+}
+
+export function isPopoutShown(location: Location): boolean {
+  return location.state && STATE_KEY_SHOW_POPOUT in location.state;
 }
 
 export function createKey() {

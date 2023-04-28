@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Blocker, BlockerFunction, Router } from '@remix-run/router';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL } from '../const';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { ViewHistory } from '../view-history';
 
 let blockerId = 0;
@@ -28,6 +28,11 @@ export function useBlockForwardToModals(router: Router, viewHistory: ViewHistory
           if (replaceState.usr?.[STATE_KEY_SHOW_MODAL]) {
             replaceState.usr = { ...replaceState.usr };
             delete replaceState.usr?.[STATE_KEY_SHOW_MODAL];
+            delete replaceState.usr?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION];
+          }
+          if (replaceState.usr?.[STATE_KEY_SHOW_POPOUT]) {
+            replaceState.usr = { ...replaceState.usr };
+            delete replaceState.usr?.[STATE_KEY_SHOW_POPOUT];
             delete replaceState.usr?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION];
           }
           window.history.replaceState(replaceState, '');

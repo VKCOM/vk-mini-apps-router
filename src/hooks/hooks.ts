@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { RouteContext, RouterContext, RouterContextObject } from '../contexts';
+import { PopoutContext, RouteContext, RouterContext, RouterContextObject } from '../contexts';
 import { Location, Params } from '@remix-run/router';
 
 export function useRouterContext(): RouterContextObject {
@@ -18,4 +18,8 @@ export function useModalParams<T extends string = string>(): Params<T> | undefin
 
 export function useLocation(): Location {
   return useContext(RouteContext).state.location;
+}
+
+export function usePopout(): JSX.Element | null {
+  return useContext(PopoutContext).popout;
 }
