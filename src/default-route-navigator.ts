@@ -1,13 +1,15 @@
 import { RouteNavigator } from './contexts';
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
-import { isModalShown, resolveRouteToPath } from './utils';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL } from './const';
+import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from './utils';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from './const';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
+  private setPopout: (popout: JSX.Element | null) => void;
 
-  constructor(router: Router) {
+  constructor(router: Router, setPopout: (popout: JSX.Element | null) => void) {
     this.router = router;
+    this.setPopout = setPopout;
   }
 
   public push(to: string): void {
@@ -36,6 +38,36 @@ export class DefaultRouteNavigator implements RouteNavigator {
       const modalMatchIndex = this.router.state.matches.findIndex((match) => 'modal' in match.route);
       if (modalMatchIndex > -1) {
         this.navigate(this.router.state.matches[modalMatchIndex - 1]);
+      }
+    }
+  }
+
+  public showPopout(popout: JSX.Element | null): void {
+    this.setPopout(popout);
+    const state: any = {
+      [STATE_KEY_SHOW_POPOUT]: createKey(),
+      [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
+    };
+    if (isModalShown(this.router.state.location)) {
+      state[STATE_KEY_SHOW_MODAL] = this.router.state.location.state[STATE_KEY_SHOW_MODAL];
+    }
+    const replace = isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
+    this.navigate(this.router.state.location, { state, replace });
+  }
+
+  public hidePopout(): void {
+    if (isPopoutShown(this.router.state.location)) {
+      this.setPopout(null);
+      if (isModalShown(this.router.state.location)) {
+        this.navigate(this.router.state.location, {
+          state: {
+            [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
+            [STATE_KEY_SHOW_MODAL]: this.router.state.location.state[STATE_KEY_SHOW_MODAL],
+          },
+          replace: true,
+        });
+      } else {
+        this.router.navigate(-1);
       }
     }
   }

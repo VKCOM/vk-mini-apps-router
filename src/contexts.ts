@@ -8,6 +8,8 @@ export interface RouteNavigator {
   back(): void;
   showModal(id: string): void;
   hideModal(): void;
+  showPopout(popout: JSX.Element | null): void;
+  hidePopout(): void;
 }
 
 export interface RouterContextObject {
@@ -27,3 +29,9 @@ export interface RouteContextObject {
 }
 
 export const RouteContext = React.createContext<RouteContextObject>(null!);
+
+export interface PopoutContextObject {
+  popout: JSX.Element | null;
+}
+
+export const PopoutContext = React.createContext<PopoutContextObject>({ popout: null });

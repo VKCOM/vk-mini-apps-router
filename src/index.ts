@@ -9,6 +9,7 @@ export {
   useRouterContext,
   usePanelParams,
   useModalParams,
+  usePopout,
 } from './hooks/hooks';
 export { useSearchParams } from './hooks/useSearchParams';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
