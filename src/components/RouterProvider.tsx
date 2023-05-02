@@ -1,13 +1,14 @@
 import { Action, Router } from '@remix-run/router';
-import { RouteContext, RouteNavigator, RouterContext, PopoutContext } from '../contexts';
+import { RouteContext, RouterContext, PopoutContext } from '../contexts';
 import React, { useState } from 'react';
-import { DefaultRouteNavigator } from '../default-route-navigator';
+import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
 import { getContextFromState } from '../utils';
-import { ViewHistory } from '../view-history';
+import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
+import { RouteNavigator } from '../services/routeNavigator.type';
 
 export interface RouterProviderProps {
   router: Router;

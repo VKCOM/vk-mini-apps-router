@@ -50,18 +50,3 @@ export interface ModalRouteObject extends IndexRouteObject {
   lazy?: LazyRouteFunction<ModalRouteObject>;
 }
 
-export interface ActiveVkuiLocationObject {
-  root?: string;
-  view?: string;
-  panel?: string;
-  modal?: string;
-  panelsHistory?: string[];
-}
-
-export type ViewNavigationRecord = {
-  view: string;
-  panel: string;
-  locationKey: string;
-  modal?: string;
-  popout?: string;
-};

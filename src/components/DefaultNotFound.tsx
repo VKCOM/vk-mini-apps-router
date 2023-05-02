@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { RouteNavigator } from '../contexts';
+import { RouteNavigator } from '../services/routeNavigator.type';
 
 const DivStyles = {
   background: '#3f5d81 url(https://vk.com/images/error404.png) no-repeat 50% 50%',
