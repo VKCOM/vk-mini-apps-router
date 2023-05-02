@@ -59,3 +59,7 @@ export function isPopoutShown(location: Location): boolean {
 export function createKey() {
   return Math.random().toString(36).substring(2, 9);
 }
+
+export function getDisplayName(WrappedComponent: {displayName?: string; name?: string}) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}

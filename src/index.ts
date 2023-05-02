@@ -12,6 +12,7 @@ export {
   usePopout,
 } from './hooks/hooks';
 export { useSearchParams } from './hooks/useSearchParams';
+export { withRouter } from './hoc/withRouter';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 
 export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]): RemixRouter {
