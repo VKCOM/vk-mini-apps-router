@@ -1,7 +1,7 @@
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
-import { RouteContextObject } from './contexts';
-import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from './type';
-import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from './const';
+import { RouteContextObject } from '../contexts';
+import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from '../type';
+import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 
 export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: AgnosticDataRouteObject[], params: Params = {}): string {
   const parentRoutes = route.id

@@ -1,5 +1,5 @@
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
-import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from '../utils';
+import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from './routeNavigator.type';
 

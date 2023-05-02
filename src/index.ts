@@ -1,6 +1,6 @@
 import { RootRouteObject, ViewRouteObject } from './type';
 import { createHashHistory, createRouter, Router as RemixRouter } from '@remix-run/router';
-import { createKey } from './utils';
+import { createKey } from './utils/utils';
 
 export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';

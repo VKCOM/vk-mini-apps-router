@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
-import { getContextFromState } from '../utils';
+import { getContextFromState } from '../utils/utils';
 import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { STATE_KEY_SHOW_POPOUT } from '../const';

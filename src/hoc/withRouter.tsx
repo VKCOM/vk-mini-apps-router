@@ -2,7 +2,7 @@ import { ActiveVkuiLocationObject, useActiveVkuiLocation } from '../hooks/useAct
 import { RouteNavigator } from '../services/routeNavigator.type';
 import { ComponentType, useContext } from 'react';
 import { RouterContext } from '../contexts';
-import { getDisplayName } from '../utils';
+import { getDisplayName } from '../utils/utils';
 import { usePopout } from '../hooks/hooks';
 
 type RouterProps = {
