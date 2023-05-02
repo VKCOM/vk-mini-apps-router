@@ -1,7 +1,7 @@
-import { RouteNavigator } from './contexts';
 import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
-import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from './utils';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from './const';
+import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from '../utils';
+import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
+import { RouteNavigator } from './routeNavigator.type';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;

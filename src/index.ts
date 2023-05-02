@@ -4,7 +4,7 @@ import { createKey } from './utils';
 
 export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
-export type { RouterContextObject, RouteNavigator } from './contexts';
+export type { RouterContextObject } from './contexts';
 export {
   useRouterContext,
   usePanelParams,
@@ -29,3 +29,4 @@ export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]):
 }
 
 export { AgnosticDataRouteObject, AgnosticRouteMatch } from '@remix-run/router';
+export { RouteNavigator } from './services/routeNavigator.type';

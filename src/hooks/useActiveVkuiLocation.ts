@@ -1,7 +1,14 @@
-import { ActiveVkuiLocationObject } from '../type';
 import { useContext } from 'react';
 import { RouteContext } from '../contexts';
 import { STATE_KEY_SHOW_MODAL } from '../const';
+
+interface ActiveVkuiLocationObject {
+  root?: string;
+  view?: string;
+  panel?: string;
+  modal?: string;
+  panelsHistory?: string[];
+}
 
 export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
   const routeContext = useContext(RouteContext);
