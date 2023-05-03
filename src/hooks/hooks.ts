@@ -3,10 +3,10 @@ import { PopoutContext, RouteContext, RouterContext } from '../contexts';
 import { Location, Params, UNSAFE_invariant as invariant } from '@remix-run/router';
 import { RouteNavigator } from '../services/routeNavigator.type';
 
-export function useNavigator(): RouteNavigator {
+export function useRouteNavigator(): RouteNavigator {
   const routerContext = useContext(RouterContext);
   invariant(routerContext, 'You can not use useNavigator hook outside of RouterContext. Make sure calling it inside RouterProvider.');
-  return routerContext.navigator;
+  return routerContext.routeNavigator;
 }
 
 export function usePanelParams<T extends string = string>(): Params<T> | undefined {

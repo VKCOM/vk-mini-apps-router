@@ -11,12 +11,12 @@ const DivStyles = {
 };
 
 export type DefaultNotFoundProps = {
-  navigator: RouteNavigator;
+  routeNavigator: RouteNavigator;
 };
 
-export function DefaultNotFound({ navigator }: DefaultNotFoundProps): ReactElement {
+export function DefaultNotFound({ routeNavigator }: DefaultNotFoundProps): ReactElement {
   return (
-    <div onClick={() => navigator.replace('/')} className="default-not-found" style={DivStyles}>
+    <div onClick={() => routeNavigator.replace('/')} className="default-not-found" style={DivStyles}>
     </div>
   );
 }

@@ -6,7 +6,7 @@ export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
 export type { RouterContextObject } from './contexts';
 export {
-  useNavigator,
+  useRouteNavigator,
   usePanelParams,
   useModalParams,
   usePopout,

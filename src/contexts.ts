@@ -5,7 +5,7 @@ import { RouteNavigator } from './services/routeNavigator.type';
 
 export interface RouterContextObject {
   router: Router;
-  navigator: RouteNavigator;
+  routeNavigator: RouteNavigator;
 }
 
 export const RouterContext = React.createContext<RouterContextObject>(null!);

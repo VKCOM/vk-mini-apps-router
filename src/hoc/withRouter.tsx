@@ -7,7 +7,7 @@ import { usePopout } from '../hooks/hooks';
 
 type RouterProps = {
   location: ActiveVkuiLocationObject;
-  navigator: RouteNavigator;
+  routeNavigator: RouteNavigator;
   popout: JSX.Element | null;
 };
 
@@ -15,7 +15,7 @@ type RouterProps = {
  * HOC для добавления свойств
  *
  * location:{@link ActiveVkuiLocationObject}
- * navigator:{@link RouteNavigator}
+ * routeNavigator:{@link RouteNavigator}
  *
  * в переданный компонент
  *
@@ -28,7 +28,7 @@ export function withRouter<T extends RouterProps>(Component: ComponentType<T>): 
   function WithRouter(props: Omit<T, keyof RouterProps>) {
     const routerContext = useContext(RouterContext);
     const routerProps: RouterProps = {
-      navigator: routerContext.navigator,
+      routeNavigator: routerContext.routeNavigator,
       location: useActiveVkuiLocation(),
       popout: usePopout(),
     };

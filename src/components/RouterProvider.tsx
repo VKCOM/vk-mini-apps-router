@@ -50,14 +50,14 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
   routeContext.panelsHistory = panelsHistory;
   const routeFound = Boolean(routeContext.panelMatch);
   const dataRouterContext = React.useMemo(() => {
-    const navigator: RouteNavigator = new DefaultRouteNavigator(router, setPopout);
-    return { router, navigator };
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, setPopout);
+    return { router, routeNavigator };
   }, [router, setPopout]);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
-        {!routeFound && (notFound || <DefaultNotFound navigator={dataRouterContext.navigator} />)}
+        {!routeFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
         {routeFound && <RouteContext.Provider value={routeContext} children={children} />}
       </PopoutContext.Provider>
     </RouterContext.Provider>
