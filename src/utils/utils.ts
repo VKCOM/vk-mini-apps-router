@@ -1,49 +1,30 @@
-import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
+import { AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
 import { RouteContextObject } from '../contexts';
-import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from '../type';
+import { PageInternal } from '../type';
 import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 
-export function resolveRouteToPath(route: AgnosticDataRouteObject, routes: AgnosticDataRouteObject[], params: Params = {}): string {
-  const parentRoutes = route.id
-    .split('-')
-    .reduce<AgnosticDataRouteObject[]>((acc, id) => {
-    if (!acc.length) {
-      acc.push(routes[parseInt(id)]);
-    } else {
-      const child = acc[acc.length - 1]?.children?.[parseInt(id)];
-      if (child) acc.push(child);
-    }
-    return acc;
-  }, []);
-  const pathFromRoute = parentRoutes
-    .map((route) => route.path)
-    .filter(Boolean)
-    .map((path) => path?.replace(/^\//, '').replace(/\/$/, ''))
-    .join('/');
-  const parameters = pathFromRoute
-    .match(/\/:[^\/]+/g)
-    ?.map((param) => param.replace('/', ''));
+export function getParamKeys(path: string | undefined): string[] {
+  return path
+    ?.match(/\/:[^\/]+/g)
+    ?.map((param) => param.replace('/', '')) ?? [];
+}
+
+export function fillParamsIntoPath(path: string, params: Params): string {
+  const parameters = getParamKeys(path);
   const paramInjector = (acc: string, param: string): string => {
     const paramName = param.replace(':', '');
     if (!params[paramName]) {
-      throw new Error(`Missing parameter ${paramName} while building route ${pathFromRoute}`);
+      throw new Error(`Missing parameter ${paramName} while building route ${path}`);
     }
     return acc.replace(param, params[paramName] as string);
   };
-  return parameters ? parameters.reduce(paramInjector, pathFromRoute) : pathFromRoute;
+  return parameters.reduce(paramInjector, path);
 }
 
 export function getContextFromState(state: RouterState): RouteContextObject {
-  const rootMatch = state.matches.find((item) => 'root' in item.route);
-  const viewMatch = state.matches.find((item) => 'view' in item.route);
-  const panelMatch = state.matches.find((item) => 'panel' in item.route);
-  const modalMatch = state.matches.find((item) => 'modal' in item.route);
   return {
     state,
-    rootMatch: rootMatch as AgnosticRouteMatch<string, RootRouteObject>,
-    viewMatch: viewMatch as AgnosticRouteMatch<string, ViewRouteObject>,
-    panelMatch: panelMatch as AgnosticRouteMatch<string, PanelRouteObject>,
-    modalMatch: modalMatch as AgnosticRouteMatch<string, ModalRouteObject>,
+    match: state.matches.length ? state.matches[state.matches.length - 1] as AgnosticRouteMatch<string, PageInternal> : undefined,
     panelsHistory: [],
   };
 }

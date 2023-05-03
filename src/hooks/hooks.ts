@@ -9,16 +9,10 @@ export function useRouteNavigator(): RouteNavigator {
   return routerContext.routeNavigator;
 }
 
-export function usePanelParams<T extends string = string>(): Params<T> | undefined {
+export function useParams<T extends string = string>(): Params<T> | undefined {
   const routeContext = useContext(RouteContext);
-  invariant(routeContext, 'You can not use usePanelParams hook outside of RouteContext. Make sure calling it inside RouterProvider.');
-  return routeContext.panelMatch?.params;
-}
-
-export function useModalParams<T extends string = string>(): Params<T> | undefined {
-  const routeContext = useContext(RouteContext);
-  invariant(routeContext, 'You can not use useModalParams hook outside of RouteContext. Make sure calling it inside RouterProvider.');
-  return routeContext.modalMatch?.params;
+  invariant(routeContext, 'You can not use useParams hook outside of RouteContext. Make sure calling it inside RouterProvider.');
+  return routeContext.match?.params;
 }
 
 export function useLocation(): Location {

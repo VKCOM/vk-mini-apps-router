@@ -15,13 +15,15 @@ export interface ActiveVkuiLocationObject {
 export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
   const routeContext = useContext(RouteContext);
   const popout = usePopout();
-  const modal = routeContext.state.location.state?.[STATE_KEY_SHOW_MODAL] ?? routeContext.modalMatch?.route.modal;
+  const { match, state, panelsHistory } = routeContext;
+  const route = match?.route;
+  const modal = state.location.state?.[STATE_KEY_SHOW_MODAL] ?? (route && 'modal' in route ? route.modal : undefined);
   return {
-    root: routeContext.rootMatch?.route.root,
-    view: routeContext.viewMatch?.route.view,
-    panel: routeContext.panelMatch?.route.panel,
+    root: route && 'root' in route ? route.root : undefined,
+    view: route?.view,
+    panel: route?.panel,
     modal,
     hasOverlay: Boolean(modal || popout),
-    panelsHistory: routeContext.panelsHistory,
+    panelsHistory,
   };
 }

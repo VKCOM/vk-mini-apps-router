@@ -1,7 +1,9 @@
-import { AgnosticDataRouteObject, AgnosticRouteMatch, Location, Router, RouterNavigateOptions } from '@remix-run/router';
-import { createKey, isModalShown, isPopoutShown, resolveRouteToPath } from '../utils/utils';
+import { Router } from '@remix-run/router';
+import { createKey, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from './routeNavigator.type';
+import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
+import { InternalRouteConfig, ModalWithRoot } from '../type';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
@@ -13,11 +15,11 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public push(to: string): void {
-    this.navigate(to, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
+    this.router.navigate(to, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
   }
 
   public replace(to: string): void {
-    this.navigate(to, { replace: true });
+    this.router.navigate(to, { replace: true });
   }
 
   public back(): void {
@@ -25,7 +27,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public showModal(id: string): void {
-    this.navigate(this.router.state.location, {
+    this.router.navigate(this.router.state.location, {
       state: { [STATE_KEY_SHOW_MODAL]: id, [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
       replace: isModalShown(this.router.state.location),
     });
@@ -35,9 +37,16 @@ export class DefaultRouteNavigator implements RouteNavigator {
     if (!pushPanel || isModalShown(this.router.state.location)) {
       this.router.navigate(-1);
     } else {
-      const modalMatchIndex = this.router.state.matches.findIndex((match) => 'modal' in match.route);
-      if (modalMatchIndex > -1) {
-        this.navigate(this.router.state.matches[modalMatchIndex - 1]);
+      const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
+      if (modalMatch) {
+        const route = modalMatch.route as ModalWithRoot & InternalRouteConfig;
+        const path = buildPanelPathFromModalMatch(modalMatch, this.router);
+        if (!path) {
+          const rootMessage = route.root ? `root: ${route.root} ` : '';
+          throw new Error(`There is no route registered for panel with ${rootMessage}, view: ${route.view}, panel: ${route.panel}.
+Make sure this route exists or use hideModal with pushPanel set to false.`);
+        }
+        this.router.navigate(path);
       }
     }
   }
@@ -52,14 +61,14 @@ export class DefaultRouteNavigator implements RouteNavigator {
       state[STATE_KEY_SHOW_MODAL] = this.router.state.location.state[STATE_KEY_SHOW_MODAL];
     }
     const replace = isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
-    this.navigate(this.router.state.location, { state, replace });
+    this.router.navigate(this.router.state.location, { state, replace });
   }
 
   public hidePopout(): void {
     if (isPopoutShown(this.router.state.location)) {
       this.setPopout(null);
       if (isModalShown(this.router.state.location)) {
-        this.navigate(this.router.state.location, {
+        this.router.navigate(this.router.state.location, {
           state: {
             [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
             [STATE_KEY_SHOW_MODAL]: this.router.state.location.state[STATE_KEY_SHOW_MODAL],
@@ -69,17 +78,6 @@ export class DefaultRouteNavigator implements RouteNavigator {
       } else {
         this.router.navigate(-1);
       }
-    }
-  }
-
-  private async navigate(
-    to: string | AgnosticRouteMatch<string, AgnosticDataRouteObject> | Location,
-    opts?: RouterNavigateOptions | undefined,
-  ): Promise<void> {
-    if (typeof to === 'string' || 'key' in to) {
-      await this.router.navigate(to, opts);
-    } else {
-      await this.router.navigate(resolveRouteToPath(to.route, this.router.routes, to.params), opts);
     }
   }
 }

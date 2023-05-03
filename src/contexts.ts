@@ -1,7 +1,7 @@
 import { AgnosticRouteMatch, Router, RouterState } from '@remix-run/router';
 import React from 'react';
-import { ModalRouteObject, PanelRouteObject, RootRouteObject, ViewRouteObject } from './type';
 import { RouteNavigator } from './services/routeNavigator.type';
+import { PageInternal } from './type';
 
 export interface RouterContextObject {
   router: Router;
@@ -12,10 +12,7 @@ export const RouterContext = React.createContext<RouterContextObject>(null!);
 
 export interface RouteContextObject {
   state: RouterState;
-  rootMatch?: AgnosticRouteMatch<string, RootRouteObject> | undefined;
-  viewMatch?: AgnosticRouteMatch<string, ViewRouteObject> | undefined;
-  panelMatch?: AgnosticRouteMatch<string, PanelRouteObject> | undefined;
-  modalMatch?: AgnosticRouteMatch<string, ModalRouteObject> | undefined;
+  match?: AgnosticRouteMatch<string, PageInternal> | undefined;
   panelsHistory?: string[];
 }
 
