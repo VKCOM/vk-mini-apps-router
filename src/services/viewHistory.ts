@@ -1,5 +1,5 @@
 import { Action, RouterState } from '@remix-run/router';
-import { getContextFromState } from '../utils';
+import { getContextFromState } from '../utils/utils';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
 import { ViewNavigationRecord } from './viewHistory.type';
 
@@ -77,11 +77,12 @@ export class ViewHistory {
 
   private getViewRecordFromState(state: RouterState): ViewNavigationRecord | undefined {
     const context = getContextFromState(state);
-    if (context.viewMatch && context.panelMatch) {
+    if (context.match) {
+      const { route } = context.match;
       return {
-        view: context.viewMatch.route.view,
-        panel: context.panelMatch.route.panel,
-        modal: context.modalMatch?.route.modal,
+        view: route.view,
+        panel: route.panel,
+        modal: 'modal' in route ? route.modal : undefined,
         popout: state.location.state?.[STATE_KEY_SHOW_POPOUT],
         locationKey: state.location.key,
       };

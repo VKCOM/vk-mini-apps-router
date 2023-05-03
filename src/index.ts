@@ -1,20 +1,20 @@
-import { RootRouteObject, ViewRouteObject } from './type';
 import { createHashHistory, createRouter, Router as RemixRouter } from '@remix-run/router';
-import { createKey } from './utils';
+import { createKey } from './utils/utils';
+import { ModalWithoutRoot, ModalWithRoot, PanelWithoutRoot, PanelWithRoot } from './type';
 
 export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
 export type { RouterContextObject } from './contexts';
 export {
-  useRouterContext,
-  usePanelParams,
-  useModalParams,
+  useRouteNavigator,
+  useParams,
   usePopout,
 } from './hooks/hooks';
 export { useSearchParams } from './hooks/useSearchParams';
+export { withRouter } from './hoc/withRouter';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 
-export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]): RemixRouter {
+export function createHashRouter(routes: (PanelWithRoot | ModalWithRoot)[] | (PanelWithoutRoot | ModalWithoutRoot)[]): RemixRouter {
   // Задать новый key для новой локации в случае, если приложение уже запущено,
   // а пользователь делает переход изменив hash в адресной строке браузера.
   window.addEventListener('popstate', (event: PopStateEvent) => {
@@ -24,7 +24,7 @@ export function createHashRouter(routes: RootRouteObject[] | ViewRouteObject[]):
   });
   return createRouter({
     history: createHashHistory(),
-    routes,
+    routes: routes.map((item) => ({ ...item, index: true })),
   }).initialize();
 }
 

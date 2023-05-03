@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
-import { getContextFromState } from '../utils';
+import { getContextFromState } from '../utils/utils';
 import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
@@ -48,17 +48,19 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     }
   }, [router, viewHistory]);
   routeContext.panelsHistory = panelsHistory;
-  const routeFound = Boolean(routeContext.panelMatch);
+  const routeNotFound = Boolean(!routeContext.match ||
+    routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
+      routeContext.state.errors[routeContext.match.route.id].status === 404);
   const dataRouterContext = React.useMemo(() => {
-    const navigator: RouteNavigator = new DefaultRouteNavigator(router, setPopout);
-    return { router, navigator };
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, setPopout);
+    return { router, routeNavigator };
   }, [router, setPopout]);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
-        {!routeFound && (notFound || <DefaultNotFound navigator={dataRouterContext.navigator} />)}
-        {routeFound && <RouteContext.Provider value={routeContext} children={children} />}
+        {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
+        {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
       </PopoutContext.Provider>
     </RouterContext.Provider>
   );
