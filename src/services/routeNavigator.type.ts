@@ -1,7 +1,12 @@
-export interface RouteNavigator {
-  push(path: string): void;
+import { Page, PageWithParams } from '../page-types/common';
+import { Params } from '@remix-run/router';
 
-  replace(path: string): void;
+export interface RouteNavigator {
+  push<T extends string>(to: PageWithParams<T>, params: Params<T>): void;
+  push(to: string | Page): void;
+
+  replace<T extends string>(to: PageWithParams<T>, params: Params<T>): void;
+  replace(to: string | Page): void;
 
   back(): void;
 
