@@ -30,3 +30,4 @@ export function createHashRouter(routes: (PanelWithRoot | ModalWithRoot)[] | (Pa
 
 export { AgnosticDataRouteObject, AgnosticRouteMatch } from '@remix-run/router';
 export { RouteNavigator } from './services/routeNavigator.type';
+export { RoutesConfig, createView, createRoot, createPanel, createModal } from './page-types';

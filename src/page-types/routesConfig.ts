@@ -1,0 +1,32 @@
+import { RootConfig } from './rootConfig';
+import { ViewConfig } from './viewConfig';
+import { AddChild, RepresentsRoutes } from './common';
+import { CommonRouteObject } from '../type';
+
+interface RoutePartial extends CommonRouteObject {
+  root?: string;
+  view: string;
+  panel: string;
+  modal?: string;
+}
+
+export class RoutesConfig implements RepresentsRoutes<RoutePartial> {
+  private items: ViewConfig<string>[] | RootConfig<string>[] = [];
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
+
+  getRoutes(): RoutePartial[] {
+    return this.items.map((item) => item.getRoutes()).flat();
+  }
+
+  static createConfig<A extends RootConfig<string>, B extends RootConfig<string>>(routes: [A, B]): AddChild<AddChild<RoutesConfig, A>, B>
+  static createConfig<A extends RootConfig<string>>(routes: [A]): AddChild<RoutesConfig, A>
+  static createConfig<A extends ViewConfig<string>, B extends ViewConfig<string>>(routes: [A, B]): AddChild<AddChild<RoutesConfig, A>, B>
+  static createConfig<A extends ViewConfig<string>>(routes: [A]): AddChild<RoutesConfig, A>
+  static createConfig(routes: ViewConfig<string>[] | RootConfig<string>[]): RoutesConfig {
+    const config = new RoutesConfig();
+    config.items = routes;
+    return config;
+  }
+}

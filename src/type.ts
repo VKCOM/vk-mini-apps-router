@@ -1,7 +1,6 @@
 import { AgnosticIndexRouteObject } from '@remix-run/router';
 
-interface CommonRouteObject {
-  caseSensitive?: AgnosticIndexRouteObject['caseSensitive'];
+export interface CommonRouteObject {
   path?: AgnosticIndexRouteObject['path'];
 }
 
@@ -26,5 +25,3 @@ export interface ModalWithRoot extends PanelWithRoot {
 
 export type InternalRouteConfig = { index: true; id: string };
 export type PageInternal = (PanelWithoutRoot & InternalRouteConfig) | (PanelWithRoot & InternalRouteConfig) | (ModalWithoutRoot & InternalRouteConfig) | (ModalWithRoot & InternalRouteConfig);
-
-export type Page = PanelWithoutRoot | PanelWithRoot | ModalWithoutRoot | ModalWithRoot;
