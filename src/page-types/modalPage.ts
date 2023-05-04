@@ -1,11 +1,11 @@
-import { Page, PageWithParams, RepresentsRoutes } from './common';
+import { HasId, Page, PageWithParams, RepresentsRoutes } from './common';
 import { CommonRouteObject } from '../type';
 
 interface ModalRoutePartial extends CommonRouteObject {
   modal: string;
 }
 
-export class ModalPage<I extends string> implements Page, RepresentsRoutes<ModalRoutePartial> {
+export class ModalPage<I extends string> implements Page, RepresentsRoutes<ModalRoutePartial>, HasId<I> {
   hasParams: false = false;
   constructor(public id: I, public path: string) {}
 
@@ -17,9 +17,9 @@ export class ModalPage<I extends string> implements Page, RepresentsRoutes<Modal
   }
 }
 
-export class ModalPageWithParams<I extends string, T extends string> implements PageWithParams<T>, RepresentsRoutes<ModalRoutePartial> {
+export class ModalPageWithParams<I extends string, T extends string> implements PageWithParams<T>, RepresentsRoutes<ModalRoutePartial>, HasId<I> {
   hasParams: true = true;
-  constructor(public id: I, public path: string, public paramKeys: T[]) {}
+  constructor(public id: I, public path: string, public paramKeys: readonly T[]) {}
 
   getRoutes(): ModalRoutePartial[] {
     return [{
@@ -34,7 +34,7 @@ export function createModal<T extends string, P extends string>(id: T, path: str
 export function createModal<T extends string, P extends string>(id: T, path: string, paramKeys?: readonly P[]):
 ModalPage<T> | ModalPageWithParams<T, P> {
   if (paramKeys) {
-    return new ModalPageWithParams(id, path, paramKeys as P[]);
+    return new ModalPageWithParams(id, path, paramKeys);
   }
   return new ModalPage(id, path);
 }

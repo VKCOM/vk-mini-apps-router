@@ -1,5 +1,5 @@
 import { AnyPanel } from './panelPage';
-import { AddChild, HasChildren, HasId, RepresentsRoutes } from './common';
+import { AddChild, HasChildren, HasId, RepresentsRoutes, uniqueKey } from './common';
 import { CommonRouteObject } from '../type';
 
 interface ViewRoutePartial extends CommonRouteObject {
@@ -9,14 +9,18 @@ interface ViewRoutePartial extends CommonRouteObject {
 }
 
 export class ViewConfig<T extends string> implements HasId<T>, HasChildren<AnyPanel>, RepresentsRoutes<ViewRoutePartial> {
-  constructor(public id: T, private panels: AnyPanel[]) {}
+  constructor(public id: T, private panels: AnyPanel[]) {
+    panels.forEach((panel) => {
+      // @ts-expect-error
+      this[uniqueKey(this, panel.id)] = panel;
+    });
+  }
 
   get children(): AnyPanel[] {
     return this.panels;
   }
 
   getRoutes(): ViewRoutePartial[] {
-    console.log(this);
     return this.panels
       .map((panel) => panel.getRoutes())
       .flat()

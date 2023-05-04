@@ -1,5 +1,5 @@
 import { ViewConfig } from './viewConfig';
-import { AddChild, HasChildren, HasId, RepresentsRoutes } from './common';
+import { AddChild, HasChildren, HasId, RepresentsRoutes, uniqueKey } from './common';
 import { CommonRouteObject } from '../type';
 
 interface RootRoutePartial extends CommonRouteObject {
@@ -14,6 +14,10 @@ export class RootConfig<T extends string> implements HasId<T>, HasChildren<ViewC
     if (!views.length) {
       throw new Error(`Trying to create root ${id} without views. Root must have at least one view.`);
     }
+    views.forEach((views) => {
+      // @ts-expect-error
+      this[uniqueKey(this, views.id)] = views;
+    });
   }
 
   get children(): ViewConfig<string>[] {
