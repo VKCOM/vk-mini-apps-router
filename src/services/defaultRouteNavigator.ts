@@ -1,9 +1,10 @@
-import { Router } from '@remix-run/router';
-import { createKey, isModalShown, isPopoutShown } from '../utils/utils';
+import { Params, Router, RouterNavigateOptions } from '@remix-run/router';
+import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from './routeNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
+import { Page, PageWithParams } from '../page-types/common';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
@@ -14,12 +15,12 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.setPopout = setPopout;
   }
 
-  public push(to: string): void {
-    this.router.navigate(to, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
+  public push(to: string | Page | PageWithParams<string>, params: Params = {}): void {
+    this.navigate(to, params, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
   }
 
-  public replace(to: string): void {
-    this.router.navigate(to, { replace: true });
+  public replace(to: string | Page | PageWithParams<string>, params: Params = {}): void {
+    this.navigate(to, params, { replace: true });
   }
 
   public back(): void {
@@ -79,5 +80,14 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
         this.router.navigate(-1);
       }
     }
+  }
+
+  private navigate(to: string | Page | PageWithParams<string>, params: Params = {}, opts?: RouterNavigateOptions): void {
+    const path = typeof to === 'string'
+      ? to
+      : to.hasParams
+        ? fillParamsIntoPath(to.path, params)
+        : to.path;
+    this.router.navigate(path, opts);
   }
 }
