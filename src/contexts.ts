@@ -2,10 +2,12 @@ import { AgnosticRouteMatch, Router, RouterState } from '@remix-run/router';
 import React from 'react';
 import { RouteNavigator } from './services/routeNavigator.type';
 import { PageInternal } from './type';
+import { ViewHistory } from './services/viewHistory';
 
 export interface RouterContextObject {
   router: Router;
   routeNavigator: RouteNavigator;
+  viewHistory: ViewHistory;
 }
 
 export const RouterContext = React.createContext<RouterContextObject>(null!);

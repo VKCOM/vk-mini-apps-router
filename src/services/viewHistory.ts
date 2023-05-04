@@ -29,6 +29,10 @@ export class ViewHistory {
     }
   }
 
+  get isFirstPage(): boolean {
+    return this.positionInternal < 1;
+  }
+
   get panelsHistory(): string[] {
     if (this.positionInternal < 0) {
       return [];

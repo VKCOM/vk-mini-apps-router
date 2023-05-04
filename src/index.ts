@@ -11,8 +11,9 @@ export {
   usePopout,
 } from './hooks/hooks';
 export { useSearchParams } from './hooks/useSearchParams';
-export { withRouter } from './hoc/withRouter';
+export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
+export { withRouter } from './hoc/withRouter';
 
 export function createHashRouter(routes: (PanelWithRoot | ModalWithRoot)[] | (PanelWithoutRoot | ModalWithoutRoot)[]): RemixRouter {
   // Задать новый key для новой локации в случае, если приложение уже запущено,
