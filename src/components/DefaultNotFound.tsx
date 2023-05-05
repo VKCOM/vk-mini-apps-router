@@ -8,6 +8,7 @@ const DivStyles = {
   overflow: 'hidden',
   margin: '0',
   cursor: 'pointer',
+  'background-size': 'contain',
 };
 
 export type DefaultNotFoundProps = {
