@@ -1,12 +1,24 @@
 import { Page, PageWithParams } from '../page-types/common';
 import { Params } from '@remix-run/router';
 
-export interface RouteNavigator {
-  push<T extends string>(to: PageWithParams<T>, params: Params<T>): void;
-  push(to: string | Page): void;
+export interface NavigationOptions {
+  keepSearchParams?: boolean;
+}
 
-  replace<T extends string>(to: PageWithParams<T>, params: Params<T>): void;
-  replace(to: string | Page): void;
+export function hasNavigationOptionsKeys<T extends {}>(object: T): boolean {
+  const base: Required<NavigationOptions> = {
+    keepSearchParams: true,
+  };
+  const keys = Object.keys(base);
+  return Object.keys(object).some((key) => keys.includes(key)) as any;
+}
+
+export interface RouteNavigator {
+  push<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): void;
+  push(to: string | Page, options?: NavigationOptions): void;
+
+  replace<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): void;
+  replace(to: string | Page, options?: NavigationOptions): void;
 
   back(): void;
 

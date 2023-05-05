@@ -1,7 +1,7 @@
 import { Params, Router, RouterNavigateOptions } from '@remix-run/router';
 import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
-import { RouteNavigator } from './routeNavigator.type';
+import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './routeNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
@@ -15,12 +15,18 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.setPopout = setPopout;
   }
 
-  public push(to: string | Page | PageWithParams<string>, params: Params = {}): void {
-    this.navigate(to, params, { replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
+  public push(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): void {
+    const paramsAreOptions = hasNavigationOptionsKeys(params);
+    const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
+    const preparedParams: Params = paramsAreOptions ? {} : params as Params;
+    this.navigate(to, preparedParams, { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
   }
 
-  public replace(to: string | Page | PageWithParams<string>, params: Params = {}): void {
-    this.navigate(to, params, { replace: true });
+  public replace(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): void {
+    const paramsAreOptions = hasNavigationOptionsKeys(params);
+    const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
+    const preparedParams: Params = paramsAreOptions ? {} : params as Params;
+    this.navigate(to, preparedParams, { ...preparedOptions, replace: true });
   }
 
   public back(): void {
@@ -82,12 +88,16 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     }
   }
 
-  private navigate(to: string | Page | PageWithParams<string>, params: Params = {}, opts?: RouterNavigateOptions): void {
-    const path = typeof to === 'string'
+  private navigate(to: string | Page | PageWithParams<string>, params: Params, opts?: RouterNavigateOptions & NavigationOptions): void {
+    let path = typeof to === 'string'
       ? to
       : to.hasParams
         ? fillParamsIntoPath(to.path, params)
         : to.path;
+    if (opts?.keepSearchParams) {
+      path += this.router.state.location.search;
+      console.log(this.router.state.location.search);
+    }
     this.router.navigate(path, opts);
   }
 }
