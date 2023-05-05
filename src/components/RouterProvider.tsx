@@ -52,7 +52,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
       routeContext.state.errors[routeContext.match.route.id].status === 404);
   const dataRouterContext = React.useMemo(() => {
-    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, setPopout);
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, setPopout);
     return { router, routeNavigator, viewHistory };
   }, [router, setPopout, viewHistory]);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];

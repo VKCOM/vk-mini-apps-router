@@ -5,12 +5,13 @@ import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './r
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
+import { ViewHistory } from './viewHistory';
 
 export class DefaultRouteNavigator implements RouteNavigator {
   private router: Router;
   private setPopout: (popout: JSX.Element | null) => void;
 
-  constructor(router: Router, setPopout: (popout: JSX.Element | null) => void) {
+  constructor(router: Router, private viewHistory: ViewHistory, setPopout: (popout: JSX.Element | null) => void) {
     this.router = router;
     this.setPopout = setPopout;
   }
@@ -41,7 +42,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public hideModal(pushPanel = false): void {
-    if (!pushPanel || isModalShown(this.router.state.location)) {
+    if (!pushPanel && !this.viewHistory.isFirstPage || isModalShown(this.router.state.location)) {
       this.router.navigate(-1);
     } else {
       const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
@@ -53,7 +54,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
           throw new Error(`There is no route registered for panel with ${rootMessage}, view: ${route.view}, panel: ${route.panel}.
 Make sure this route exists or use hideModal with pushPanel set to false.`);
         }
-        this.router.navigate(path);
+        this.navigate(path, {}, { keepSearchParams: true });
       }
     }
   }
