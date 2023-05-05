@@ -96,7 +96,6 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
         : to.path;
     if (opts?.keepSearchParams) {
       path += this.router.state.location.search;
-      console.log(this.router.state.location.search);
     }
     this.router.navigate(path, opts);
   }
