@@ -163,8 +163,10 @@ routeNavigator.push('/user/123');
 Можно проверить, есть ли записи в истории навигации используя хук `useFirstPageCheck()`.
 
 ```tsx
-import { useFirstPageCheck } from '@vkontakte/vk-mini-app-router';
+import { useFirstPageCheck, routeNavigator } from '@vkontakte/vk-mini-app-router';
+import { PanelPanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 
+const routeNavigator = useRouteNavigator();
 const isFirstPage = useFirstPageCheck();
 <PanelHeader
   before={<PanelHeaderBack onClick={() => isFirstPage ? routeNavigator.push('/') : routeNavigator.back()} />}
@@ -221,6 +223,9 @@ Popout всегда выводится без изменения URL.
 ### Отображение модальных окон
 В VKUI модальные страницы и карточки выводятся внутри `ModalRoot`.
 ```tsx
+import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { ModalPage, ModalRoot } from '@vkontakte/vkui';
+
 export function Modals() {
   const routeNavigator = useRouteNavigator();
   const { modal: activeModal } = useActiveVkuiLocation();
