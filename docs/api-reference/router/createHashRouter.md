@@ -12,6 +12,6 @@ export function createHashRouter(routes: RouteWithRoot[] | RouteWithoutRoot[]): 
 ### routes
 Массив маршрутов приложения.
 
-Состоит из набора [`RouteWithRoot`](route-with-root.md) элементов в случае,
+Состоит из набора [`RouteWithRoot`](routeWithRoot.md) элементов в случае,
 если в приложении есть несколько компонентов `Root` (используется компонент `Epic`).\
-В противном случае состоит из набора [`RouteWithoutRoot`](route-without-root.md).
+В противном случае состоит из набора [`RouteWithoutRoot`](routeWithoutRoot.md).
