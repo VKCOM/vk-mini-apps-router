@@ -13,7 +13,7 @@ export interface NavigateOptions {
   relative?: RelativeRoutingType;
 }
 
-type SetURLSearchParams = (
+export type SetURLSearchParams = (
   nextInit?:
   | URLSearchParamsInit
   | ((prev: URLSearchParams) => URLSearchParamsInit),

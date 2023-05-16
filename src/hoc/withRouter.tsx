@@ -1,21 +1,38 @@
 import { ActiveVkuiLocationObject, useActiveVkuiLocation } from '../hooks/useActiveVkuiLocation';
 import { RouteNavigator } from '../services/routeNavigator.type';
-import { ComponentType, useContext } from 'react';
-import { RouterContext } from '../contexts';
+import { ComponentType } from 'react';
 import { getDisplayName } from '../utils/utils';
-import { usePopout } from '../hooks/hooks';
+import { useParams, usePopout, useRouteNavigator } from '../hooks/hooks';
+import { Params } from '@remix-run/router';
+import { useFirstPageCheck } from '../hooks/useFirstPageCheck';
+import { SetURLSearchParams, useSearchParams } from '../hooks/useSearchParams';
 
 type RouterProps = {
   location: ActiveVkuiLocationObject;
   routeNavigator: RouteNavigator;
   popout: JSX.Element | null;
+  isFirstPage: boolean;
+  params?: Params;
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
 };
 
 /**
  * HOC для добавления свойств
  *
- * location:{@link ActiveVkuiLocationObject}
- * routeNavigator:{@link RouteNavigator}
+ * location: {@link ActiveVkuiLocationObject}
+ *
+ * routeNavigator: {@link RouteNavigator}
+ *
+ * popout: {@link JSX.Element}
+ *
+ * params: {@link Params}
+ *
+ * isFirstPage: boolean
+ *
+ * searchParams: {@link URLSearchParams}
+ *
+ * setSearchParams: {@link SetURLSearchParams}
  *
  * в переданный компонент
  *
@@ -26,11 +43,15 @@ type RouterProps = {
  */
 export function withRouter<T extends RouterProps>(Component: ComponentType<T>): ComponentType<Omit<T, keyof RouterProps>> {
   function WithRouter(props: Omit<T, keyof RouterProps>) {
-    const routerContext = useContext(RouterContext);
+    const [searchParams, setSearchParams] = useSearchParams();
     const routerProps: RouterProps = {
-      routeNavigator: routerContext.routeNavigator,
+      routeNavigator: useRouteNavigator(),
       location: useActiveVkuiLocation(),
       popout: usePopout(),
+      params: useParams(),
+      isFirstPage: useFirstPageCheck(),
+      searchParams,
+      setSearchParams,
     };
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const propsWithRouter: T = {
