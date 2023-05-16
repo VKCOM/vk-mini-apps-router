@@ -8,8 +8,8 @@ export interface ActiveVkuiLocationObject {
   view?: string;
   panel?: string;
   modal?: string;
-  hasOverlay?: boolean;
-  panelsHistory?: string[];
+  hasOverlay: boolean;
+  panelsHistory: string[];
 }
 
 export function useActiveVkuiLocation(): ActiveVkuiLocationObject {

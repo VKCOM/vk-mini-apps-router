@@ -1,6 +1,6 @@
 import { Action, Router } from '@remix-run/router';
 import { RouteContext, RouterContext, PopoutContext } from '../contexts';
-import React, { useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
@@ -14,10 +14,10 @@ export interface RouterProviderProps {
   router: Router;
   children: any;
   useBridge?: boolean;
-  notFound?: React.ReactElement;
+  notFound?: ReactElement;
 }
 
-export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): React.ReactElement {
+export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): ReactElement {
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
@@ -25,10 +25,10 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
 
   useBlockForwardToModals(router, viewHistory);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setViewHistory(new ViewHistory());
   }, [router, setViewHistory]);
-  React.useEffect(() => {
+  useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
     router.subscribe((state) => {
@@ -51,7 +51,7 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
   const routeNotFound = Boolean(!routeContext.match ||
     routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
       routeContext.state.errors[routeContext.match.route.id].status === 404);
-  const dataRouterContext = React.useMemo(() => {
+  const dataRouterContext = useMemo(() => {
     const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, setPopout);
     return { router, routeNavigator, viewHistory };
   }, [router, setPopout, viewHistory]);

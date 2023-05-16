@@ -1,7 +1,9 @@
 # Руководство пользователя @vkontakte/vk-mini-app-router
 Ниже приведены инструкции для запуска и использования `@vkontakte/vk-mini-app-router` в вашем приложении на основе библиотеки VKUI.
 
-Вы можете запустить [демо-приложение](TODO:Добавить ссылку) для ознакомления с функционалом роутера.
+[Описание публичных интерфейсов тут.](api-reference/apiReference.md)
+
+Вы можете запустить [демо-приложение](../examples/vk-mini-app-router-example/README.md) для ознакомления с функционалом роутера.
 
 ## Установка
 
@@ -163,8 +165,10 @@ routeNavigator.push('/user/123');
 Можно проверить, есть ли записи в истории навигации используя хук `useFirstPageCheck()`.
 
 ```tsx
-import { useFirstPageCheck } from '@vkontakte/vk-mini-app-router';
+import { useFirstPageCheck, routeNavigator } from '@vkontakte/vk-mini-app-router';
+import { PanelPanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 
+const routeNavigator = useRouteNavigator();
 const isFirstPage = useFirstPageCheck();
 <PanelHeader
   before={<PanelHeaderBack onClick={() => isFirstPage ? routeNavigator.push('/') : routeNavigator.back()} />}
@@ -221,6 +225,9 @@ Popout всегда выводится без изменения URL.
 ### Отображение модальных окон
 В VKUI модальные страницы и карточки выводятся внутри `ModalRoot`.
 ```tsx
+import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { ModalPage, ModalRoot } from '@vkontakte/vkui';
+
 export function Modals() {
   const routeNavigator = useRouteNavigator();
   const { modal: activeModal } = useActiveVkuiLocation();
