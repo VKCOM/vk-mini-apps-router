@@ -9,6 +9,7 @@ import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from '../services/routeNavigator.type';
+import { TransactionExecutor } from '../entities/TransactionExecutor';
 
 export interface RouterProviderProps {
   router: Router;
@@ -34,6 +35,7 @@ export function RouterProvider(
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
+  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor());
   const [popout, setPopout] = useState<JSX.Element | null>(null);
 
   useBlockForwardToModals(router, viewHistory);
@@ -42,11 +44,15 @@ export function RouterProvider(
     setViewHistory(new ViewHistory());
   }, [router, setViewHistory]);
   useEffect(() => {
+    setTransactionExecutor(new TransactionExecutor());
+  }, [router, setTransactionExecutor]);
+  useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
     router.subscribe((state) => {
       viewHistory.updateNavigation(state);
       setPanelsHistory(viewHistory.panelsHistory);
+      transactionExecutor.doNext();
     });
     if (useBridge) {
       bridge.subscribe((event) => {
@@ -65,13 +71,18 @@ export function RouterProvider(
     routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
       routeContext.state.errors[routeContext.match.route.id].status === 404);
   const dataRouterContext = useMemo(() => {
-    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, setPopout);
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, transactionExecutor, setPopout);
     return { router, routeNavigator, viewHistory };
   }, [router, setPopout, viewHistory]);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
+  const throttlingOptions = {
+    enabled: throttled || Boolean(transactionExecutor.initialDelay),
+    firstActionDelay: Math.max(firstActionDelay, transactionExecutor.initialDelay),
+    interval,
+  };
   return (
     <RouterContext.Provider value={dataRouterContext}>
-      <ThrottledContext.Provider value={{ enabled: throttled, firstActionDelay, interval }}>
+      <ThrottledContext.Provider value={throttlingOptions}>
         <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
           {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
           {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}

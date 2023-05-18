@@ -1,4 +1,4 @@
-import { Params, Router, RouterNavigateOptions } from '@remix-run/router';
+import { Params, Router, RouterNavigateOptions, UNSAFE_invariant as invariant } from '@remix-run/router';
 import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './routeNavigator.type';
@@ -6,44 +6,60 @@ import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMa
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
 import { ViewHistory } from './viewHistory';
+import { TransactionExecutor } from '../entities/TransactionExecutor';
+import { NavigationTransaction } from '../entities/NavigationTransaction';
 
 export class DefaultRouteNavigator implements RouteNavigator {
-  private router: Router;
-  private setPopout: (popout: JSX.Element | null) => void;
+  private readonly router: Router;
+  private readonly setPopout: (popout: JSX.Element | null) => void;
 
-  constructor(router: Router, private viewHistory: ViewHistory, setPopout: (popout: JSX.Element | null) => void) {
+  constructor(
+    router: Router,
+    private viewHistory: ViewHistory,
+    private transactionExecutor: TransactionExecutor,
+    setPopout: (popout: JSX.Element | null) => void,
+  ) {
     this.router = router;
     this.setPopout = setPopout;
   }
 
-  public push(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): void {
+  public async push(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): Promise<void> {
     const paramsAreOptions = hasNavigationOptionsKeys(params);
     const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
     const preparedParams: Params = paramsAreOptions ? {} : params as Params;
-    this.navigate(to, preparedParams, { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
+    await this.navigate(to, preparedParams, { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
   }
 
-  public replace(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): void {
+  public async replace(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): Promise<void> {
     const paramsAreOptions = hasNavigationOptionsKeys(params);
     const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
     const preparedParams: Params = paramsAreOptions ? {} : params as Params;
-    this.navigate(to, preparedParams, { ...preparedOptions, replace: true });
+    await this.navigate(to, preparedParams, { ...preparedOptions, replace: true });
   }
 
-  public back(): void {
-    this.router.navigate(-1);
+  public async back(to = -1): Promise<void> {
+    invariant(to < 0, `Parameter 'to' must be negative, ${to} passed. Use method 'go()' for any integer offset`);
+    await this.go(to);
   }
 
-  public showModal(id: string): void {
-    this.router.navigate(this.router.state.location, {
+  public async go(to: number): Promise<void> {
+    await this.router.navigate(to);
+  }
+
+  public async transaction(actions: VoidFunction[]): Promise<void> {
+    return await new NavigationTransaction(actions).start(this.transactionExecutor);
+  }
+
+  public async showModal(id: string): Promise<void> {
+    await this.router.navigate(this.router.state.location, {
       state: { [STATE_KEY_SHOW_MODAL]: id, [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
       replace: isModalShown(this.router.state.location),
     });
   }
 
-  public hideModal(pushPanel = false): void {
+  public async hideModal(pushPanel = false): Promise<void> {
     if (!pushPanel && !this.viewHistory.isFirstPage || isModalShown(this.router.state.location)) {
-      this.router.navigate(-1);
+      await this.router.navigate(-1);
     } else {
       const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
       if (modalMatch) {
@@ -54,12 +70,12 @@ export class DefaultRouteNavigator implements RouteNavigator {
           throw new Error(`There is no route registered for panel with ${rootMessage}, view: ${route.view}, panel: ${route.panel}.
 Make sure this route exists or use hideModal with pushPanel set to false.`);
         }
-        this.navigate(path, {}, { keepSearchParams: true });
+        await this.navigate(path, {}, { keepSearchParams: true });
       }
     }
   }
 
-  public showPopout(popout: JSX.Element | null): void {
+  public async showPopout(popout: JSX.Element | null): Promise<void> {
     this.setPopout(popout);
     const state: any = {
       [STATE_KEY_SHOW_POPOUT]: createKey(),
@@ -69,14 +85,14 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
       state[STATE_KEY_SHOW_MODAL] = this.router.state.location.state[STATE_KEY_SHOW_MODAL];
     }
     const replace = isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
-    this.router.navigate(this.router.state.location, { state, replace });
+    await this.router.navigate(this.router.state.location, { state, replace });
   }
 
-  public hidePopout(): void {
+  public async hidePopout(): Promise<void> {
     if (isPopoutShown(this.router.state.location)) {
       this.setPopout(null);
       if (isModalShown(this.router.state.location)) {
-        this.router.navigate(this.router.state.location, {
+        await this.router.navigate(this.router.state.location, {
           state: {
             [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
             [STATE_KEY_SHOW_MODAL]: this.router.state.location.state[STATE_KEY_SHOW_MODAL],
@@ -84,12 +100,12 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
           replace: true,
         });
       } else {
-        this.router.navigate(-1);
+        await this.router.navigate(-1);
       }
     }
   }
 
-  private navigate(to: string | Page | PageWithParams<string>, params: Params, opts?: RouterNavigateOptions & NavigationOptions): void {
+  private async navigate(to: string | Page | PageWithParams<string>, params: Params, opts?: RouterNavigateOptions & NavigationOptions): Promise<void> {
     let path = typeof to === 'string'
       ? to
       : to.hasParams
@@ -98,6 +114,6 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     if (opts?.keepSearchParams) {
       path += this.router.state.location.search;
     }
-    this.router.navigate(path, opts);
+    await this.router.navigate(path, opts);
   }
 }

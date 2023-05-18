@@ -11,6 +11,9 @@ export const DEFAULT_VIEW_PANELS = {
 
 export enum HOME_PANEL_MODALS {
   USER = 'user_modal',
+  ONBOARDING_1 = 'onboarding_1',
+  ONBOARDING_2 = 'onboarding_2',
+  ONBOARDING_3 = 'onboarding_3',
 }
 
 export enum PERSIK_PANEL_MODALS {
@@ -36,6 +39,9 @@ export const routes = RoutesConfig.create([
     createView(DEFAULT_VIEW, [
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', [
         createModal(HOME_PANEL_MODALS.USER, `/${HOME_PANEL_MODALS.USER}`),
+        createModal(HOME_PANEL_MODALS.ONBOARDING_1, `/${HOME_PANEL_MODALS.ONBOARDING_1}`),
+        createModal(HOME_PANEL_MODALS.ONBOARDING_2, `/${HOME_PANEL_MODALS.ONBOARDING_2}`),
+        createModal(HOME_PANEL_MODALS.ONBOARDING_3, `/${HOME_PANEL_MODALS.ONBOARDING_3}`),
       ]),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, [
         createModal(PERSIK_PANEL_MODALS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}`),
