@@ -1,5 +1,5 @@
 import { Action, Router } from '@remix-run/router';
-import { RouteContext, RouterContext, PopoutContext } from '../contexts';
+import { RouteContext, RouterContext, PopoutContext, ThrottledContext } from '../contexts';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
@@ -15,9 +15,22 @@ export interface RouterProviderProps {
   children: any;
   useBridge?: boolean;
   notFound?: ReactElement;
+  throttled?: boolean;
+  firstActionDelay?: number;
+  interval?: number;
 }
 
-export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): ReactElement {
+export function RouterProvider(
+  {
+    router,
+    children,
+    useBridge = true,
+    notFound = undefined,
+    throttled = true,
+    firstActionDelay = 0,
+    interval = 400,
+  }: RouterProviderProps,
+): ReactElement {
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
@@ -58,10 +71,12 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
   return (
     <RouterContext.Provider value={dataRouterContext}>
-      <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
-        {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
-        {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
-      </PopoutContext.Provider>
+      <ThrottledContext.Provider value={{ enabled: throttled, firstActionDelay, interval }}>
+        <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
+          {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
+          {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
+        </PopoutContext.Provider>
+      </ThrottledContext.Provider>
     </RouterContext.Provider>
   );
 }

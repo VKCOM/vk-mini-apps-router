@@ -1,7 +1,7 @@
-import { useContext } from 'react';
 import { RouteContext } from '../contexts';
 import { STATE_KEY_SHOW_MODAL } from '../const';
 import { usePopout } from './hooks';
+import { useThrottledContext } from './useThrottledContext';
 
 export interface ActiveVkuiLocationObject {
   root?: string;
@@ -13,7 +13,7 @@ export interface ActiveVkuiLocationObject {
 }
 
 export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
-  const routeContext = useContext(RouteContext);
+  const [routeContext] = useThrottledContext(RouteContext);
   const popout = usePopout();
   const { match, state, panelsHistory } = routeContext;
   const route = match?.route;

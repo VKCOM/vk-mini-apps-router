@@ -25,3 +25,11 @@ export interface PopoutContextObject {
 }
 
 export const PopoutContext = createContext<PopoutContextObject>({ popout: null });
+
+export interface ThrottledContextObject {
+  enabled: boolean;
+  firstActionDelay: number;
+  interval: number;
+}
+
+export const ThrottledContext = createContext<ThrottledContextObject>({ enabled: false, firstActionDelay: 0, interval: 0 });
