@@ -39,10 +39,24 @@ URL задан объектом типа `Page` в параметре `to`.
 URL задан объектом типа `PageWithParams` в параметре `to`,
 обязательно должны быть передан объект `params`, со всеми необходимыми ключами.
 
-### back(): void;
+### `back(): void;`
 Шаг назад по истории навигации.
 
-### showModal(id: string): void;
+### `transaction(actions: VoidFunction[]): Promise<void>`
+Выполнить несколько переходов разом, пользователь увидит только последний.\
+Промис будет завершен после выполнения последнего действия.\
+Каждая функция должна выполнять ровно один вызов метода routeNavigator.
+
+Пример использования:
+```tsx
+routeNavigator.transaction([
+  () => routeNavigator.back(-2),
+  () => routeNavigator.replace('/'),
+  () => routeNavigator.push('/'),
+]);
+```
+
+### `showModal(id: string): void;`
 Открыть модальное окно с идентификатором `id` без изменения URL.
 Будет добавлена новая запись в историю, либо обновлена предыдущая,
 если вызвать при открытом функцией `showModal` модальном окне.
@@ -67,5 +81,5 @@ _По умолчанию `false`_\
 [ScreenSpinner](https://vkcom.github.io/VKUI/#/ScreenSpinner),
 [Snackbar](https://vkcom.github.io/VKUI/#/Snackbar)
 
-### hidePopout(): void;
+### `hidePopout(): void;`
 Убирает Popout, если был открыт.

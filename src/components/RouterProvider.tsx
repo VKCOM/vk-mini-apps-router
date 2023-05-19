@@ -1,5 +1,5 @@
 import { Action, Router } from '@remix-run/router';
-import { RouteContext, RouterContext, PopoutContext } from '../contexts';
+import { RouteContext, RouterContext, PopoutContext, ThrottledContext } from '../contexts';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
@@ -9,18 +9,31 @@ import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from '../services/routeNavigator.type';
+import { TransactionExecutor } from '../entities/TransactionExecutor';
 
 export interface RouterProviderProps {
   router: Router;
   children: any;
   useBridge?: boolean;
   notFound?: ReactElement;
+  throttled?: boolean;
+  interval?: number;
 }
 
-export function RouterProvider({ router, children, useBridge = true, notFound = undefined }: RouterProviderProps): ReactElement {
+export function RouterProvider(
+  {
+    router,
+    children,
+    useBridge = true,
+    notFound = undefined,
+    throttled = true,
+    interval = 400,
+  }: RouterProviderProps,
+): ReactElement {
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
+  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor());
   const [popout, setPopout] = useState<JSX.Element | null>(null);
 
   useBlockForwardToModals(router, viewHistory);
@@ -29,11 +42,15 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     setViewHistory(new ViewHistory());
   }, [router, setViewHistory]);
   useEffect(() => {
+    setTransactionExecutor(new TransactionExecutor());
+  }, [router, setTransactionExecutor]);
+  useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
     router.subscribe((state) => {
       viewHistory.updateNavigation(state);
       setPanelsHistory(viewHistory.panelsHistory);
+      transactionExecutor.doNext();
     });
     if (useBridge) {
       bridge.subscribe((event) => {
@@ -52,16 +69,23 @@ export function RouterProvider({ router, children, useBridge = true, notFound = 
     routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
       routeContext.state.errors[routeContext.match.route.id].status === 404);
   const dataRouterContext = useMemo(() => {
-    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, setPopout);
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, transactionExecutor, setPopout);
     return { router, routeNavigator, viewHistory };
   }, [router, setPopout, viewHistory]);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
+  const throttlingOptions = {
+    enabled: throttled || Boolean(transactionExecutor.initialDelay),
+    firstActionDelay: transactionExecutor.initialDelay,
+    interval,
+  };
   return (
     <RouterContext.Provider value={dataRouterContext}>
-      <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
-        {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
-        {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
-      </PopoutContext.Provider>
+      <ThrottledContext.Provider value={throttlingOptions}>
+        <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
+          {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
+          {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
+        </PopoutContext.Provider>
+      </ThrottledContext.Provider>
     </RouterContext.Provider>
   );
 }

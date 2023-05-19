@@ -22,6 +22,9 @@ import { Empty } from './panels/Empty';
 import { PersikModal } from './modals/PersikModal';
 import { UserModal } from './modals/UserModal';
 import { Alternative } from './panels/Alternative';
+import { OnboardingOne } from './onboarding/OnboardingOne';
+import { OnboardingTwo } from './onboarding/OnboardingTwo';
+import { OnboardingThree } from './onboarding/OnboardingThree';
 
 function App() {
   const [fetchedUser, setUser] = useState<any>(null);
@@ -60,6 +63,9 @@ function App() {
     >
       <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK}></PersikModal>
       <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser}></UserModal>
+      <OnboardingOne nav={HOME_PANEL_MODALS.ONBOARDING_1} />
+      <OnboardingTwo nav={HOME_PANEL_MODALS.ONBOARDING_2} />
+      <OnboardingThree nav={HOME_PANEL_MODALS.ONBOARDING_3} />
     </ModalRoot>
   );
 
