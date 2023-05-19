@@ -16,30 +16,44 @@ interface NavigationOptions {
 ### push()
 Переход на новый URL. В историю будет добавлена новая запись.
 
-#### `push(to: string, options?: NavigationOptions): void;`
+#### `push(to: string, options?: NavigationOptions): Promise<void>;`
 URL задан строкой в параметре `to`.
 
-#### `push(to: Page, options?: NavigationOptions): void;`
+#### `push(to: Page, options?: NavigationOptions): Promise<void>;`
 URL задан объектом типа `Page` в параметре `to`.
 
-#### `push<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): void;`
+#### `push<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): Promise<void>;`
 URL задан объектом типа `PageWithParams` в параметре `to`,
 обязательно должны быть передан объект `params`, со всеми необходимыми ключами.
 
 ### replace()
 Переход на новый URL. В историю будет обновлена последняя запись.
 
-#### `replace(to: string, options?: NavigationOptions): void;`
+#### `replace(to: string, options?: NavigationOptions): Promise<void>;`
 URL задан строкой в параметре `to`.
 
-#### `replace(to: Page, options?: NavigationOptions): void;`
+#### `replace(to: Page, options?: NavigationOptions): Promise<void>;`
 URL задан объектом типа `Page` в параметре `to`.
 
-#### `replace<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): void;`
+#### `replace<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): Promise<void>;`
 URL задан объектом типа `PageWithParams` в параметре `to`,
 обязательно должны быть передан объект `params`, со всеми необходимыми ключами.
 
-### `back(): void;`
+### `back(to?: number): Promise<void>;`
+Шаг назад по истории навигации.
+
+#### `to`
+_По умолчанию `-1`_
+Сколько шагов назад нужно сделать. Должно быть отрицательным числом.
+
+### `go(to?: number): Promise<void>;`
+Смещение по истории навигации.
+
+#### `to`
+Направление и количество шагов. Любое целое число.\
+`0` допустим, но не имеет эффекта.
+
+### `backToFirst(): Promise<void>;`
 Шаг назад по истории навигации.
 
 ### `transaction(actions: VoidFunction[]): Promise<void>`
@@ -56,12 +70,12 @@ routeNavigator.transaction([
 ]);
 ```
 
-### `showModal(id: string): void;`
+### `showModal(id: string): Promise<void>;`
 Открыть модальное окно с идентификатором `id` без изменения URL.
 Будет добавлена новая запись в историю, либо обновлена предыдущая,
 если вызвать при открытом функцией `showModal` модальном окне.
 
-### `hideModal(pushPanel?: boolean): void;`
+### `hideModal(pushPanel?: boolean): Promise<void>;`
 Закрывает модальное окно, если оно было открыто.
 
 #### `pushPanel`
@@ -69,7 +83,7 @@ _По умолчанию `false`_\
 Делает шаг назад по истории навигации, если значение `false`
 Делает шаг вперед на панель, указанную в маршруте модального окна при `true` (работает только для модальных окон с собственным путем).
 
-### `showPopout(popout: JSX.Element | null): void;`
+### `showPopout(popout: JSX.Element | null): Promise<void>;`
 Открыть Popout без изменения URL.
 Будет добавлена новая запись в историю, либо обновлена предыдущая,
 если вызвать при открытом функцией `showModal` модальном окне.
@@ -81,5 +95,5 @@ _По умолчанию `false`_\
 [ScreenSpinner](https://vkcom.github.io/VKUI/#/ScreenSpinner),
 [Snackbar](https://vkcom.github.io/VKUI/#/Snackbar)
 
-### `hidePopout(): void;`
+### `hidePopout(): Promise<void>;`
 Убирает Popout, если был открыт.

@@ -42,8 +42,20 @@ export class DefaultRouteNavigator implements RouteNavigator {
     await this.go(to);
   }
 
+  public async backToFirst(): Promise<void> {
+    if (this.viewHistory.position > 0) {
+      await this.go(-this.viewHistory.position);
+    } else {
+      await this.transactionExecutor.doNext();
+    }
+  }
+
   public async go(to: number): Promise<void> {
-    await this.router.navigate(to);
+    if (to === 0) {
+      await this.transactionExecutor.doNext();
+    } else {
+      await this.router.navigate(to);
+    }
   }
 
   public async transaction(actions: VoidFunction[]): Promise<void> {

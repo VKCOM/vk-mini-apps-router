@@ -7,7 +7,7 @@ export const OnboardingThree = ({ nav }: { nav: string }) => {
   const routeNavigator: RouteNavigator = useRouteNavigator();
   const onClick = async () => {
     routeNavigator.transaction([
-      () => routeNavigator.back(-2),
+      () => routeNavigator.backToFirst(),
       () => routeNavigator.replace('/'),
       () => routeNavigator.push('/'),
       () => routeNavigator.back(),
