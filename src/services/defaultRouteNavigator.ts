@@ -71,6 +71,8 @@ export class DefaultRouteNavigator implements RouteNavigator {
 Make sure this route exists or use hideModal with pushPanel set to false.`);
         }
         await this.navigate(path, {}, { keepSearchParams: true });
+      } else {
+        await this.transactionExecutor.doNext();
       }
     }
   }
@@ -102,6 +104,8 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
       } else {
         await this.router.navigate(-1);
       }
+    } else {
+      await this.transactionExecutor.doNext();
     }
   }
 

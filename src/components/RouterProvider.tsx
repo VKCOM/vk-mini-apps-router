@@ -17,7 +17,6 @@ export interface RouterProviderProps {
   useBridge?: boolean;
   notFound?: ReactElement;
   throttled?: boolean;
-  firstActionDelay?: number;
   interval?: number;
 }
 
@@ -28,7 +27,6 @@ export function RouterProvider(
     useBridge = true,
     notFound = undefined,
     throttled = true,
-    firstActionDelay = 0,
     interval = 400,
   }: RouterProviderProps,
 ): ReactElement {
@@ -77,7 +75,7 @@ export function RouterProvider(
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
   const throttlingOptions = {
     enabled: throttled || Boolean(transactionExecutor.initialDelay),
-    firstActionDelay: Math.max(firstActionDelay, transactionExecutor.initialDelay),
+    firstActionDelay: transactionExecutor.initialDelay,
     interval,
   };
   return (
