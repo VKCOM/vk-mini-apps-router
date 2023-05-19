@@ -22,6 +22,8 @@ export interface RouteNavigator {
 
   back(to?: number): Promise<void>;
 
+  backToFirst(): Promise<void>;
+
   go(to: number): Promise<void>;
 
   showModal(id: string): Promise<void>;
