@@ -10,6 +10,7 @@ export const OnboardingThree = ({ nav }: { nav: string }) => {
       () => routeNavigator.back(-2),
       () => routeNavigator.replace('/'),
       () => routeNavigator.push('/'),
+      () => routeNavigator.back(),
     ]);
   };
   return (
