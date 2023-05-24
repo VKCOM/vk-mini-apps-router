@@ -3,12 +3,14 @@ import React from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, SimpleCell, Switch } from '@vkontakte/vkui';
 import { GoFunctionProp, NavProp, UserInfo } from '../types';
+import { useEnableSwipeBack } from '@vkontakte/vk-mini-app-router';
 
 type HomeProps = NavProp & GoFunctionProp & {
 	fetchedUser: UserInfo,
 };
 
 export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
+	useEnableSwipeBack();
 	const [top, setTop] = React.useState(false);
 	const [overlay, setOverlay] = React.useState(false);
 	const [close, setClose] = React.useState(true);

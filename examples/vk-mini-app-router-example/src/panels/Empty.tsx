@@ -2,10 +2,11 @@ import React from 'react';
 
 import { Panel, PanelHeader, Header, Button, Group, Div, Alert } from '@vkontakte/vkui';
 import { NavProp } from '../types';
-import { PERSIK_PANEL_MODALS, routes } from '../routes';
-import { useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { PERSIK_PANEL_MODALS } from '../routes';
+import { useRouteNavigator, useEnableSwipeBack } from '@vkontakte/vk-mini-app-router';
 
 export const Empty = ({ nav }: NavProp) => {
+  useEnableSwipeBack();
   const routeNavigator = useRouteNavigator();
   const popup =
     <Alert
@@ -28,7 +29,6 @@ export const Empty = ({ nav }: NavProp) => {
       text="Точно хотите нажать красную кнопку?"
     />;
 
-  const defaultView = routes.default_root.default_view;
   return (
     <Panel nav={nav}>
       <PanelHeader>Пустая страница</PanelHeader>
@@ -36,17 +36,6 @@ export const Empty = ({ nav }: NavProp) => {
       <Group header={<Header mode="secondary">Пример навигации</Header>}>
         <Div>
           <Group>
-            <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push(defaultView.persik)}>
-              Покажите Персика, пожалуйста
-            </Button>
-            <Button
-              stretched
-              size="l"
-              mode="secondary"
-              onClick={() => routeNavigator.push(defaultView.persik_0, { emotion: 'fish' })}
-            >
-              А Персик не голоден?
-            </Button>
             <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('/tra-ta-ta')}>
               Пойди туда, не знаю куда (404)
             </Button>
