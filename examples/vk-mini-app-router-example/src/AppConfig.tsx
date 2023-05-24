@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AdaptivityProvider, AppRoot, ConfigProvider, Platform } from '@vkontakte/vkui';
+import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import App from './App';
 import { router } from './routes';
@@ -21,7 +21,7 @@ export const AppConfig = () => {
   }, [])
 
   return (
-    <ConfigProvider platform={Platform.IOS} isWebView>
+    <ConfigProvider isWebView>
       <AdaptivityProvider>
         <AppRoot>
           {/*<RouterProvider router={router} notFound={<p>'Custom not found'</p>}>*/}

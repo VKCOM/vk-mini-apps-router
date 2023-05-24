@@ -47,9 +47,6 @@ function App() {
     }
     fetchData();
   }, []);
-  useEffect(() => {
-    bridge.send('VKWebAppSetSwipeSettings', { history: !!panelsHistory?.length });
-  }, [panelsHistory])
 
   const go = (path: string) => {
     console.log('go -> router.push', path);
@@ -69,6 +66,7 @@ function App() {
     </ModalRoot>
   );
 
+  const history = (activeModal || routerPopout) ? [] : panelsHistory;
   return (
     <SplitLayout popout={routerPopout || popout} modal={modal}>
       <SplitCol>
@@ -76,7 +74,7 @@ function App() {
           <Root activeView={activeView} nav={DEFAULT_ROOT}>
             <View
               nav={DEFAULT_VIEW}
-              history={panelsHistory}
+              history={history}
               activePanel={activePanel}
               onSwipeBack={() => routeNavigator.back()}
             >
@@ -85,7 +83,7 @@ function App() {
             </View>
             <View
               nav={EMPTY_VIEW}
-              history={panelsHistory}
+              history={history}
               activePanel={activePanel}
               onSwipeBack={() => routeNavigator.back()}
             >
@@ -95,7 +93,7 @@ function App() {
           <Root activeView={activeView} nav={ALTERNATIVE_ROOT}>
             <View
               nav={ALTERNATIVE_VIEW}
-              history={panelsHistory}
+              history={history}
               activePanel={activePanel}
               onSwipeBack={() => routeNavigator.back()}
             >

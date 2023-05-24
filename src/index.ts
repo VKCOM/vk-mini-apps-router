@@ -11,6 +11,7 @@ export {
 export { useSearchParams } from './hooks/useSearchParams';
 export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
+export { useEnableSwipeBack } from './hooks/useEnableSwipeBack';
 
 export { withRouter } from './hoc/withRouter';
 
