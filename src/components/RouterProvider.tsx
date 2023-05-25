@@ -1,15 +1,18 @@
 import { Action, Router } from '@remix-run/router';
-import { RouteContext, RouterContext, PopoutContext, ThrottledContext } from '../contexts';
+import { PopoutContext, RouteContext, RouterContext, ThrottledContext } from '../contexts';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
-import { getContextFromState } from '../utils/utils';
+import { getContextFromState, useForceUpdate } from '../utils/utils';
 import { ViewHistory } from '../services/viewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
-import { STATE_KEY_SHOW_POPOUT } from '../const';
+import { SEARCH_PARAM_INFLATE, STATE_KEY_SHOW_POPOUT } from '../const';
 import { RouteNavigator } from '../services/routeNavigator.type';
-import { TransactionExecutor } from '../entities/TransactionExecutor';
+import { TransactionExecutor } from '../services/TransactionExecutor';
+import { fillHistory } from '../utils/fillHistory';
+import { createSearchParams } from '../utils/createSearchParams';
+import { RouteLeaf } from '../type';
 
 export interface RouterProviderProps {
   router: Router;
@@ -18,6 +21,7 @@ export interface RouterProviderProps {
   notFound?: ReactElement;
   throttled?: boolean;
   interval?: number;
+  hierarchy?: RouteLeaf[];
 }
 
 export function RouterProvider(
@@ -28,22 +32,17 @@ export function RouterProvider(
     notFound = undefined,
     throttled = true,
     interval = 400,
+    hierarchy,
   }: RouterProviderProps,
 ): ReactElement {
+  const forceUpdate = useForceUpdate();
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
-  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor());
+  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor(forceUpdate));
   const [popout, setPopout] = useState<JSX.Element | null>(null);
 
   useBlockForwardToModals(router, viewHistory);
-
-  useEffect(() => {
-    setViewHistory(new ViewHistory());
-  }, [router, setViewHistory]);
-  useEffect(() => {
-    setTransactionExecutor(new TransactionExecutor());
-  }, [router, setTransactionExecutor]);
   useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
@@ -78,6 +77,15 @@ export function RouterProvider(
     firstActionDelay: transactionExecutor.initialDelay,
     interval,
   };
+
+  useEffect(() => {
+    setViewHistory(new ViewHistory());
+    const executor = new TransactionExecutor(forceUpdate);
+    setTransactionExecutor(executor);
+    const searchParams = createSearchParams(router.state.location.search);
+    const enableFilling = Boolean(searchParams.get(SEARCH_PARAM_INFLATE));
+    hierarchy && enableFilling && fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
+  }, [router]);
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <ThrottledContext.Provider value={throttlingOptions}>

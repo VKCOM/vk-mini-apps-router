@@ -1,4 +1,12 @@
-import { createHashRouter, createModal, createPanel, createRoot, createView, RoutesConfig } from '@vkontakte/vk-mini-app-router';
+import {
+  createHashRouter,
+  createModal,
+  createPanel,
+  createRoot,
+  createView,
+  RoutesConfig,
+  RouteLeaf,
+} from '@vkontakte/vk-mini-app-router';
 
 export const DEFAULT_ROOT = 'default_root';
 
@@ -62,6 +70,19 @@ export const routes = RoutesConfig.create([
     ]),
   ]),
 ]);
+
+export const hierarchy: RouteLeaf[] = [{
+  path: '/',
+  children: [
+    {
+      path: `/${DEFAULT_VIEW_PANELS.PERSIK}`,
+      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}` }],
+    }, {
+      path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
+      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}` }],
+    },
+  ],
+}];
 
 export const router = createHashRouter(routes.getRoutes());
 

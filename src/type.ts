@@ -28,3 +28,14 @@ export type RouteWithoutRoot = PanelWithoutRoot | ModalWithoutRoot;
 
 export type InternalRouteConfig = { index: true; id: string };
 export type PageInternal = (PanelWithoutRoot & InternalRouteConfig) | (PanelWithRoot & InternalRouteConfig) | (ModalWithoutRoot & InternalRouteConfig) | (ModalWithRoot & InternalRouteConfig);
+
+export interface RouteLeaf {
+  path: string;
+  children?: RouteLeaf[];
+}
+
+export interface RouteLeafWithParents {
+  path: string;
+  children?: RouteLeaf[];
+  parents: RouteLeaf[];
+}

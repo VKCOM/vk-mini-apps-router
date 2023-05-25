@@ -53,3 +53,32 @@ _Необязательное, по умолчанию `true`_\
 ### `interval: number`
 _Необязательное, по умолчанию `400`_\
 Минимальная задержка между двумя последовательными навигациями, задана в ms.
+
+### `hierarchy: RouteLeaf[]`
+_Необязательное, по умолчанию `undefined`_\
+Дерево страниц, которое позволяет внести в историю навигации
+сразу несколько записей при входе в приложение по прямой ссылке с
+параметром `?inflate=true`.
+
+```tsx
+export interface RouteLeaf {
+  path: string;
+  children?: RouteLeaf[];
+}
+```
+Пример структуры:
+```tsx
+export const hierarchy: RouteLeaf[] = [{
+  path: '/',
+  children: [
+    {
+      path: `/${DEFAULT_VIEW_PANELS.PERSIK}`,
+      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}` }],
+    }, {
+      path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
+      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}` }],
+    },
+  ],
+}];
+```
+Пример пути: `/persik/fish/persik_modal?inflate=true`.
