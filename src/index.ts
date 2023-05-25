@@ -1,4 +1,4 @@
-export type { RouteWithoutRoot, RouteWithRoot } from './type';
+export type { RouteWithoutRoot, RouteWithRoot, RouteLeaf } from './type';
 export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
 export { createHashRouter } from './utils/createHashRouter';

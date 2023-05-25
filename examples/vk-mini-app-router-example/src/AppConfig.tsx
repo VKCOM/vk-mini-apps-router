@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import App from './App';
-import { router } from './routes';
+import { hierarchy, router } from './routes';
 import { RouterProvider } from '@vkontakte/vk-mini-app-router';
 import bridge from '@vkontakte/vk-bridge';
 
@@ -25,7 +25,7 @@ export const AppConfig = () => {
       <AdaptivityProvider>
         <AppRoot>
           {/*<RouterProvider router={router} notFound={<p>'Custom not found'</p>}>*/}
-          <RouterProvider router={router}>
+          <RouterProvider router={router} hierarchy={hierarchy}>
             <App />
           </RouterProvider>
         </AppRoot>

@@ -6,7 +6,7 @@ import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMa
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
 import { ViewHistory } from './viewHistory';
-import { TransactionExecutor } from '../entities/TransactionExecutor';
+import { TransactionExecutor } from './TransactionExecutor';
 import { NavigationTransaction } from '../entities/NavigationTransaction';
 
 export class DefaultRouteNavigator implements RouteNavigator {
@@ -59,7 +59,10 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public async transaction(actions: VoidFunction[]): Promise<void> {
-    return await new NavigationTransaction(actions).start(this.transactionExecutor);
+    const transaction = new NavigationTransaction(actions);
+    this.transactionExecutor.add(transaction);
+    this.transactionExecutor.doNext();
+    return transaction.donePromise;
   }
 
   public async showModal(id: string): Promise<void> {

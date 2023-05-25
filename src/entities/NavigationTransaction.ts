@@ -1,5 +1,3 @@
-import { TransactionExecutor } from './TransactionExecutor';
-
 export class NavigationTransaction {
   private pointer = 0;
   private resolve: VoidFunction = () => { /* Empty */ };
@@ -11,9 +9,11 @@ export class NavigationTransaction {
 
   constructor(private actions: VoidFunction[]) {}
 
-  start(executor: TransactionExecutor): Promise<void> {
-    executor.add(this);
-    this.doNext();
+  get isMultiAction(): boolean {
+    return this.actions.length > 1;
+  }
+
+  get donePromise(): Promise<void> {
     return this.promise;
   }
 
