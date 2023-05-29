@@ -5,6 +5,8 @@
 Компонент-обертка для приложения для подключения роутера и хуков
 ## [useActiveVkuiLocation](hooks/useActiveVkuiLocation.md)
 Хук для получения значений видимых Root, View, Panel, Modal
+## [useParams](hooks/useParams.md)
+Хук для получения параметров из пути
 ## Описание маршрутов приложения
 Типы для описания маршрутов в приложении
 ### [RouteWithRoot](router/routeWithRoot.md)

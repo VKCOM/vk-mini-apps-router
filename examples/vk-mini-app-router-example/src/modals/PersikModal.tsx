@@ -8,6 +8,7 @@ import persik_sad from '../img/persik_sad.png';
 import './PersikModal.css';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
 import { NavProp } from '../types';
+import { PERSIK_PANEL_MODALS } from '../routes';
 
 const IMAGES = { persik, persik_fish, persik_sad };
 
@@ -34,7 +35,7 @@ export const PersikModal = (props: NavProp) => {
       text="Вы уверены, что хотите забрать у персика еду?"
     />;
 
-  const { emotion } = useParams() ?? {};
+  const { em: emotion } = useParams({ modal: PERSIK_PANEL_MODALS.PERSIK }) ?? {};
   const image: string = IMAGES[`persik${emotion ? '_' : ''}${emotion ?? ''}` as keyof typeof IMAGES];
   return (
       <ModalPage

@@ -13,7 +13,7 @@ import { routes } from '../routes';
 const IMAGES = { persik, persik_fish, persik_sad };
 
 const Persik = (props: NavProp) => {
-	const { emotion } = useParams() ?? {};
+	const { emotion } = useParams({ panel: props.nav }) ?? {};
 	const [params, setParams] = useSearchParams();
 	const [additional, setAdditional] = useState(params.get('additional'));
 	function updateSearch() {
@@ -56,7 +56,7 @@ const Persik = (props: NavProp) => {
 					onClick={() => routeNavigator.push(persikEmotionPanel, { emotion: 'sad' }, { keepSearchParams: true })}
 				>А еды нет...</Button>}
 				<Button stretched size="l" mode="secondary" onClick={() =>
-					routeNavigator.push(`/persik${emotion ? '/' + emotion : ''}/persik_modal`, { keepSearchParams: true })}>
+					routeNavigator.push(`/persik${emotion ? '/' + emotion : ''}/persik_modal${emotion ? '/sad' : ''}`, { keepSearchParams: true })}>
 					Персик в модалке
 				</Button>
 				<FormItem top="Дополнительный текст в заголовке">

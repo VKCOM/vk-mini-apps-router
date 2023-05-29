@@ -5,14 +5,17 @@ type NullableFunction = (() => void) | null;
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const EMPTY_FUNCTION = () => {};
 
-export function useThrottledContext<T>(context: Context<T>): [T, () => void] {
+export function useThrottledContext<T>(context: Context<T>): [T, T | null, () => void] {
   const { enabled, interval, firstActionDelay } = useContext(ThrottledContext);
+  const prevValue = useRef<T | null>(null);
   const value = useContext(context);
   const updated = useRef(0);
   const updateTimer = useRef(0);
   const [throttledValue, setThrottledValue] = useState<T>(value);
   if (!enabled) {
-    return [value, EMPTY_FUNCTION];
+    const returnPrev = prevValue.current;
+    prevValue.current = value;
+    return [value, returnPrev, EMPTY_FUNCTION];
   }
   const updateCallback = useRef<NullableFunction>(null);
   useEffect(() => {
@@ -40,5 +43,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, () => void] {
       updateTimer.current = setTimeout(updateCallback.current, 1);
     }
   }, []);
-  return [throttledValue, onTransitionEnd];
+  const returnPrev = prevValue.current;
+  prevValue.current = throttledValue;
+  return [throttledValue, returnPrev, onTransitionEnd];
 }

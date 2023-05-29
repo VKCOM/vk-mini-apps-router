@@ -63,7 +63,7 @@ export const routes = RoutesConfig.create([
         createModal(HOME_PANEL_MODALS.USER, `/${DEFAULT_VIEW_PANELS.PERSIK}/${HOME_PANEL_MODALS.USER}`),
       ]),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`, [
-        createModal(PERSIK_PANEL_MODALS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}`, ['emotion'] as const),
+        createModal(PERSIK_PANEL_MODALS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}/:em`, ['em', 'emotion'] as const),
         createModal(HOME_PANEL_MODALS.USER, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${HOME_PANEL_MODALS.USER}`, ['emotion'] as const),
       ], ['emotion'] as const),
     ]),
