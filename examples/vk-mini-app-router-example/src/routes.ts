@@ -8,7 +8,6 @@ import {
   RoutesConfig,
   RouteLeaf,
 } from '@vkontakte/vk-mini-app-router';
-import { RouteNavigator } from '../../../src';
 
 export const DEFAULT_ROOT = 'default_root';
 
@@ -85,8 +84,6 @@ export const routes = RoutesConfig.create([
     ]),
   ]),
 ]);
-
-const tmp: RouteNavigator = undefined as unknown as RouteNavigator;
 
 export const hierarchy: RouteLeaf[] = [{
   path: '/',
