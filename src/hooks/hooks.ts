@@ -2,6 +2,7 @@ import { PopoutContext, RouteContext, RouterContext } from '../contexts';
 import { Location, Params, UNSAFE_invariant as invariant } from '@remix-run/router';
 import { RouteNavigator } from '../services/routeNavigator.type';
 import { useThrottledContext } from './useThrottledContext';
+import { ModalWithRoot } from '../type';
 
 export function useRouteNavigator(): RouteNavigator {
   const [routerContext] = useThrottledContext(RouterContext);
@@ -9,10 +10,22 @@ export function useRouteNavigator(): RouteNavigator {
   return routerContext.routeNavigator;
 }
 
-export function useParams<T extends string = string>(): Params<T> | undefined {
-  const [routeContext] = useThrottledContext(RouteContext);
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> =
+  Pick<T, Exclude<keyof T, Keys>>
+  & { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
+
+type AnimatedParts = Pick<ModalWithRoot, 'tab' | 'panel' | 'modal'>;
+type NavId = RequireOnlyOne<AnimatedParts>;
+
+export function useParams<T extends string = string>(id?: NavId): Params<T> | undefined {
+  const [routeContext, prevRouteContext] = useThrottledContext(RouteContext);
   invariant(routeContext, 'You can not use useParams hook outside of RouteContext. Make sure calling it inside RouterProvider.');
-  return routeContext.match?.params;
+  const match = id
+    && prevRouteContext
+    && (Object.keys(id) as unknown as (keyof NavId)[]).every((key) => (routeContext.match?.route as ModalWithRoot)[key] !== id[key])
+    && (Object.keys(id) as unknown as (keyof NavId)[]).every((key) => (prevRouteContext.match?.route as ModalWithRoot)[key] === id[key])
+    ? prevRouteContext.match : routeContext.match;
+  return match?.params;
 }
 
 export function useLocation(): Location {
