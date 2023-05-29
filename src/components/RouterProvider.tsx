@@ -1,14 +1,14 @@
 import { Action, Router } from '@remix-run/router';
 import { PopoutContext, RouteContext, RouterContext, ThrottledContext } from '../contexts';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { DefaultRouteNavigator } from '../services/defaultRouteNavigator';
+import { DefaultRouteNavigator } from '../services/DefaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
 import { getContextFromState, useForceUpdate } from '../utils/utils';
-import { ViewHistory } from '../services/viewHistory';
+import { ViewHistory } from '../services/ViewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { SEARCH_PARAM_INFLATE, STATE_KEY_SHOW_POPOUT } from '../const';
-import { RouteNavigator } from '../services/routeNavigator.type';
+import { RouteNavigator } from '../services/RouteNavigator.type';
 import { TransactionExecutor } from '../services/TransactionExecutor';
 import { fillHistory } from '../utils/fillHistory';
 import { createSearchParams } from '../utils/createSearchParams';

@@ -1,7 +1,7 @@
 import { Action, RouterState } from '@remix-run/router';
 import { getContextFromState } from '../utils/utils';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
-import { ViewNavigationRecord } from './viewHistory.type';
+import { ViewNavigationRecord } from './ViewNavigationRecord.type';
 
 export class ViewHistory {
   private history: ViewNavigationRecord[] = [];

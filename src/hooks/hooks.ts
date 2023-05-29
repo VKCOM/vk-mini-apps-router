@@ -1,6 +1,6 @@
 import { PopoutContext, RouteContext, RouterContext } from '../contexts';
 import { Location, Params, UNSAFE_invariant as invariant } from '@remix-run/router';
-import { RouteNavigator } from '../services/routeNavigator.type';
+import { RouteNavigator } from '../services/RouteNavigator.type';
 import { useThrottledContext } from './useThrottledContext';
 import { ModalWithRoot } from '../type';
 

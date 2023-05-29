@@ -1,7 +1,7 @@
 # RouteWithoutRoot
 Описание маршрута в приложении, имеющем один компонент `Root`.
 
-Наследует базовые свойства маршрута от [`CommonRouteObject`](commonRouteObject.md)
+Наследует базовые свойства маршрута от [`CommonRouteObject`](CommonRouteObject.md)
 
 ## Объявление типа
 ```tsx

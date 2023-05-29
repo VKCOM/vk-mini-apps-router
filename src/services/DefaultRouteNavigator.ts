@@ -1,11 +1,11 @@
 import { Params, Router, RouterNavigateOptions, UNSAFE_invariant as invariant } from '@remix-run/router';
 import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
-import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './routeNavigator.type';
+import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
-import { ViewHistory } from './viewHistory';
+import { ViewHistory } from './ViewHistory';
 import { TransactionExecutor } from './TransactionExecutor';
 import { NavigationTransaction } from '../entities/NavigationTransaction';
 

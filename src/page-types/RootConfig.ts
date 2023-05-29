@@ -1,4 +1,4 @@
-import { ViewConfig } from './viewConfig';
+import { ViewConfig } from './ViewConfig';
 import { AddChild, HasChildren, HasId, RepresentsRoutes, uniqueKey } from './common';
 import { CommonRouteObject } from '../type';
 

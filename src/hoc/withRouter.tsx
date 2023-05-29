@@ -1,5 +1,5 @@
 import { ActiveVkuiLocationObject, useActiveVkuiLocation } from '../hooks/useActiveVkuiLocation';
-import { RouteNavigator } from '../services/routeNavigator.type';
+import { RouteNavigator } from '../services/RouteNavigator.type';
 import { ComponentType } from 'react';
 import { getDisplayName } from '../utils/utils';
 import { useParams, usePopout, useRouteNavigator } from '../hooks/hooks';
