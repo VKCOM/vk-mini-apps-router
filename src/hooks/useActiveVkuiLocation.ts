@@ -7,6 +7,7 @@ export interface ActiveVkuiLocationObject {
   root?: string;
   view?: string;
   panel?: string;
+  tab?: string;
   modal?: string;
   hasOverlay: boolean;
   panelsHistory: string[];
@@ -22,6 +23,7 @@ export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
     root: route && 'root' in route ? route.root : undefined,
     view: route?.view,
     panel: route?.panel,
+    tab: route?.tab,
     modal,
     hasOverlay: Boolean(modal || popout),
     panelsHistory,

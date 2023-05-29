@@ -3,6 +3,7 @@ import {
   createModal,
   createPanel,
   createRoot,
+  createTab,
   createView,
   RoutesConfig,
   RouteLeaf,
@@ -42,6 +43,12 @@ export enum ALTERNATIVE_VIEW_PANELS {
   ALTERNATIVE = 'alternative',
 }
 
+export enum ALTERNATIVE_PANEL_TABS {
+  TAB_1 = 'tab1',
+  TAB_2 = 'tab2',
+  TAB_3 = 'tab3',
+}
+
 export const routes = RoutesConfig.create([
   createRoot(DEFAULT_ROOT, [
     createView(DEFAULT_VIEW, [
@@ -66,7 +73,14 @@ export const routes = RoutesConfig.create([
   ]),
   createRoot(ALTERNATIVE_ROOT, [
     createView(ALTERNATIVE_VIEW, [
-      createPanel(ALTERNATIVE_VIEW_PANELS.ALTERNATIVE, '/alternative'),
+      createPanel(ALTERNATIVE_VIEW_PANELS.ALTERNATIVE, '/alternative', [
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_1, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_1}`),
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_2, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_2}`),
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_3, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}`, [
+          createModal(PERSIK_PANEL_MODALS.PERSIK, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${PERSIK_PANEL_MODALS.PERSIK}`),
+          createModal(HOME_PANEL_MODALS.USER, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`),
+        ]),
+      ]),
     ]),
   ]),
 ]);

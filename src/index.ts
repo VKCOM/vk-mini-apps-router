@@ -17,4 +17,4 @@ export { withRouter } from './hoc/withRouter';
 
 export type { RouteNavigator } from './services/routeNavigator.type';
 
-export { RoutesConfig, createView, createRoot, createPanel, createModal } from './page-types';
+export { RoutesConfig, createView, createRoot, createPanel, createTab, createModal } from './page-types';

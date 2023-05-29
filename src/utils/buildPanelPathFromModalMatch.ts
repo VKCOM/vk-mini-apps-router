@@ -13,6 +13,7 @@ export function buildPanelPathFromModalMatch(match: AgnosticDataRouteMatch, rout
     const itemTyped = item as ModalWithRoot & InternalRouteConfig;
     const parameters = getParamKeys(itemTyped.path).map((param) => param.replace(':', ''));
     return !itemTyped.modal &&
+      itemTyped.tab === route.tab &&
       itemTyped.panel === route.panel &&
       itemTyped.view === route.view &&
       itemTyped.root === route.root &&
