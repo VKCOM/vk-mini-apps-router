@@ -50,6 +50,34 @@ export type AnyPanel = PanelPage<any> | PanelPageWithParams<any, any>;
 export function createPanel<
   T extends string,
   A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+  I extends AnySubPage, J extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H, I, J]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<
+AddChild<PanelPage<T>, A>, B>, C>, D>, E>, F>, G>, H>, I>, J>;
+export function createPanel<
+  T extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+  I extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H, I]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<
+AddChild<PanelPage<T>, A>, B>, C>, D>, E>, F>, G>, H>, I>;
+export function createPanel<
+  T extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<PanelPage<T>, A>, B>, C>, D>, E>, F>, G>, H>;
+export function createPanel<
+  T extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<PanelPage<T>, A>, B>, C>, D>, E>, F>, G>;
+export function createPanel<
+  T extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
   E extends AnySubPage, F extends AnySubPage,
 >(id: T, path: string, modals: [A, B, C, D, E, F]):
 AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<PanelPage<T>, A>, B>, C>, D>, E>, F>;
@@ -73,6 +101,34 @@ export function createPanel<
 export function createPanel<T extends string, A extends AnySubPage>(id: T, path: string, modals: [A]): AddChild<PanelPage<T>, A>;
 export function createPanel<T extends string>(id: T, path: string, modals?: AnySubPage[]): PanelPage<T>;
 
+export function createPanel<
+  T extends string, P extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+  I extends AnySubPage, J extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H, I, J], paramKeys: readonly P[]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<
+AddChild<PanelPageWithParams<T, P>, A>, B>, C>, D>, E>, F>, G>, H>, I>, J>;
+export function createPanel<
+  T extends string, P extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+  I extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H, I], paramKeys: readonly P[]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<
+AddChild<PanelPageWithParams<T, P>, A>, B>, C>, D>, E>, F>, G>, H>, I>;
+export function createPanel<
+  T extends string, P extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage, H extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G, H], paramKeys: readonly P[]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<PanelPageWithParams<T, P>, A>, B>, C>, D>, E>, F>, G>, H>;
+export function createPanel<
+  T extends string, P extends string,
+  A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
+  E extends AnySubPage, F extends AnySubPage, G extends AnySubPage,
+>(id: T, path: string, modals: [A, B, C, D, E, F, G], paramKeys: readonly P[]):
+AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<AddChild<PanelPageWithParams<T, P>, A>, B>, C>, D>, E>, F>, G>;
 export function createPanel<
   T extends string, P extends string,
   A extends AnySubPage, B extends AnySubPage, C extends AnySubPage, D extends AnySubPage,
