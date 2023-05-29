@@ -364,6 +364,7 @@ import {
   createHashRouter,
   createModal,
   createPanel,
+  createTab,
   createRoot,
   createView,
   RoutesConfig,
@@ -375,7 +376,8 @@ export const routes = RoutesConfig.create([
       createPanel('home_panel', `/`),
       createPanel('persik_panel', `/persik/:emotion`, [
         createModal('persik_modal', `/persik/:emotion/modal`, ['emotion'] as const),
-        // Другие createModal(...),
+        createTab('persik_tab', `/persik/:emotion/persik_tab`, ['emotion'] as const),
+        // Другие createModal(...) или createTab(...),
       ], ['emotion'] as const),
       // Другие createPanel(...),
     ]),

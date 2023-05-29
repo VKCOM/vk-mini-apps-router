@@ -7,12 +7,14 @@ export interface CommonRouteObject {
 export interface PanelWithoutRoot extends CommonRouteObject {
   view: string;
   panel: string;
+  tab?: string;
 }
 
 export interface PanelWithRoot extends CommonRouteObject {
   root: string;
   view: string;
   panel: string;
+  tab?: string;
 }
 
 export interface ModalWithoutRoot extends PanelWithoutRoot {

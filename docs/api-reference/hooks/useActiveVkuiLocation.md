@@ -6,6 +6,7 @@ interface ActiveVkuiLocationObject {
   root?: string;
   view?: string;
   panel?: string;
+  tab?: string;
   modal?: string;
   hasOverlay: boolean;
   panelsHistory: string[];
@@ -29,6 +30,13 @@ export function useActiveVkuiLocation(): ActiveVkuiLocationObject {}
 Строковый идентификатор компонента `Panel`,
 который сейчас должен быть виден во `View`.\
 Может быть `undefined` в случае, когда маршрут не найден.
+
+### `tab`
+`string | undefined`\
+Строковый идентификатор компонента `TabsItem`,
+который сейчас должен быть виден в `Tabs` текущей `Panel`.\
+Может быть `undefined` в случае, табов на странице нет
+или ни один не был выбран.
 
 ### `modal`
 `string | undefined`\
