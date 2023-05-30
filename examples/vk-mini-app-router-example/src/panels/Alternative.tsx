@@ -22,20 +22,31 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
           <TabsItem
             selected={activeTab === ALTERNATIVE_PANEL_TABS.TAB_1}
             onClick={() => go('/alternative/tab1')}
+            id={ALTERNATIVE_PANEL_TABS.TAB_1}
+            aria-controls={`${ALTERNATIVE_PANEL_TABS.TAB_1}_content`}
           >{ALTERNATIVE_PANEL_TABS.TAB_1}</TabsItem>
           <TabsItem
             selected={activeTab === ALTERNATIVE_PANEL_TABS.TAB_2}
             onClick={() => go('/alternative/tab2')}
+            id={ALTERNATIVE_PANEL_TABS.TAB_2}
+            aria-controls={`${ALTERNATIVE_PANEL_TABS.TAB_2}_content`}
           >{ALTERNATIVE_PANEL_TABS.TAB_2}</TabsItem>
           <TabsItem
             selected={activeTab === ALTERNATIVE_PANEL_TABS.TAB_3}
             onClick={() => go('/alternative/tab3')}
+            id={ALTERNATIVE_PANEL_TABS.TAB_3}
+            aria-controls={`${ALTERNATIVE_PANEL_TABS.TAB_3}_content`}
           >{ALTERNATIVE_PANEL_TABS.TAB_3}</TabsItem>
         </Tabs>
       </PanelHeader>
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_1 &&
-        <Group header={<Header mode="secondary">Пример навигации</Header>}>
+        <Group
+          header={<Header mode="secondary">Пример навигации</Header>}
+          id={`${ALTERNATIVE_PANEL_TABS.TAB_1}_content`}
+          aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_1}
+          tabIndex={0}
+        >
           <Div>
             <Group>
               <Button stretched size="l" mode="secondary" onClick={() => go('/')}>
@@ -50,11 +61,20 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
       }
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_2 &&
-        <Div>Контент второго таба</Div>
+        <Div
+          id={`${ALTERNATIVE_PANEL_TABS.TAB_2}_content`}
+          aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_2}
+          tabIndex={0}
+        >Контент второго таба</Div>
       }
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_3 &&
-        <Group header={<Header mode="secondary">Пример навигации</Header>}>
+        <Group
+          header={<Header mode="secondary">Пример навигации</Header>}
+          id={`${ALTERNATIVE_PANEL_TABS.TAB_3}_content`}
+          aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_3}
+          tabIndex={0}
+        >
           <Div>
             <Group>
               <Button stretched size="l" mode="secondary" onClick={() => go(`/alternative/tab3/${PERSIK_PANEL_MODALS.PERSIK}`)}>
