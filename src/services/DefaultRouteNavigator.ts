@@ -67,7 +67,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
     }
   }
 
-  public async transaction(actions: VoidFunction[]): Promise<void> {
+  public transaction(actions: VoidFunction[]): Promise<void> {
     const transaction = new NavigationTransaction(actions);
     this.transactionExecutor.add(transaction);
     this.transactionExecutor.doNext();
