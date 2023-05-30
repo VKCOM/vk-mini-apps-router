@@ -400,11 +400,6 @@
     "@typescript-eslint/types" "4.33.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vkontakte-internal/tsconfig.json@^1.0.0":
-  version "1.0.0"
-  resolved "https://artifactory.mvk.com/artifactory/api/npm/npm/@vkontakte-internal/tsconfig.json/-/@vkontakte-internal/tsconfig.json-1.0.0.tgz#fce873042e528d59b88d4d67d8d8961348bcb1f3"
-  integrity sha512-mkbQTYZrJoygYDKLSGzof1kHAkaTydS6eUiGLADT+kDndXmw9WtoYKrRbLPXJGNFNbOfJK/VN2vDFtb7ywrGPg==
-
 "@vkontakte/eslint-config@^3.1.0":
   version "3.1.0"
   resolved "https://artifactory.mvk.com/artifactory/api/npm/npm/@vkontakte/eslint-config/-/eslint-config-3.1.0.tgz#80a195df01dc4b1c274c3e6153403ca1a2d17607"

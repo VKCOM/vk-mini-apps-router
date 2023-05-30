@@ -11,13 +11,15 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
   const value = useContext(context);
   const updated = useRef(0);
   const updateTimer = useRef(0);
+  const updateCallback = useRef<NullableFunction>(null);
   const [throttledValue, setThrottledValue] = useState<T>(value);
+
   if (!enabled) {
     const returnPrev = prevValue.current;
     prevValue.current = value;
     return [value, returnPrev, EMPTY_FUNCTION];
   }
-  const updateCallback = useRef<NullableFunction>(null);
+
   useEffect(() => {
     const timeDiff = Date.now() - updated.current;
     const throttleDelay = interval - timeDiff;
@@ -36,6 +38,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
       updateTimer.current = setTimeout(updateCallback.current, delay);
     }
   }, [value]);
+
   const onTransitionEnd = useCallback(() => {
     updated.current = 0;
     if (updateCallback.current) {
@@ -43,6 +46,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
       updateTimer.current = setTimeout(updateCallback.current, 1);
     }
   }, []);
+
   const returnPrev = prevValue.current;
   prevValue.current = throttledValue;
   return [throttledValue, returnPrev, onTransitionEnd];

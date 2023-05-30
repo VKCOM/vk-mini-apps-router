@@ -1,6 +1,19 @@
 {
-  "extends": "@vkontakte-internal/tsconfig.json",
   "compilerOptions": {
+    "strict": true,
+    "incremental": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "useDefineForClassFields": false,
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
     "jsx": "react-jsx"
