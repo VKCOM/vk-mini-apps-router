@@ -35,15 +35,15 @@ export const PersikModal = (props: NavProp) => {
       text="Вы уверены, что хотите забрать у персика еду?"
     />;
 
-  const { em: emotion } = useParams({ modal: PERSIK_PANEL_MODALS.PERSIK }) ?? {};
-  const image: string = IMAGES[`persik${emotion ? '_' : ''}${emotion ?? ''}` as keyof typeof IMAGES];
+  const { em: modalEmotion, emotion: panelEmotion } = useParams({ modal: PERSIK_PANEL_MODALS.PERSIK }) ?? {};
+  const image: string = IMAGES[`persik${modalEmotion ? '_' : ''}${modalEmotion ?? ''}` as keyof typeof IMAGES];
   return (
       <ModalPage
         id={props.nav}
         header={<ModalPageHeader>Персик в модалке</ModalPageHeader>}
       >
         <Group>
-          <CellButton onClick={() => routeNavigator.push(`/persik${emotion ? '/' + emotion : ''}/user_modal`, { keepSearchParams: true })}>Информация о пользователе</CellButton>
+          <CellButton onClick={() => routeNavigator.push(`/persik${panelEmotion ? '/' + panelEmotion : ''}/user_modal`, { keepSearchParams: true })}>Информация о пользователе</CellButton>
           <CellButton onClick={() => routeNavigator.showPopout(popup)}>Открыть попаут из модалки</CellButton>
         </Group>
         <img className="Persik" src={image} alt="Persik The Cat" />

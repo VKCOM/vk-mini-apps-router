@@ -23,18 +23,27 @@ export class DefaultRouteNavigator implements RouteNavigator {
     this.setPopout = setPopout;
   }
 
-  public async push(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): Promise<void> {
-    const paramsAreOptions = hasNavigationOptionsKeys(params);
-    const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
-    const preparedParams: Params = paramsAreOptions ? {} : params as Params;
-    await this.navigate(to, preparedParams, { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) });
+  public async push(
+    to: string | Page | PageWithParams<string>,
+    paramsOrOptions: Params | NavigationOptions = {},
+    options: NavigationOptions = {}
+  ): Promise<void> {
+    const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
+    const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
+    const fullOptions = { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) };
+    const preparedParams: Params = paramsAreOptions ? {} : paramsOrOptions as Params;
+    await this.navigate(to, fullOptions, preparedParams);
   }
 
-  public async replace(to: string | Page | PageWithParams<string>, params: Params | NavigationOptions = {}, options: NavigationOptions = {}): Promise<void> {
-    const paramsAreOptions = hasNavigationOptionsKeys(params);
-    const preparedOptions: NavigationOptions = paramsAreOptions ? params : options;
-    const preparedParams: Params = paramsAreOptions ? {} : params as Params;
-    await this.navigate(to, preparedParams, { ...preparedOptions, replace: true });
+  public async replace(
+    to: string | Page | PageWithParams<string>,
+    paramsOrOptions: Params | NavigationOptions = {},
+    options: NavigationOptions = {}
+  ): Promise<void> {
+    const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
+    const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
+    const preparedParams: Params = paramsAreOptions ? {} : paramsOrOptions as Params;
+    await this.navigate(to, { ...preparedOptions, replace: true }, preparedParams);
   }
 
   public async back(to = -1): Promise<void> {
@@ -85,7 +94,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
           throw new Error(`There is no route registered for panel with ${rootMessage}, view: ${route.view}, panel: ${route.panel}.
 Make sure this route exists or use hideModal with pushPanel set to false.`);
         }
-        await this.navigate(path, {}, { keepSearchParams: true });
+        await this.navigate(path, { keepSearchParams: true });
       } else {
         await this.transactionExecutor.doNext();
       }
@@ -124,15 +133,21 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     }
   }
 
-  private async navigate(to: string | Page | PageWithParams<string>, params: Params, opts?: RouterNavigateOptions & NavigationOptions): Promise<void> {
+  private async navigate(
+    to: string | Page | PageWithParams<string>,
+    opts?: RouterNavigateOptions & NavigationOptions,
+    params: Params = {}
+  ): Promise<void> {
     let path = typeof to === 'string'
       ? to
       : to.hasParams
         ? fillParamsIntoPath(to.path, params)
         : to.path;
+
     if (opts?.keepSearchParams) {
       path += this.router.state.location.search;
     }
+
     await this.router.navigate(path, opts);
   }
 }
