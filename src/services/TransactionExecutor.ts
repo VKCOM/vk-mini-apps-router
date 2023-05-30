@@ -23,6 +23,6 @@ export class TransactionExecutor {
           this.transactions.shift();
         }
       }
-    }, 1);
+    });
   }
 }
