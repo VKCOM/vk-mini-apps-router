@@ -40,5 +40,5 @@ export function fillHistory(config: RouteLeaf[], routeNavigator: RouteNavigator,
       transactionExecutor.add(transaction);
       transactionExecutor.doNext();
     }
-  }, 1);
+  });
 }
