@@ -9,8 +9,7 @@ export function hasNavigationOptionsKeys<T extends {}>(object: T): boolean {
   const base: Required<NavigationOptions> = {
     keepSearchParams: true,
   };
-  const keys = Object.keys(base);
-  return Object.keys(object).some((key) => keys.includes(key)) as any;
+  return Object.keys(object).some((key) => key in base);
 }
 
 export interface RouteNavigator {

@@ -1,4 +1,4 @@
-import { AnyPanel } from './panelPage';
+import { AnyPanel } from './PanelPage';
 import { AddChild, HasChildren, HasId, RepresentsRoutes, uniqueKey } from './common';
 import { CommonRouteObject } from '../type';
 

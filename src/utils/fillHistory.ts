@@ -1,4 +1,4 @@
-import { RouteNavigator } from '../services/routeNavigator.type';
+import { RouteNavigator } from '../services/RouteNavigator.type';
 import { RouteContextObject } from '../contexts';
 import { RouteLeaf, RouteLeafWithParents } from '../type';
 import { TransactionExecutor } from '../services/TransactionExecutor';
@@ -40,5 +40,5 @@ export function fillHistory(config: RouteLeaf[], routeNavigator: RouteNavigator,
       transactionExecutor.add(transaction);
       transactionExecutor.doNext();
     }
-  }, 1);
+  });
 }

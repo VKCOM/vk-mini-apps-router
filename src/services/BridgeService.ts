@@ -1,10 +1,10 @@
 import bridge from '@vkontakte/vk-bridge';
 import { createKey } from '../utils/utils';
 
-let instance: BridgeService | null = null;
-
 export class BridgeService {
   private swipeBackConsumers: string[] = [];
+
+  private static _instance: BridgeService | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
@@ -40,9 +40,9 @@ export class BridgeService {
   }
 
   private static get instance(): BridgeService {
-    if (!instance) {
-      instance = new BridgeService();
+    if (!BridgeService._instance) {
+      BridgeService._instance = new BridgeService();
     }
-    return instance;
+    return BridgeService._instance;
   }
 }

@@ -6,6 +6,15 @@ export type URLSearchParamsInit =
   | Record<string, string | string[]>
   | URLSearchParams;
 
+function convertObjectToURLInit(init: Record<string, string | string[]>) {
+  return Object.keys(init).reduce<ParamKeyValuePair[]>((memo, key) => {
+    const value = init[key];
+    return memo.concat(
+      Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]],
+    );
+  }, []);
+}
+
 /**
  * Creates a URLSearchParams object using the given initializer.
  *
@@ -30,25 +39,17 @@ export type URLSearchParamsInit =
 export function createSearchParams(
   init: URLSearchParamsInit = ''
 ): URLSearchParams {
-  return new URLSearchParams(
-    typeof init === 'string' ||
+  const inputIsReadyForInstantiation = typeof init === 'string' ||
     Array.isArray(init) ||
-    init instanceof URLSearchParams
-      ? init
-      : Object.keys(init).reduce<ParamKeyValuePair[]>((memo, key) => {
-        let value = init[key];
-        return memo.concat(
-          Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]
-        );
-      }, [])
-  );
+    init instanceof URLSearchParams;
+  return new URLSearchParams(inputIsReadyForInstantiation ? init : convertObjectToURLInit(init));
 }
 
 export function getSearchParamsForLocation(
   locationSearch: string,
   defaultSearchParams: URLSearchParams | null
 ) {
-  let searchParams = createSearchParams(locationSearch);
+  const searchParams = createSearchParams(locationSearch);
 
   if (defaultSearchParams) {
     for (let key of defaultSearchParams.keys()) {

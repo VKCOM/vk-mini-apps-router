@@ -1,5 +1,5 @@
 import { AddChild, HasId, Page, PageWithParams, RepresentsRoutes, uniqueKey } from './common';
-import { AnyModalPage } from './modalPage';
+import { AnyModalPage } from './ModalPage';
 import { CommonRouteObject } from '../type';
 
 interface TabRoutePartial extends CommonRouteObject {

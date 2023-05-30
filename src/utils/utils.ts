@@ -39,7 +39,10 @@ export function isPopoutShown(location: Location): boolean {
 }
 
 export function createKey() {
-  return Math.random().toString(36).substring(2, 9);
+  const allNumbersAndLetters = 36;
+  const positionAfterZeroAnDot = 2;
+  const keyLength = 7;
+  return Math.random().toString(allNumbersAndLetters).substring(positionAfterZeroAnDot, positionAfterZeroAnDot + keyLength);
 }
 
 export function getDisplayName(WrappedComponent: {displayName?: string; name?: string}) {

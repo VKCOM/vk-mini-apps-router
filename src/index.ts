@@ -15,6 +15,6 @@ export { useEnableSwipeBack } from './hooks/useEnableSwipeBack';
 
 export { withRouter } from './hoc/withRouter';
 
-export type { RouteNavigator } from './services/routeNavigator.type';
+export type { RouteNavigator } from './services/RouteNavigator.type';
 
 export { RoutesConfig, createView, createRoot, createPanel, createTab, createModal } from './page-types';

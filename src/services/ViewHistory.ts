@@ -1,7 +1,7 @@
 import { Action, RouterState } from '@remix-run/router';
 import { getContextFromState } from '../utils/utils';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
-import { ViewNavigationRecord } from './viewHistory.type';
+import { ViewNavigationRecord } from './ViewNavigationRecord.type';
 
 export class ViewHistory {
   private history: ViewNavigationRecord[] = [];
@@ -9,23 +9,24 @@ export class ViewHistory {
 
   updateNavigation(state: RouterState): void {
     const record = this.getViewRecordFromState(state);
-    if (record) {
-      switch (state.historyAction) {
-        case Action.Push:
+    if (!record) {
+      return;
+    }
+    switch (state.historyAction) {
+      case Action.Push:
+        this.push(record);
+        break;
+      case Action.Pop:
+        if (this.hasKey(record.locationKey)) {
+          this.pop(record);
+        } else {
+          // В случае, если пользователь введет в адресную строку новый хэш, мы поймаем POP событие с новой локацией.
           this.push(record);
-          break;
-        case Action.Pop:
-          if (this.hasKey(record.locationKey)) {
-            this.pop(record);
-          } else {
-            // В случае, если пользователь введет в адресную строку новый хэш, мы поймаем POP событие с новой локацией.
-            this.push(record);
-          }
-          break;
-        case Action.Replace:
-          this.replace(record);
-          break;
-      }
+        }
+        break;
+      case Action.Replace:
+        this.replace(record);
+        break;
     }
   }
 
@@ -81,16 +82,16 @@ export class ViewHistory {
 
   private getViewRecordFromState(state: RouterState): ViewNavigationRecord | undefined {
     const context = getContextFromState(state);
-    if (context.match) {
-      const { route } = context.match;
-      return {
-        view: route.view,
-        panel: route.panel,
-        modal: 'modal' in route ? route.modal : undefined,
-        popout: state.location.state?.[STATE_KEY_SHOW_POPOUT],
-        locationKey: state.location.key,
-      };
+    if (!context.match) {
+      return undefined;
     }
-    return undefined;
+    const { route } = context.match;
+    return {
+      view: route.view,
+      panel: route.panel,
+      modal: 'modal' in route ? route.modal : undefined,
+      popout: state.location.state?.[STATE_KEY_SHOW_POPOUT],
+      locationKey: state.location.key,
+    };
   }
 }

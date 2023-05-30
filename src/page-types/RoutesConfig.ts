@@ -1,5 +1,5 @@
-import { RootConfig } from './rootConfig';
-import { ViewConfig } from './viewConfig';
+import { RootConfig } from './RootConfig';
+import { ViewConfig } from './ViewConfig';
 import { AddChild, RepresentsRoutes, uniqueKey } from './common';
 import { CommonRouteObject } from '../type';
 

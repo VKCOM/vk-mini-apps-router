@@ -1,7 +1,7 @@
 # Создание и подключение роутера
 ## [createHashRouter](router/createHashRouter.md)
 Создание роутера, работающего с хэш-частью строки адреса
-## [RouterProvider](components/routerProvider.md)
+## [RouterProvider](components/RouterProvider.md)
 Компонент-обертка для приложения для подключения роутера и хуков
 ## [useActiveVkuiLocation](hooks/useActiveVkuiLocation.md)
 Хук для получения значений видимых Root, View, Panel, Modal
@@ -9,9 +9,9 @@
 Хук для получения параметров из пути
 ## Описание маршрутов приложения
 Типы для описания маршрутов в приложении
-### [RouteWithRoot](router/routeWithRoot.md)
+### [RouteWithRoot](router/RouteWithRoot.md)
 Маршрут, включающий в себя возможность изменения Root
-### [RouteWithoutRoot](router/routeWithoutRoot.md)
+### [RouteWithoutRoot](router/RouteWithoutRoot.md)
 Маршрут без возможности изменения Root
 # Навигация
 ## [RouteNavigator](services/RouteNavigator.md)

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { BridgeService } from '../services/bridgeService';
+import { BridgeService } from '../services/BridgeService';
 
 export const useEnableSwipeBack = () => {
   const consumerId = useRef<string | null>(null);
