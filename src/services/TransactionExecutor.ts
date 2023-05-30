@@ -16,9 +16,9 @@ export class TransactionExecutor {
 
   async doNext(): Promise<void> {
     // Нужно делать асинхронно, иначе будет бесконечный цикл навигация-изменение стейта-навигация...
-    setTimeout(async () => {
+    setTimeout(() => {
       if (this.transactions.length) {
-        await this.transactions[0].doNext();
+        this.transactions[0].doNext();
         if (this.transactions[0].finished) {
           this.transactions.shift();
         }

@@ -21,11 +21,12 @@ export class NavigationTransaction {
     return this.pointer >= this.actions.length;
   }
 
-  async doNext(): Promise<void> {
+  doNext(): void {
     if (!this.finished) {
       this.actions[this.pointer]();
       this.pointer += 1;
     }
+    // this.finished изменился при выполнении предыдущего условия - нельзя объединить в if-else.
     if (this.finished) {
       this.resolve();
     }
