@@ -1,4 +1,4 @@
-import { RoutesConfig } from '../../../../dist';
+import { RoutesConfig } from '@vkontakte/vk-mini-app-router';
 
 export const NO_ROOT = 'no-root';
 export const NO_TAB = 'no-tab';
