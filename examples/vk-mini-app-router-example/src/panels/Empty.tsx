@@ -3,7 +3,7 @@ import React from 'react';
 import { Panel, PanelHeader, Header, Button, Group, ButtonGroup, Alert } from '@vkontakte/vkui';
 import { NavProp } from '../types';
 import { PERSIK_PANEL_MODALS } from '../routes';
-import { useRouteNavigator, useEnableSwipeBack } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator, useEnableSwipeBack } from '@vkontakte/vk-mini-apps-router';
 import { AppMap } from '../appMap/AppMap';
 
 export const Empty = ({ nav }: NavProp) => {

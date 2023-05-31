@@ -2,7 +2,7 @@ import { Button, Group, ButtonProps, Header } from '@vkontakte/vkui';
 import { routes } from '../routes';
 import './AppMap.css';
 import { arrayToTree, completeRoutes, ModalButton, NO_ROOT, NO_TAB, PanelButton, RootButton, TabButton, ViewButton } from './appMapHelpers';
-import { useActiveVkuiLocation } from '@vkontakte/vk-mini-app-router';
+import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
 type ActiveLocation = ReturnType<typeof useActiveVkuiLocation>;
 

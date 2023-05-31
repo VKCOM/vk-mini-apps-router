@@ -6,7 +6,7 @@ import persik from '../img/persik.png';
 import persik_fish from '../img/persik_fish.png';
 import persik_sad from '../img/persik_sad.png';
 import './PersikModal.css';
-import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
 import { PERSIK_PANEL_MODALS } from '../routes';
 
@@ -26,7 +26,7 @@ export const PersikModal = (props: NavProp) => {
           title: 'Забрать',
           autoClose: true,
           mode: 'destructive',
-          action: () => setTimeout(() => routeNavigator.replace('/persik/sad/persik_modal', { keepSearchParams: true }), 100),
+          action: () => setTimeout(() => routeNavigator.replace('/persik/sad/persik_modal/sad', { keepSearchParams: true }), 100),
         },
       ]}
       actionsLayout="horizontal"
@@ -44,7 +44,7 @@ export const PersikModal = (props: NavProp) => {
       >
         <Group>
           <CellButton onClick={() => routeNavigator.push(`/persik${panelEmotion ? '/' + panelEmotion : ''}/user_modal`, { keepSearchParams: true })}>Информация о пользователе</CellButton>
-          <CellButton onClick={() => routeNavigator.showPopout(popup)}>Открыть попаут из модалки</CellButton>
+          <CellButton onClick={() => routeNavigator.showPopout(popup)}>Открыть Popout из модального окна</CellButton>
         </Group>
         <img className="Persik" src={image} alt="Persik The Cat" />
       </ModalPage>

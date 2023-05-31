@@ -7,7 +7,7 @@ import {
   createView,
   RoutesConfig,
   RouteLeaf,
-} from '@vkontakte/vk-mini-app-router';
+} from '@vkontakte/vk-mini-apps-router';
 
 export const DEFAULT_ROOT = 'default_root';
 

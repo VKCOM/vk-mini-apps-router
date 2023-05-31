@@ -3,7 +3,7 @@ import React from 'react';
 import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Div, Tabs, TabsItem } from '@vkontakte/vkui';
 import bridge from '@vkontakte/vk-bridge';
 import { GoFunctionProp, NavProp } from '../types';
-import { useEnableSwipeBack, useActiveVkuiLocation } from '@vkontakte/vk-mini-app-router';
+import { useEnableSwipeBack, useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 import { ALTERNATIVE_PANEL_TABS, HOME_PANEL_MODALS, PERSIK_PANEL_MODALS } from '../routes';
 import { AppMap } from '../appMap/AppMap';
 
@@ -43,7 +43,7 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_1 &&
         <Group
-          header={<Header mode="secondary">Другой рут и табы</Header>}
+          header={<Header mode="secondary">Другой Root с Tabs</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_1}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_1}
           tabIndex={0}

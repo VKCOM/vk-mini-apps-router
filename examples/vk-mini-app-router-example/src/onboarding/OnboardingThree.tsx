@@ -1,7 +1,7 @@
 import { ModalPage, ModalPageHeader, Group, CellButton, Div } from '@vkontakte/vkui';
 import React from 'react';
 import persik_sad from '../img/persik_sad.png';
-import { useRouteNavigator, RouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator, RouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const OnboardingThree = ({ nav }: { nav: string }) => {
   const routeNavigator: RouteNavigator = useRouteNavigator();

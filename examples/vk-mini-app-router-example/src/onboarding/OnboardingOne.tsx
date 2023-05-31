@@ -1,7 +1,7 @@
 import { ModalPage, ModalPageHeader, Group, CellButton, Div } from '@vkontakte/vkui';
 import React from 'react';
 import persik from '../img/persik.png';
-import { useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { HOME_PANEL_MODALS } from '../routes';
 
 export const OnboardingOne = ({ nav }: { nav: string }) => {

@@ -6,7 +6,7 @@ import persik from '../img/persik.png';
 import persik_fish from '../img/persik_fish.png';
 import persik_sad from '../img/persik_sad.png';
 import './Persik.css';
-import { useParams, useSearchParams, useFirstPageCheck, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useParams, useSearchParams, useFirstPageCheck, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
 import { routes } from '../routes';
 import { AppMap } from '../appMap/AppMap';

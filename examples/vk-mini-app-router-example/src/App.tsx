@@ -3,7 +3,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { SplitCol, SplitLayout, View, Root, Epic, ModalRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import { useActiveVkuiLocation, usePopout, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useActiveVkuiLocation, usePopout, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
 import Persik from './panels/Persik';

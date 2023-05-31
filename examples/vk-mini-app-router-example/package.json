@@ -1,5 +1,5 @@
 {
-  "name": "vk-mini-app-router-example",
+  "name": "vk-mini-apps-router-example",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,7 @@
     "@types/react-dom": "^18.0.11",
     "@vkontakte/icons": "^2.27.0",
     "@vkontakte/vk-bridge": "latest",
-    "@vkontakte/vk-mini-app-router": "file:../../",
+    "@vkontakte/vk-mini-apps-router": "file:../../",
     "@vkontakte/vkui": "^5.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

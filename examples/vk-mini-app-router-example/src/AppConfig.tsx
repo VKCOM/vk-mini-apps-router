@@ -3,7 +3,7 @@ import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import App from './App';
 import { hierarchy, router } from './routes';
-import { RouterProvider } from '@vkontakte/vk-mini-app-router';
+import { RouterProvider } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 
 export const AppConfig = () => {

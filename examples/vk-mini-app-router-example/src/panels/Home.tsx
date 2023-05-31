@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Panel, PanelHeader, Header, Button, Group, Cell, ButtonGroup, Avatar } from '@vkontakte/vkui';
 import { GoFunctionProp, NavProp, UserInfo } from '../types';
-import { useEnableSwipeBack } from '@vkontakte/vk-mini-app-router';
+import { useEnableSwipeBack } from '@vkontakte/vk-mini-apps-router';
 import { AppMap } from '../appMap/AppMap';
 
 type HomeProps = NavProp & GoFunctionProp & {
@@ -35,10 +35,10 @@ export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
 						</Button>
 					</ButtonGroup>
 					<Button stretched size="l" mode="secondary" onClick={() => go('/empty')}>
-						На пустую страницу!!!
+						На пустую страницу!
 					</Button>
 					<Button stretched size="l" mode="secondary" onClick={() => go('/alternative')}>
-						На другой Root.
+						На другой Root
 					</Button>
 				</ButtonGroup>
 			</Group>

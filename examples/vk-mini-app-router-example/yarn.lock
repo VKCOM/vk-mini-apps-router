@@ -2308,8 +2308,8 @@
   resolved "https://artifactory.mvk.com/artifactory/api/npm/npm/@vkontakte/vk-bridge/-/vk-bridge-2.7.2.tgz#284380d3d5f54774741e6a2e67cce9fbe62e2072"
   integrity sha512-m/cgWEbd4Xi49xyS0tn14h3b8fLTG3Vw/wNo72k5sw5ILf8SFzB1CAyruc7kKBE6Xc8ibyIydVx1YkHwW1O0PA==
 
-"@vkontakte/vk-mini-app-router@file:../..":
-  version "1.0.1"
+"@vkontakte/vk-mini-apps-router@file:../..":
+  version "1.0.2"
   dependencies:
     "@remix-run/router" "^1.5.0"
 

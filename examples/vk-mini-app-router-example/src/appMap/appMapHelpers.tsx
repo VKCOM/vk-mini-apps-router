@@ -1,4 +1,4 @@
-import { RoutesConfig } from '@vkontakte/vk-mini-app-router';
+import { RoutesConfig } from '@vkontakte/vk-mini-apps-router';
 
 export const NO_ROOT = 'no-root';
 export const NO_TAB = 'no-tab';

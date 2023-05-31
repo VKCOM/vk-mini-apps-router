@@ -1,9 +1,9 @@
-# Руководство пользователя @vkontakte/vk-mini-app-router
-Ниже приведены инструкции для запуска и использования `@vkontakte/vk-mini-app-router` в вашем приложении на основе библиотеки VKUI.
+# Руководство пользователя @vkontakte/vk-mini-apps-router
+Ниже приведены инструкции для запуска и использования `@vkontakte/vk-mini-apps-router` в вашем приложении на основе библиотеки VKUI.
 
 [Описание публичных интерфейсов тут.](api-reference/apiReference.md)
 
-Вы можете запустить [демо-приложение](../examples/vk-mini-app-router-example/README.md) для ознакомления с функционалом роутера.
+Вы можете запустить [демо-приложение](../examples/vk-mini-apps-router-example/README.md) для ознакомления с функционалом роутера.
 
 ## Установка
 
@@ -13,12 +13,12 @@ TODO: добавить ссылку на npm пакет!
 
 1. Создайте роутер с помощью функции `createHashRouter`, передав ей [описания путей приложения](#настройка-маршрутов)
 ```tsx
-import { createHashRouter } from '@vkontakte/vk-mini-app-router';
+import { createHashRouter } from '@vkontakte/vk-mini-apps-router';
 const router = createHashRouter([/* описание путей приложения */]);
 ```
 2. Оберните приложение в `RouterProvider`, передав ему `router`
 ```tsx
-import { RouterProvider } from '@vkontakte/vk-mini-app-router';
+import { RouterProvider } from '@vkontakte/vk-mini-apps-router';
 import App from './App';
 
 <RouterProvider router={router}>
@@ -28,7 +28,7 @@ import App from './App';
 
 Пример целиком, с подключением конфигурации VKUI:
 ```tsx
-import { RouterProvider, createHashRouter } from '@vkontakte/vk-mini-app-router';
+import { RouterProvider, createHashRouter } from '@vkontakte/vk-mini-apps-router';
 import { createRoot } from 'react-dom/client';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import { App } from './App'; // Пример содержимого будет ниже.
@@ -62,7 +62,7 @@ root.render(
 
 Информацию о текущем местоположении пользователя можно получить из хука `useActiveVkuiLocation`:
 ```tsx
-import { useActiveVkuiLocation } from '@vkontakte/vk-mini-app-router';
+import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 import { Root, View, Panel } from '@vkontakte/vkui';
 
 export function App() {
@@ -92,7 +92,7 @@ export function App() {
 
 Пример использования (создание роутера смотри в разделе [Подключение роутера](#подключение-роутера)):
 ```tsx
-import { RouteWithRoot, createHashRouter } from '@vkontakte/vk-mini-app-router';
+import { RouteWithRoot, createHashRouter } from '@vkontakte/vk-mini-apps-router';
 
 const routes: RouteWithRoot[] = [
   {
@@ -126,7 +126,7 @@ const router = createHashRouter(routes);
 Получить к нему доступ можно через хук `useRouteNavigator`.
 
 ```tsx
-import { useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export function PersikPage() {
   const routeNavigator = useRouteNavigator();
@@ -165,7 +165,7 @@ routeNavigator.push('/user/123');
 Можно проверить, есть ли записи в истории навигации используя хук `useFirstPageCheck()`.
 
 ```tsx
-import { useFirstPageCheck, routeNavigator } from '@vkontakte/vk-mini-app-router';
+import { useFirstPageCheck, routeNavigator } from '@vkontakte/vk-mini-apps-router';
 import { PanelPanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 
 const routeNavigator = useRouteNavigator();
@@ -201,7 +201,7 @@ const routes: RouteWithoutRoot[] = [
 Получить к ним доступ можно через хук `useSearchParams()`, который возвращает их текущее значение и метод для их изменения.
 
 ```tsx
-import { useSearchParams } from '@vkontakte/vk-mini-app-router';
+import { useSearchParams } from '@vkontakte/vk-mini-apps-router';
 
 export function PersikPage() {
   const [params, setParams] = useSearchParams();
@@ -228,7 +228,7 @@ Popout всегда выводится без изменения URL.
 ### Отображение модальных окон
 В VKUI модальные страницы и карточки выводятся внутри `ModalRoot`.
 ```tsx
-import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ModalPage, ModalRoot } from '@vkontakte/vkui';
 
 export function Modals() {
@@ -297,7 +297,7 @@ Popout можно вывести через поле `popout` компонент
 App.tsx:
 ```tsx
 import { SplitLayout, SplitCol } from '@vkontakte/vkui';
-import { usePopout } from '@vkontakte/vk-mini-app-router';
+import { usePopout } from '@vkontakte/vk-mini-apps-router';
 
 function App() {
   const routerPopout = usePopout();
@@ -312,7 +312,7 @@ function App() {
 Persik.tsx:
 ```tsx
 import { Button, Alert } from '@vkontakte/vkui';
-import { useRouteNavigator } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const Persik = () => {
   const routeNavigator = useRouteNavigator();
@@ -333,7 +333,7 @@ export const Persik = () => {
     />;
 
   return (
-    <Button onClick={() => routeNavigator.showPopout(popup)}>Открыть попаут из модалки</Button>
+    <Button onClick={() => routeNavigator.showPopout(popup)}>Открыть Popout из модального окна</Button>
   );
 };
 ```
@@ -371,7 +371,7 @@ import {
   createRoot,
   createView,
   RoutesConfig,
-} from '@vkontakte/vk-mini-app-router';
+} from '@vkontakte/vk-mini-apps-router';
 
 export const routes = RoutesConfig.create([
   createRoot('default_root', [
@@ -419,7 +419,7 @@ View в библиотеке VKUI предоставляет возможнос�
 
 ```tsx
 import { Root, View, Panel } from '@vkontakte/vkui';
-import { useRouteNavigator, useActiveVkuiLocation } from '@vkontakte/vk-mini-app-router';
+import { useRouteNavigator, useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
 function App() {
   const {
