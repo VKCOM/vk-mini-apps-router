@@ -1,4 +1,4 @@
-import { Button, Group, ButtonProps } from '@vkontakte/vkui';
+import { Button, Group, ButtonProps, Header } from '@vkontakte/vkui';
 import { routes } from '../routes';
 import './AppMap.css';
 import { arrayToTree, completeRoutes, ModalButton, NO_ROOT, NO_TAB, PanelButton, RootButton, TabButton, ViewButton } from './appMapHelpers';
@@ -80,7 +80,7 @@ function renderModal(modal: ModalButton, location: ActiveLocation): JSX.Element 
 export const AppMap = () => {
   const location = useActiveVkuiLocation();
   return (
-    <Group className="AppMap">
+    <Group className="AppMap" header={<Header mode="secondary">Карта навигации в приложении</Header>}>
       {arrayToTree(completeRoutes(routes.getRoutes())).map((root) => renderRoot(root, location as any))}
     </Group>
   )
