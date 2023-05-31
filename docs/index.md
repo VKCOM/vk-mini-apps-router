@@ -207,7 +207,10 @@ export function PersikPage() {
   const [params, setParams] = useSearchParams();
 
   return (
-    <Button onClick={() => setParams(params.set('name', 'persik'))}>
+    <Button onClick={() => {
+      params.set('name', 'persik');
+      setParams(params);
+    } }>
       {params.get('name')}
     </Button>
   );
