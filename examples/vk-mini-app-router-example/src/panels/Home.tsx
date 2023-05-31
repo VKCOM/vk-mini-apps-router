@@ -1,9 +1,9 @@
 import React from 'react';
 
-import bridge from '@vkontakte/vk-bridge';
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, SimpleCell, Switch } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, Group, Cell, ButtonGroup, Avatar } from '@vkontakte/vkui';
 import { GoFunctionProp, NavProp, UserInfo } from '../types';
 import { useEnableSwipeBack } from '@vkontakte/vk-mini-app-router';
+import { AppMap } from '../appMap/AppMap';
 
 type HomeProps = NavProp & GoFunctionProp & {
 	fetchedUser: UserInfo,
@@ -11,17 +11,6 @@ type HomeProps = NavProp & GoFunctionProp & {
 
 export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
 	useEnableSwipeBack();
-	const [top, setTop] = React.useState(false);
-	const [overlay, setOverlay] = React.useState(false);
-	const [close, setClose] = React.useState(true);
-
-	const showAd = () => bridge.send('VKWebAppShowBannerAd' as any, {
-		can_close: close,
-		banner_location: top ? 'top' : 'bottom',
-		layout_type: overlay ? 'overlay' : 'resize',
-	}).then((data) => {
-		console.log(data);
-	});
 	return (
 		<Panel nav={nav}>
 			<PanelHeader>Главная</PanelHeader>
@@ -35,41 +24,25 @@ export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
 					</Cell>
 				</Group>}
 
-			<Group header={<Header mode="secondary">Пример навигации</Header>}>
-				<Div>
-					<Group>
+			<Group>
+				<ButtonGroup stretched mode="vertical">
+					<ButtonGroup mode="horizontal" stretched>
 						<Button stretched size="l" mode="secondary" onClick={() => go('/persik?additional=tra-ta-ta')}>
 							Покажите Персика, пожалуйста
 						</Button>
 						<Button stretched size="l" mode="secondary" onClick={() => go('/persik/fish')}>
 							А Персик не голоден?
 						</Button>
-						<Button stretched size="l" mode="secondary" onClick={() => go('/empty')}>
-							На пустую страницу!!!
-						</Button>
-						<Button stretched size="l" mode="secondary" onClick={() => go('/alternative')}>
-							На другой Root.
-						</Button>
-					</Group>
-					<Group>
-						<SimpleCell Component="label" after={<Switch onChange={() => setTop(!top)} />}>
-							Вверху страницы
-						</SimpleCell>
-						<SimpleCell Component="label" after={<Switch onChange={() => setOverlay(!overlay)} />}>
-							Поверх контента
-						</SimpleCell>
-						<SimpleCell Component="label" after={<Switch onChange={() => setClose(!close)} defaultChecked />}>
-							Можно закрыть
-						</SimpleCell>
-						<Button stretched size="l" mode="secondary" onClick={showAd}>
-							Рекламу в студию!
-						</Button>
-					</Group>
-					<Button stretched size="l" mode="secondary" onClick={() => bridge.send('VKWebAppOpenApp', { app_id: 6703670 })}>
-						Открыть тестовое приложение
+					</ButtonGroup>
+					<Button stretched size="l" mode="secondary" onClick={() => go('/empty')}>
+						На пустую страницу!!!
 					</Button>
-				</Div>
+					<Button stretched size="l" mode="secondary" onClick={() => go('/alternative')}>
+						На другой Root.
+					</Button>
+				</ButtonGroup>
 			</Group>
+			<AppMap></AppMap>
 		</Panel>
 	);
 };

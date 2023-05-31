@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Panel, PanelHeader, Header, Button, Group, Div, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Div, Tabs, TabsItem } from '@vkontakte/vkui';
 import bridge from '@vkontakte/vk-bridge';
 import { GoFunctionProp, NavProp } from '../types';
 import { useEnableSwipeBack, useActiveVkuiLocation } from '@vkontakte/vk-mini-app-router';
 import { ALTERNATIVE_PANEL_TABS, HOME_PANEL_MODALS, PERSIK_PANEL_MODALS } from '../routes';
+import { AppMap } from '../appMap/AppMap';
 
 export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
   useEnableSwipeBack();
@@ -42,51 +43,53 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_1 &&
         <Group
-          header={<Header mode="secondary">Пример навигации</Header>}
+          header={<Header mode="secondary">Другой рут и табы</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_1}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_1}
           tabIndex={0}
         >
-          <Div>
-            <Group>
-              <Button stretched size="l" mode="secondary" onClick={() => go('/')}>
-                На главную
-              </Button>
-              <Button stretched size="l" mode="secondary" onClick={() => sendToClient()}>
-                VKWebAppSendToClient с fragment: '/persik'
-              </Button>
-            </Group>
-          </Div>
+          <ButtonGroup stretched mode="horizontal">
+            <Button stretched size="l" mode="secondary" onClick={() => sendToClient()}>
+              VKWebAppSendToClient с fragment: '/persik'
+            </Button>
+            <Button stretched size="l" mode="primary" onClick={() => go('/')}>
+              На главную
+            </Button>
+          </ButtonGroup>
         </Group>
       }
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_2 &&
-        <Div
+        <Group
+          header={<Header mode="secondary">Тут ничего</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_2}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_2}
           tabIndex={0}
-        >Контент второго таба</Div>
+        >
+          <Button stretched size="l" mode="primary" onClick={() => go('/')}>
+            На главную
+          </Button>
+        </Group>
       }
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_3 &&
         <Group
-          header={<Header mode="secondary">Пример навигации</Header>}
+          header={<Header mode="secondary">Модальные окна над табом</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_3}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_3}
           tabIndex={0}
         >
-          <Div>
-            <Group>
-              <Button stretched size="l" mode="secondary" onClick={() => go(`/alternative/tab3/${PERSIK_PANEL_MODALS.PERSIK}`)}>
-                Модалка с персиком
-              </Button>
-              <Button stretched size="l" mode="secondary" onClick={() => go(`/alternative/tab3/${HOME_PANEL_MODALS.USER}`)}>
-                Модалка с юзером
-              </Button>
-            </Group>
-          </Div>
+          <ButtonGroup stretched mode="horizontal">
+            <Button stretched size="l" mode="secondary" onClick={() => go(`/alternative/tab3/${PERSIK_PANEL_MODALS.PERSIK}`)}>
+              Модалка с персиком
+            </Button>
+            <Button stretched size="l" mode="secondary" onClick={() => go(`/alternative/tab3/${HOME_PANEL_MODALS.USER}`)}>
+              Модалка с юзером
+            </Button>
+          </ButtonGroup>
         </Group>
       }
+      <AppMap></AppMap>
     </Panel>
   );
 };

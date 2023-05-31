@@ -8,6 +8,7 @@ interface RoutePartial extends CommonRouteObject {
   view: string;
   panel: string;
   modal?: string;
+  tab?: string;
 }
 
 export class RoutesConfig implements RepresentsRoutes<RoutePartial> {

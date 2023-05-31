@@ -1,0 +1,46 @@
+.AppMap {
+  max-width: 750px;
+  margin: auto;
+}
+
+.AppMapRoot {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px 20px;
+  padding: 20px;
+}
+
+.AppMapViews,
+.AppMapView,
+.AppMapPanels,
+.AppMapPanel,
+.AppMapTabs,
+.AppMapTab,
+.AppMapModals {
+  display: contents;
+}
+
+.ButtonRoot {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.ButtonView {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.ButtonPanel {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.ButtonTab {
+  grid-column-start: 4;
+  grid-column-end: 5;
+}
+
+.ButtonModal {
+  grid-column-start: 5;
+  grid-column-end: 6;
+}
