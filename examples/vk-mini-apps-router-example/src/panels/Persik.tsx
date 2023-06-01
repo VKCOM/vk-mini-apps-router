@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 
-import { Button, Group, Panel, PanelHeader, PanelHeaderBack, Input, FormItem, ButtonGroup, FormLayoutGroup } from '@vkontakte/vkui';
+import { Button, Group, Panel, PanelHeader, PanelHeaderBack, Input, FormItem, FormLayoutGroup } from '@vkontakte/vkui';
 
 import persik from '../img/persik.png';
 import persik_fish from '../img/persik_fish.png';

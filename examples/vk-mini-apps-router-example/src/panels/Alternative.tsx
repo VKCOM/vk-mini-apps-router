@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Div, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Tabs, TabsItem } from '@vkontakte/vkui';
 import bridge from '@vkontakte/vk-bridge';
 import { GoFunctionProp, NavProp } from '../types';
 import { useEnableSwipeBack, useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
