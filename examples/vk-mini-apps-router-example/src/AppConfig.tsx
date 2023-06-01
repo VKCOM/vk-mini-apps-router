@@ -1,25 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import App from './App';
 import { hierarchy, router } from './routes';
 import { RouterProvider } from '@vkontakte/vk-mini-apps-router';
-import bridge from '@vkontakte/vk-bridge';
 
 export const AppConfig = () => {
-
-  useEffect(() => {
-    async function subscribeToNavigation() {
-      await bridge.subscribe((event) => {
-        if (!event.detail) {
-          return;
-        }
-        console.log(event.detail.type, event.detail.data);
-      });
-    }
-    subscribeToNavigation();
-  }, [])
-
   return (
     <ConfigProvider isWebView>
       <AdaptivityProvider>

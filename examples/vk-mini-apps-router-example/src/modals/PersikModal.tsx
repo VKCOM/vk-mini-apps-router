@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ModalPage, ModalPageHeader, Group, CellButton, Alert } from '@vkontakte/vkui';
+import { CellButton, Group, ModalPage, ModalPageHeader } from '@vkontakte/vkui';
 
 import persik from '../img/persik.png';
 import persik_fish from '../img/persik_fish.png';
@@ -9,31 +9,13 @@ import './PersikModal.css';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
 import { PERSIK_PANEL_MODALS } from '../routes';
+import { OffencePersikPopout } from '../popouts/OffencePersikPopout';
 
 const IMAGES = { persik, persik_fish, persik_sad };
 
 export const PersikModal = (props: NavProp) => {
   const routeNavigator = useRouteNavigator();
-  const popup =
-    <Alert
-      actions={[
-        {
-          title: 'Отмена',
-          autoClose: true,
-          mode: 'cancel',
-        },
-        {
-          title: 'Забрать',
-          autoClose: true,
-          mode: 'destructive',
-          action: () => setTimeout(() => routeNavigator.replace('/persik/sad/persik_modal/sad', { keepSearchParams: true }), 100),
-        },
-      ]}
-      actionsLayout="horizontal"
-      onClose={() => routeNavigator.hidePopout()}
-      header="Еда персика"
-      text="Вы уверены, что хотите забрать у персика еду?"
-    />;
+  const popup = OffencePersikPopout();
 
   const { em: modalEmotion, emotion: panelEmotion } = useParams({ modal: PERSIK_PANEL_MODALS.PERSIK }) ?? {};
   const image: string = IMAGES[`persik${modalEmotion ? '_' : ''}${modalEmotion ?? ''}` as keyof typeof IMAGES];
