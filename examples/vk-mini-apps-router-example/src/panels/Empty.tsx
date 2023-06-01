@@ -1,35 +1,17 @@
 import React from 'react';
 
-import { Panel, PanelHeader, Header, Button, Group, ButtonGroup, Alert } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, Group, ButtonGroup } from '@vkontakte/vkui';
 import { NavProp } from '../types';
 import { PERSIK_PANEL_MODALS } from '../routes';
 import { useRouteNavigator, useEnableSwipeBack } from '@vkontakte/vk-mini-apps-router';
 import { AppMap } from '../appMap/AppMap';
+import { EmptyPopout } from '../popouts/EmptyPopout';
 
 export const Empty = ({ nav }: NavProp) => {
   useEnableSwipeBack();
   const routeNavigator = useRouteNavigator();
-  const popup =
-    <Alert
-      actions={[
-        {
-          title: 'Отмена',
-          autoClose: true,
-          mode: 'cancel',
-        },
-        {
-          title: 'Да',
-          autoClose: true,
-          mode: 'destructive',
-          action: () => console.log('Кнопка нажата.'),
-        },
-      ]}
-      actionsLayout="horizontal"
-      onClose={() => routeNavigator.hidePopout()}
-      header="Просто попап"
-      text="Точно хотите нажать красную кнопку?"
-    />;
 
+  const popout = EmptyPopout();
   return (
     <Panel nav={nav}>
       <PanelHeader>Пустая страница</PanelHeader>
@@ -48,7 +30,7 @@ export const Empty = ({ nav }: NavProp) => {
             <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.showModal(PERSIK_PANEL_MODALS.PERSIK)}>
               Открыть модалку без изменения пути
             </Button>
-            <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.showPopout(popup)}>
+            <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.showPopout(popout)}>
               Открыть попап без изменения пути
             </Button>
           </ButtonGroup>

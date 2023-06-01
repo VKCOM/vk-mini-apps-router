@@ -28,7 +28,6 @@ import { OnboardingThree } from './onboarding/OnboardingThree';
 
 function App() {
   const [fetchedUser, setUser] = useState<any>(null);
-  const [popout, setPopout] = useState<JSX.Element | null>(null!);
   const routerPopout = usePopout();
   const routeNavigator = useRouteNavigator();
   const {
@@ -43,13 +42,11 @@ function App() {
     async function fetchData() {
       const user = await bridge.send('VKWebAppGetUserInfo');
       setUser(user);
-      setPopout(null);
     }
     fetchData();
   }, []);
 
   const go = (path: string) => {
-    console.log('go -> router.push', path);
     routeNavigator.push(path);
   };
 
@@ -68,7 +65,7 @@ function App() {
 
   const history = (activeModal || routerPopout) ? [] : panelsHistory;
   return (
-    <SplitLayout popout={routerPopout || popout} modal={modal}>
+    <SplitLayout popout={routerPopout} modal={modal}>
       <SplitCol>
         <Epic activeStory={activeRoot}>
           <Root activeView={activeView} nav={DEFAULT_ROOT}>
