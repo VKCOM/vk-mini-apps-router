@@ -9,6 +9,7 @@ export interface PanelWithRoot extends CommonRouteObject {
   root: string;
   view: string;
   panel: string;
+  tab?: string;
 }
 
 export interface ModalWithRoot extends PanelWithRoot {
