@@ -2,6 +2,7 @@ import { Router as RemixRouter } from '@remix-run/router/dist/router';
 import { createKey } from './utils';
 import { createHashHistory, createRouter } from '@remix-run/router';
 import { RouteWithoutRoot, RouteWithRoot } from '../type';
+import { InitialLocation } from '../services/InitialLocation';
 
 export function createHashRouter(routes: RouteWithRoot[] | RouteWithoutRoot[]): RemixRouter {
   // Задать новый key для новой локации в случае, если приложение уже запущено,
@@ -11,8 +12,10 @@ export function createHashRouter(routes: RouteWithRoot[] | RouteWithoutRoot[]): 
       window.history.replaceState({ key: createKey() }, '');
     }
   });
+  const history = createHashHistory();
+  InitialLocation.init(history.location);
   return createRouter({
-    history: createHashHistory(),
+    history,
     routes: routes.map((item) => ({ ...item, index: true })),
   }).initialize();
 }
