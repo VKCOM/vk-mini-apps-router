@@ -4,7 +4,6 @@ export class InitialLocation {
   private static _instance: InitialLocation | undefined;
   private _value: Location;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor(value: Location) {
     this._value = value;
   }
