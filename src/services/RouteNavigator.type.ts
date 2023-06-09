@@ -41,5 +41,5 @@ export interface RouteNavigator {
 
   hidePopout(): Promise<void>;
 
-  transaction(actions: VoidFunction[]): Promise<void>;
+  runSync(actions: VoidFunction[]): Promise<void>;
 }

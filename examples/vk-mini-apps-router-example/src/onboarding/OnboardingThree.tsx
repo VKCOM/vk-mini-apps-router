@@ -6,7 +6,7 @@ import { useRouteNavigator, RouteNavigator } from '@vkontakte/vk-mini-apps-route
 export const OnboardingThree = ({ nav }: { nav: string }) => {
   const routeNavigator: RouteNavigator = useRouteNavigator();
   const onClick = async () => {
-    routeNavigator.transaction([
+    routeNavigator.runSync([
       () => routeNavigator.backToFirst(),
       () => routeNavigator.replace('/'),
       () => routeNavigator.push('/'),

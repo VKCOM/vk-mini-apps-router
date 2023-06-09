@@ -56,14 +56,14 @@ _По умолчанию `-1`_
 ### `backToFirst(): Promise<void>;`
 Шаг назад по истории навигации.
 
-### `transaction(actions: VoidFunction[]): Promise<void>`
+### `runSync(actions: VoidFunction[]): Promise<void>`
 Выполнить несколько переходов разом, пользователь увидит только последний.\
 Промис будет завершен после выполнения последнего действия.\
 Каждая функция должна выполнять ровно один вызов метода routeNavigator.
 
 Пример использования:
 ```tsx
-routeNavigator.transaction([
+routeNavigator.runSync([
   () => routeNavigator.back(-2),
   () => routeNavigator.replace('/'),
   () => routeNavigator.push('/'),
