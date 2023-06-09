@@ -1,4 +1,4 @@
-import { Params, Router, RouterNavigateOptions, UNSAFE_invariant as invariant } from '@remix-run/router';
+import { Params, Router, RouterNavigateOptions } from '@remix-run/router';
 import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './RouteNavigator.type';
@@ -46,9 +46,11 @@ export class DefaultRouteNavigator implements RouteNavigator {
     await this.navigate(to, { ...preparedOptions, replace: true }, preparedParams);
   }
 
-  public async back(to = -1): Promise<void> {
-    invariant(to < 0, `Parameter 'to' must be negative, ${to} passed. Use method 'go()' for any integer offset`);
-    await this.go(to);
+  public async back(to = 1): Promise<void> {
+    if (to === 0) {
+      return;
+    }
+    await this.go(-Math.abs(to));
   }
 
   public async backToFirst(): Promise<void> {
