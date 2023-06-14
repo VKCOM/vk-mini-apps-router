@@ -37,7 +37,7 @@ export interface RouteNavigator {
    */
   hideModal(pushPanel?: boolean): Promise<void>;
 
-  showPopout(popout: JSX.Element | null): Promise<void>;
+  showPopout(popout: JSX.Element): Promise<void>;
 
   hidePopout(): Promise<void>;
 

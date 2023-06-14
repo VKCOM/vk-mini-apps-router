@@ -16,7 +16,11 @@
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "inlineSources": true,
+    "typeRoots": [
+      "typings",
+    ]
   },
   "include": ["src/**/*", "types/**/*"]
 }

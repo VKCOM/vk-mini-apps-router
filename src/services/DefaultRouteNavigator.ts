@@ -103,7 +103,7 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     }
   }
 
-  public async showPopout(popout: JSX.Element | null): Promise<void> {
+  public async showPopout(popout: JSX.Element): Promise<void> {
     this.setPopout(popout);
     const state: any = {
       [STATE_KEY_SHOW_POPOUT]: createKey(),
