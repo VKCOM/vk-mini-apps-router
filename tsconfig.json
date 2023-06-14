@@ -17,6 +17,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "jsx": "react-jsx",
+    "inlineSources": true,
     "typeRoots": [
       "typings",
     ]
