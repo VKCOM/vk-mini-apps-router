@@ -38,8 +38,3 @@
 * [Пример использования](https://github.com/VKCOM/vk-mini-apps-router/tree/master/examples/vk-mini-apps-router-example).
 
 * [VK Mini Apps](https://vk.com/vkappsdev) — сообщество разработчиков мини-приложений ВКонтакте.
-
-## Участие в развитии
-
-Если желаете принять участие в развитии библиотеки,
-ознакомьтесь с документом [CONTRIBUTING.md](https://github.com/VKCOM/vk-mini-apps-router/blob/master/CONTRIBUTING.md)
