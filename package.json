@@ -17,7 +17,8 @@
   "scripts": {
     "build": "tsc",
     "lint:js": "eslint src/ --ext ts,tsx --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@remix-run/router": "^1.5.0"
