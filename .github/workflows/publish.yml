@@ -38,9 +38,7 @@ jobs:
           github_token: ${{ secrets.DEVTOOLS_GITHUB_TOKEN }}
           branch: ${{ github.ref }}
 
-      - run: cat /home/runner/work/_temp/.npmrc
-
       - name: Publishing release
-        run: yarn publish --access public --non-interactive
+        run: yarn publish --access public --non-interactive --verbose
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_PUBLISH_TOKEN }}
