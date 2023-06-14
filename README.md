@@ -35,7 +35,7 @@
 
 * https://dev.vk.com/libraries/router — документация библиотеки.
 
-* https://github.com/VKCOM/vk-mini-apps-router-examples — примеры использования.
+* [Пример использования](https://github.com/VKCOM/vk-mini-apps-router/tree/master/examples/vk-mini-apps-router-example).
 
 * [VK Mini Apps](https://vk.com/vkappsdev) — сообщество разработчиков мини-приложений ВКонтакте.
 
