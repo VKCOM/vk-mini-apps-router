@@ -6,7 +6,11 @@ export function useGetPanelForView(): (view?: string) => string | undefined {
   const { match } = routeContext;
   const route = match?.route;
   return (view?: string) => {
-    const routeForPanel = view && prevRouteContext?.match?.route.view === view && route?.view !== view ? prevRouteContext.match.route : route;
+    const routeForPanel = view
+      && prevRouteContext?.match?.route.view === view
+      && route?.view !== view
+      ? prevRouteContext.match.route
+      : route;
     return routeForPanel?.panel;
   };
 }
