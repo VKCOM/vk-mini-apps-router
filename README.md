@@ -19,13 +19,13 @@
 
 ## Установка и использование
 
-### Команды
+### yarn
 
-* `yarn install` — установка зависимостей.
+`yarn add @vkontakte/vk-mini-apps-router`
 
-* `yarn build` — сборка библиотеки.
+### npm
 
-* `yarn lint:js` — проверка стиля кода.
+`npm install @vkontakte/vk-mini-apps-router`
 
 ### Использование VK Bridge
 
@@ -35,6 +35,11 @@
 
 * https://dev.vk.com/libraries/router — документация библиотеки.
 
-* https://githubcom/VKCOM/vk-mini-apps-router-examples — примеры использования.
+* https://github.com/VKCOM/vk-mini-apps-router-examples — примеры использования.
 
 * [VK Mini Apps](https://vk.com/vkappsdev) — сообщество разработчиков мини-приложений ВКонтакте.
+
+## Участие в развитии
+
+Если желаете принять участие в развитии библиотеки,
+ознакомьтесь с документом [CONTRIBUTING.md](https://github.com/VKCOM/vk-mini-apps-router/blob/master/CONTRIBUTING.md)
