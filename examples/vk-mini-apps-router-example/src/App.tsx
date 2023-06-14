@@ -3,7 +3,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { SplitCol, SplitLayout, View, Root, Epic, ModalRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import { useActiveVkuiLocation, usePopout, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { useActiveVkuiLocation, usePopout, useRouteNavigator, useGetPanelForView } from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
 import Persik from './panels/Persik';
@@ -33,10 +33,11 @@ function App() {
   const {
     root: activeRoot = DEFAULT_ROOT,
     view: activeView = DEFAULT_VIEW,
-    panel: activePanel = DEFAULT_VIEW_PANELS.HOME,
     modal: activeModal,
     panelsHistory,
   } = useActiveVkuiLocation();
+
+  const getPanel = useGetPanelForView();
 
   useEffect(() => {
     async function fetchData() {
@@ -72,7 +73,7 @@ function App() {
             <View
               nav={DEFAULT_VIEW}
               history={history}
-              activePanel={activePanel}
+              activePanel={getPanel(DEFAULT_VIEW) || DEFAULT_VIEW_PANELS.HOME}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Home nav={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} go={go} />
@@ -81,7 +82,7 @@ function App() {
             <View
               nav={EMPTY_VIEW}
               history={history}
-              activePanel={activePanel}
+              activePanel={getPanel(EMPTY_VIEW) || EMPTY_VIEW_PANELS.EMPTY}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Empty nav={EMPTY_VIEW_PANELS.EMPTY} />
@@ -91,7 +92,7 @@ function App() {
             <View
               nav={ALTERNATIVE_VIEW}
               history={history}
-              activePanel={activePanel}
+              activePanel={getPanel(ALTERNATIVE_VIEW) || ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Alternative nav={ALTERNATIVE_VIEW_PANELS.ALTERNATIVE} go={go} />
