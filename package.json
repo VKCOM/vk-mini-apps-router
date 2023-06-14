@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "author": "VK Team <https://vk.com/team>",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "homepage": "https://dev.vk.com/libraries/router",
+  "bugs": "https://github.com/VKCOM/vk-mini-apps-router/issues",
   "contributors": [
     {
       "name": "Nikita Shvyryaev",
@@ -38,7 +40,6 @@
     "typescript": "^4.9.5"
   },
   "files": [
-    "dist",
-    "types"
+    "./dist"
   ]
 }
