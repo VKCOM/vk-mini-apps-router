@@ -8,6 +8,7 @@ export {
   useParams,
   usePopout,
 } from './hooks/hooks';
+export { useGetPanelForView } from './hooks/useGetPanelForView';
 export { useSearchParams } from './hooks/useSearchParams';
 export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
