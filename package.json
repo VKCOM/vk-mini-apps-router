@@ -14,6 +14,10 @@
       "url": "https://vk.com/shvyryaevng"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VKCOM/vk-mini-apps-router.git"
+  },
   "scripts": {
     "build": "tsc",
     "lint:js": "eslint src/ --ext ts,tsx --fix",
