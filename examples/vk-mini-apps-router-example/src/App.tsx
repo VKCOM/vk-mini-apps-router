@@ -37,7 +37,9 @@ function App() {
     panelsHistory,
   } = useActiveVkuiLocation();
 
-  const getPanel = useGetPanelForView();
+  const defaultActivePanel = useGetPanelForView(DEFAULT_VIEW);
+  const emptyActivePanel = useGetPanelForView(EMPTY_VIEW);
+  const alternativeActivePanel = useGetPanelForView(ALTERNATIVE_VIEW);
 
   useEffect(() => {
     async function fetchData() {
@@ -73,7 +75,7 @@ function App() {
             <View
               nav={DEFAULT_VIEW}
               history={history}
-              activePanel={getPanel(DEFAULT_VIEW) || DEFAULT_VIEW_PANELS.HOME}
+              activePanel={defaultActivePanel || DEFAULT_VIEW_PANELS.HOME}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Home nav={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} go={go} />
@@ -82,7 +84,7 @@ function App() {
             <View
               nav={EMPTY_VIEW}
               history={history}
-              activePanel={getPanel(EMPTY_VIEW) || EMPTY_VIEW_PANELS.EMPTY}
+              activePanel={emptyActivePanel || EMPTY_VIEW_PANELS.EMPTY}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Empty nav={EMPTY_VIEW_PANELS.EMPTY} />
@@ -92,7 +94,7 @@ function App() {
             <View
               nav={ALTERNATIVE_VIEW}
               history={history}
-              activePanel={getPanel(ALTERNATIVE_VIEW) || ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}
+              activePanel={alternativeActivePanel || ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}
               onSwipeBack={() => routeNavigator.back()}
             >
               <Alternative nav={ALTERNATIVE_VIEW_PANELS.ALTERNATIVE} go={go} />
