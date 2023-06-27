@@ -37,6 +37,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
       };
       updateTimer.current = setTimeout(updateCallback.current, delay);
     }
+    return () => clearTimeout(updateTimer.current);
   }, [value]);
 
   const onTransitionEnd = useCallback(() => {
@@ -45,6 +46,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
       clearTimeout(updateTimer.current);
       updateTimer.current = setTimeout(updateCallback.current, 1);
     }
+    return () => clearTimeout(updateTimer.current);
   }, []);
 
   const returnPrev = prevValue.current;

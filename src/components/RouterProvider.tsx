@@ -38,10 +38,10 @@ export function RouterProvider(
   const forceUpdate = useForceUpdate();
   const routeContext = getContextFromState(router.state);
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
-  const [viewHistory, setViewHistory] = useState<ViewHistory>(new ViewHistory());
   const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor(forceUpdate));
   const [popout, setPopout] = useState<JSX.Element | null>(null);
-
+  const [viewHistory] = useState<ViewHistory>(new ViewHistory());
+  
   useBlockForwardToModals(router, viewHistory);
   useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
@@ -71,6 +71,7 @@ export function RouterProvider(
     const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, transactionExecutor, setPopout);
     return { router, routeNavigator, viewHistory };
   }, [router, setPopout, viewHistory]);
+
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
   const throttlingOptions = {
     enabled: throttled || Boolean(transactionExecutor.initialDelay),
@@ -79,13 +80,14 @@ export function RouterProvider(
   };
 
   useEffect(() => {
-    setViewHistory(new ViewHistory());
+    viewHistory.resetHistory();
     const executor = new TransactionExecutor(forceUpdate);
     setTransactionExecutor(executor);
     const searchParams = createSearchParams(router.state.location.search);
     const enableFilling = Boolean(searchParams.get(SEARCH_PARAM_INFLATE));
     hierarchy && enableFilling && fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
   }, [router]);
+  
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <ThrottledContext.Provider value={throttlingOptions}>
