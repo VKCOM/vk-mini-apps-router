@@ -1320,7 +1320,7 @@
   dependencies:
     "@floating-ui/core" "^1.3.0"
 
-"@floating-ui/react-dom@^2.0.0":
+"@floating-ui/react-dom@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-2.0.1.tgz#7972a4fc488a8c746cded3cfe603b6057c308a91"
   integrity sha512-rZtAmSht4Lry6gdhAJDrCp/6rKN7++JnL1/Anbr/DdeyYXQPxvg/ivrbYvJulbRf4vL8b212suwMM2lxbv+RQA==
@@ -2416,12 +2416,12 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@vkontakte/vkui@^5.3.1":
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-5.5.1.tgz#00301bda22b1c98eb4b697fdfc9922a53509244b"
-  integrity sha512-pt5s630c2hlAmB6qekbkq3aZ796WS5Rjvf63FZE/uhD93eb6xjUO3y9hdNRodLAWmjN3vyUWeKcVdSZAyLdpfw==
+"@vkontakte/vkui@^5.5.4":
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-5.5.4.tgz#16ed88f45278e2cea667c33caa7050166bfbcd37"
+  integrity sha512-JJpNthrJI3GimESm5wtjx3yi4M06IE3ELy6K6TKECEgC12MgVFvQT1zsiClmVjVaZGKj6suzf9cz+oKSd0ZxBQ==
   dependencies:
-    "@floating-ui/react-dom" "^2.0.0"
+    "@floating-ui/react-dom" "^2.0.1"
     "@swc/helpers" "^0.5.1"
     "@vkontakte/vkjs" "^0.32.3"
     dayjs "1.11.8"
