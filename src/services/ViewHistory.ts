@@ -62,6 +62,11 @@ export class ViewHistory {
     return historyAction === Action.Pop && newPosition <= this.position;
   }
 
+  resetHistory() {
+    this.positionInternal = -1;
+    this.history = [];
+  }
+
   private push(record: ViewNavigationRecord): void {
     this.history = this.history.slice(0, this.positionInternal + 1);
     this.history.push(record);
