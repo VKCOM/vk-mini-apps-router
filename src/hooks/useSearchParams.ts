@@ -1,10 +1,8 @@
 import { useLocation } from './hooks';
-import { UNSAFE_warning as warning } from '@remix-run/router';
+import { RelativeRoutingType, UNSAFE_warning as warning } from '@remix-run/router';
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import { createSearchParams, getSearchParamsForLocation, URLSearchParamsInit } from '../utils/createSearchParams';
 import { RouterContext } from '../contexts';
-
-export type RelativeRoutingType = 'route' | 'path';
 
 export interface NavigateOptions {
   replace?: boolean;

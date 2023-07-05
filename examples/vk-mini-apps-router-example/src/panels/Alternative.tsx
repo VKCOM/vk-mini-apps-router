@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Tabs, TabsItem, Spacing, InfoRow } from '@vkontakte/vkui';
 import bridge from '@vkontakte/vk-bridge';
 import { GoFunctionProp, NavProp } from '../types';
-import { useEnableSwipeBack, useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
+import { useEnableSwipeBack, useActiveVkuiLocation, RouterLink } from '@vkontakte/vk-mini-apps-router';
 import { ALTERNATIVE_PANEL_TABS, HOME_PANEL_MODALS, PERSIK_PANEL_MODALS } from '../routes';
 import { AppMap } from '../appMap/AppMap';
 
@@ -56,6 +56,10 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
               На главную
             </Button>
           </ButtonGroup>
+          <Spacing size={12}></Spacing>
+          <InfoRow header="Ссылки">
+            <RouterLink to="/persik">Можно использовать ссылки (на Персика)</RouterLink>
+          </InfoRow>
         </Group>
       }
 
