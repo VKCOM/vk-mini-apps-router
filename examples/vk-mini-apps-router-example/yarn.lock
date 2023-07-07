@@ -1696,10 +1696,10 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@remix-run/router@^1.5.0":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.6.3.tgz#8205baf6e17ef93be35bf62c37d2d594e9be0dad"
-  integrity sha512-EXJysQ7J3veRECd0kZFQwYYd5sJMcq2O/m60zu1W2l3oVQ9xtub8jTOtYRE0+M2iomyG/W3Ps7+vp2kna0C27Q==
+"@remix-run/router@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.1.tgz#fea7ac35ae4014637c130011f59428f618730498"
+  integrity sha512-bgVQM4ZJ2u2CM8k1ey70o1ePFXsEzYVZoWghh6WjM8p59jQ7HxzbHW4SbnWFG7V9ig9chLawQxDTZ3xzOF8MkQ==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -2384,12 +2384,12 @@
   resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.7.4.tgz#a14c0d5cd77a57a696b01421d4f98a8508ac4c83"
   integrity sha512-Rp89wdWMHb4gMOPVIq8jeXwa2n9mgmzUKRiBFyd9w0/rXpHIM37yWpPSneB7oND+ZpanzfO9U8NIQl8lzCB4zQ==
 
-"@vkontakte/vk-mini-apps-router@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.0.5.tgz#072ec8cecb57c0903e119d4d7b8d81f1991d17e7"
-  integrity sha512-mgLsshWLKrQJ8n6SJ23rpl5ZNr7Ahhz4Q0J6SOwxXF6+NJMSAk34vHDW6HcsBAN6sgkBxOOO1BlO5QTATxmVkg==
+"@vkontakte/vk-mini-apps-router@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.0.9.tgz#7661a9fa048e7fc80645d82e0dbfa1874a5bcbf6"
+  integrity sha512-9yE/pJXpR3qwL9CIebqUfBh1mLrvNtrWZe/sYo+oqxZjzcX/VWOnx/pyQgsm1wcQDk5lHRPQErwhurPll6A0Cw==
   dependencies:
-    "@remix-run/router" "^1.5.0"
+    "@remix-run/router" "^1.7.1"
 
 "@vkontakte/vk-tunnel@^0.1.3":
   version "0.1.3"
