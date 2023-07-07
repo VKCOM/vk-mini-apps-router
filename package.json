@@ -23,7 +23,8 @@
     "lint:js": "eslint src/ --ext ts,tsx --fix",
     "prepare": "husky install",
     "prepublishOnly": "yarn build",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "installPatches": "patch-package"
   },
   "dependencies": {
     "@remix-run/router": "^1.7.1"
