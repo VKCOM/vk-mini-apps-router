@@ -22,10 +22,11 @@
     "build": "tsc",
     "lint:js": "eslint src/ --ext ts,tsx --fix",
     "prepare": "husky install",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "postinstall": "patch-package"
   },
   "dependencies": {
-    "@remix-run/router": "^1.5.0"
+    "@remix-run/router": "^1.7.1"
   },
   "peerDependencies": {
     "@vkontakte/vk-bridge": "^2.7.2",
@@ -42,6 +43,8 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
+    "patch-package": "^7.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "typescript": "^4.9.5"
   },
   "files": [

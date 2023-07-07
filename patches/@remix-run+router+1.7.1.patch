@@ -1,0 +1,212 @@
+diff --git a/node_modules/@remix-run/router/dist/history.d.ts b/node_modules/@remix-run/router/dist/history.d.ts
+index 7b1f399..887c612 100644
+--- a/node_modules/@remix-run/router/dist/history.d.ts
++++ b/node_modules/@remix-run/router/dist/history.d.ts
+@@ -224,6 +224,24 @@ export type HashHistoryOptions = UrlHistoryOptions;
+  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createhashhistory
+  */
+ export declare function createHashHistory(options?: HashHistoryOptions): HashHistory;
++/**
++ * Специальная история для интеграции с платформой Mini Apps ВКонтакте.
++ * Позволяет передавать в хэше путь вместе с параметрами запуска.
++ */
++export interface HashParamHistory extends UrlHistory {
++}
++export type HashParamHistoryOptions = UrlHistoryOptions & {
++    paramName?: string;
++};
++/**
++ * Hash history stores the location in window.location.hash. This makes it ideal
++ * for situations where you don't want to send the location to the server for
++ * some reason, either because you do cannot configure it or the URL space is
++ * reserved for something else.
++ *
++ * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createhashhistory
++ */
++export declare function createHashParamHistory(options?: HashParamHistoryOptions): HashParamHistory;
+ /**
+  * @private
+  */
+diff --git a/node_modules/@remix-run/router/dist/index.d.ts b/node_modules/@remix-run/router/dist/index.d.ts
+index 324ac95..ffe8489 100644
+--- a/node_modules/@remix-run/router/dist/index.d.ts
++++ b/node_modules/@remix-run/router/dist/index.d.ts
+@@ -1,7 +1,7 @@
+ export type { ActionFunction, ActionFunctionArgs, AgnosticDataIndexRouteObject, AgnosticDataNonIndexRouteObject, AgnosticDataRouteMatch, AgnosticDataRouteObject, AgnosticIndexRouteObject, AgnosticNonIndexRouteObject, AgnosticRouteMatch, AgnosticRouteObject, LazyRouteFunction, TrackedPromise, FormEncType, FormMethod, HTMLFormMethod, JsonFunction, LoaderFunction, LoaderFunctionArgs, ParamParseKey, Params, PathMatch, PathPattern, RedirectFunction, ShouldRevalidateFunction, V7_FormMethod, } from "./utils";
+ export { AbortedDeferredError, ErrorResponse, defer, generatePath, getToPathname, isRouteErrorResponse, joinPaths, json, matchPath, matchRoutes, normalizePathname, redirect, resolvePath, resolveTo, stripBasename, } from "./utils";
+ export type { BrowserHistory, BrowserHistoryOptions, HashHistory, HashHistoryOptions, History, InitialEntry, Location, MemoryHistory, MemoryHistoryOptions, Path, To, } from "./history";
+-export { Action, createBrowserHistory, createPath, createHashHistory, createMemoryHistory, parsePath, } from "./history";
++export { Action, createBrowserHistory, createPath, createHashHistory, createHashParamHistory, createMemoryHistory, parsePath, } from "./history";
+ export * from "./router";
+ /** @internal */
+ export type { RouteManifest as UNSAFE_RouteManifest } from "./utils";
+diff --git a/node_modules/@remix-run/router/dist/router.js b/node_modules/@remix-run/router/dist/router.js
+index 50611e6..f8be3a7 100644
+--- a/node_modules/@remix-run/router/dist/router.js
++++ b/node_modules/@remix-run/router/dist/router.js
+@@ -227,6 +227,53 @@ function createHashHistory(options) {
+   }
+   return getUrlBasedHistory(createHashLocation, createHashHref, validateHashLocation, options);
+ }
++const DEFAULT_PATH_PARAM_NAME = 'path';
++/**
++ * Hash history stores the location in window.location.hash. This makes it ideal
++ * for situations where you don't want to send the location to the server for
++ * some reason, either because you do cannot configure it or the URL space is
++ * reserved for something else.
++ *
++ * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createhashhistory
++ */
++function createHashParamHistory(options) {
++  if (options === void 0) {
++    options = {};
++  }
++  let paramName = options.paramName || DEFAULT_PATH_PARAM_NAME;
++  function createHashParamLocation(window, globalHistory) {
++    let hashParams = new URLSearchParams(window.location.hash.substring(1));
++    let pathFromHash = hashParams.get(paramName) || '';
++    let {
++      pathname = "/",
++      search = "",
++      hash = ""
++    } = parsePath(pathFromHash);
++    return createLocation("", {
++        pathname,
++        search,
++        hash
++      },
++      // state defaults to `null` because `window.history.state` does
++      globalHistory.state && globalHistory.state.usr || null, globalHistory.state && globalHistory.state.key || "default");
++  }
++  function createHashParamHref(window, to) {
++    let currentHashParams = new URLSearchParams(window.location.hash.substring(1));
++    let base = window.document.querySelector("base");
++    let href = "";
++    if (base && base.getAttribute("href")) {
++      let url = window.location.href;
++      let hashIndex = url.indexOf("#");
++      href = hashIndex === -1 ? url : url.slice(0, hashIndex);
++    }
++    currentHashParams.set(paramName, typeof to === "string" ? to : createPath(to));
++    return href + "#" + currentHashParams.toString();
++  }
++  function validateHashParamLocation(location, to) {
++    warning(location.pathname.charAt(0) === "/", "relative pathnames are not supported in hash param history.push(" + JSON.stringify(to) + ")");
++  }
++  return getUrlBasedHistory(createHashParamLocation, createHashParamHref, validateHashParamLocation, options);
++}
+ function invariant(value, message) {
+   if (value === false || value === null || typeof value === "undefined") {
+     throw new Error(message);
+@@ -3945,5 +3992,5 @@ function getDoneFetcher(data) {
+ }
+ //#endregion
+ 
+-export { AbortedDeferredError, Action, ErrorResponse, IDLE_BLOCKER, IDLE_FETCHER, IDLE_NAVIGATION, UNSAFE_DEFERRED_SYMBOL, DeferredData as UNSAFE_DeferredData, convertRoutesToDataRoutes as UNSAFE_convertRoutesToDataRoutes, getPathContributingMatches as UNSAFE_getPathContributingMatches, invariant as UNSAFE_invariant, warning as UNSAFE_warning, createBrowserHistory, createHashHistory, createMemoryHistory, createPath, createRouter, createStaticHandler, defer, generatePath, getStaticContextFromError, getToPathname, isDeferredData, isRouteErrorResponse, joinPaths, json, matchPath, matchRoutes, normalizePathname, parsePath, redirect, resolvePath, resolveTo, stripBasename };
++export { AbortedDeferredError, Action, ErrorResponse, IDLE_BLOCKER, IDLE_FETCHER, IDLE_NAVIGATION, UNSAFE_DEFERRED_SYMBOL, DeferredData as UNSAFE_DeferredData, convertRoutesToDataRoutes as UNSAFE_convertRoutesToDataRoutes, getPathContributingMatches as UNSAFE_getPathContributingMatches, invariant as UNSAFE_invariant, warning as UNSAFE_warning, createBrowserHistory, createHashHistory, createHashParamHistory, createMemoryHistory, createPath, createRouter, createStaticHandler, defer, generatePath, getStaticContextFromError, getToPathname, isDeferredData, isRouteErrorResponse, joinPaths, json, matchPath, matchRoutes, normalizePathname, parsePath, redirect, resolvePath, resolveTo, stripBasename };
+ //# sourceMappingURL=router.js.map
+diff --git a/node_modules/@remix-run/router/history.ts b/node_modules/@remix-run/router/history.ts
+index f128453..b3e8230 100644
+--- a/node_modules/@remix-run/router/history.ts
++++ b/node_modules/@remix-run/router/history.ts
+@@ -463,6 +463,88 @@ export function createHashHistory(
+ }
+ //#endregion
+ 
++////////////////////////////////////////////////////////////////////////////////
++//#region Hash Param History
++////////////////////////////////////////////////////////////////////////////////
++
++/**
++ * Специальная история для интеграции с платформой Mini Apps ВКонтакте.
++ * Позволяет передавать в хэше путь вместе с параметрами запуска.
++ */
++export interface HashParamHistory extends UrlHistory {}
++
++export type HashParamHistoryOptions = UrlHistoryOptions & {
++  paramName?: string;
++};
++
++const DEFAULT_PATH_PARAM_NAME = 'path';
++
++/**
++ * Hash history stores the location in window.location.hash. This makes it ideal
++ * for situations where you don't want to send the location to the server for
++ * some reason, either because you do cannot configure it or the URL space is
++ * reserved for something else.
++ *
++ * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createhashhistory
++ */
++export function createHashParamHistory(
++  options: HashParamHistoryOptions = {}
++): HashParamHistory {
++  let paramName = options.paramName || DEFAULT_PATH_PARAM_NAME;
++
++  function createHashParamLocation(
++    window: Window,
++    globalHistory: Window["history"]
++  ) {
++    let hashParams = new URLSearchParams(window.location.hash.substring(1));
++    let pathFromHash = hashParams.get(paramName) || '';
++    let {
++      pathname = "/",
++      search = "",
++      hash = "",
++    } = parsePath(pathFromHash);
++    return createLocation(
++      "",
++      { pathname, search, hash },
++      // state defaults to `null` because `window.history.state` does
++      (globalHistory.state && globalHistory.state.usr) || null,
++      (globalHistory.state && globalHistory.state.key) || "default"
++    );
++  }
++
++  function createHashParamHref(window: Window, to: To) {
++    let currentHashParams = new URLSearchParams(window.location.hash.substring(1));
++    let base = window.document.querySelector("base");
++    let href = "";
++
++    if (base && base.getAttribute("href")) {
++      let url = window.location.href;
++      let hashIndex = url.indexOf("#");
++      href = hashIndex === -1 ? url : url.slice(0, hashIndex);
++    }
++
++    currentHashParams.set(paramName, (typeof to === "string" ? to : createPath(to)));
++    return href + "#" + currentHashParams.toString();
++  }
++
++  function validateHashParamLocation(location: Location, to: To) {
++    warning(
++      location.pathname.charAt(0) === "/",
++      `relative pathnames are not supported in hash param history.push(${JSON.stringify(
++        to
++      )})`
++    );
++  }
++
++  return getUrlBasedHistory(
++    createHashParamLocation,
++    createHashParamHref,
++    validateHashParamLocation,
++    options
++  );
++}
++//#endregion
++
+ ////////////////////////////////////////////////////////////////////////////////
+ //#region UTILS
+ ////////////////////////////////////////////////////////////////////////////////
+diff --git a/node_modules/@remix-run/router/index.ts b/node_modules/@remix-run/router/index.ts
+index 3d4fea9..7f0d209 100644
+--- a/node_modules/@remix-run/router/index.ts
++++ b/node_modules/@remix-run/router/index.ts
+@@ -63,6 +63,7 @@ export {
+   createBrowserHistory,
+   createPath,
+   createHashHistory,
++  createHashParamHistory,
+   createMemoryHistory,
+   parsePath,
+ } from "./history";
