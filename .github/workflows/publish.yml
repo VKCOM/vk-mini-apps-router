@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
 
+      - name: Install patches
+        run: yarn installPatches
+
       - name: Set Git credentials
         run: |
           git config --local user.email "actions@github.com"
