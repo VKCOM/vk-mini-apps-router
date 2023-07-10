@@ -58,7 +58,7 @@ export function RouterProvider(
         }
       });
       router.subscribe((state) => {
-        const location = `${state.location.pathname}${state.location.search}${state.location.hash}`;
+        const location = router.createHref(state.location).replace(/^#/, '');
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
