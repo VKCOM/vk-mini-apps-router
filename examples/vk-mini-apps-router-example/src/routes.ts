@@ -1,5 +1,5 @@
 import {
-  createHashParamRouter,
+  createHashRouter,
   createModal,
   createPanel,
   createRoot,
@@ -98,7 +98,7 @@ export const hierarchy: RouteLeaf[] = [{
   ],
 }];
 
-export const router = createHashParamRouter(routes.getRoutes());
+export const router = createHashRouter(routes.getRoutes());
 
 // export const router = createHashRouter([
 //   {
