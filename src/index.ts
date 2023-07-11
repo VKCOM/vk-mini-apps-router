@@ -3,7 +3,6 @@ export type { RouterProviderProps } from './components/RouterProvider';
 export { RouterProvider } from './components/RouterProvider';
 export { RouterLink } from './components/RouterLink';
 export { createHashRouter } from './utils/createHashRouter';
-export { createHashParamRouter } from './utils/createHashParamRouter';
 export { createBrowserRouter } from './utils/createBrowserRouter';
 
 export {
