@@ -2408,16 +2408,16 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@vkontakte/vkui@^5.5.5":
-  version "5.5.5"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-5.5.5.tgz#c3b052622d647fbdd3e44a0bf87f81c3726eaeec"
-  integrity sha512-Vr1bxxgsLI/zTFAOdJ8V3DyeJRwQ4Hz2Gq5QXHQb3m6daQrPXUYNkTcQc7pNKartETkI/KpM4xJWZoHjj+6d8w==
+"@vkontakte/vkui@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-5.6.0.tgz#c9cc45d7e2a50edfb469dd47d594bfd3d6e5c9a4"
+  integrity sha512-T8YA3QEt+5pujpqyYKrfWcXBSk1xkt9gnamffvP2fmHSeKhAVBJYqTcJpm3utdDa4lsTojRJcJBoOotiiOTuGA==
   dependencies:
     "@floating-ui/react-dom" "^2.0.1"
     "@swc/helpers" "^0.5.1"
     "@vkontakte/vkjs" "^1.1.0"
-    dayjs "^1.11.8"
-    mitt "^3.0.0"
+    dayjs "^1.11.9"
+    mitt "^3.0.1"
 
 "@webassemblyjs/ast@1.11.6", "@webassemblyjs/ast@^1.11.5":
   version "1.11.6"
@@ -3763,10 +3763,10 @@ dateformat@^3.0.3:
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
-dayjs@^1.11.8:
-  version "1.11.8"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.8.tgz#4282f139c8c19dd6d0c7bd571e30c2d0ba7698ea"
-  integrity sha512-LcgxzFoWMEPO7ggRv1Y2N31hUf2R0Vj7fuy/m+Bg1K8rr+KAs1AEy4y9jd5DXe8pbHgX+srkHNS7TH6Q6ZhYeQ==
+dayjs@^1.11.9:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.9.tgz#9ca491933fadd0a60a2c19f6c237c03517d71d1a"
+  integrity sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.6.0:
   version "2.6.9"
@@ -6585,10 +6585,10 @@ minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mitt@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
-  integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
+mitt@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.1.tgz#ea36cf0cc30403601ae074c8f77b7092cdab36d1"
+  integrity sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==
 
 mkdirp@~0.5.1:
   version "0.5.6"
