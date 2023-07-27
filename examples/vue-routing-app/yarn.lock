@@ -1437,10 +1437,10 @@
   resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.8.2.tgz#ec57ef6830a181914678f00ab6c2a037478a9d37"
   integrity sha512-RG7G1CHmTMcNvltNEOLGMGQUjloZLWftSjnuCih8dPgOakKM77EMDHwT1zOqXJp1Z3sZiJXty5L73Y9eDMSDcA==
 
-"@vkontakte/vk-tunnel@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-tunnel/-/vk-tunnel-0.1.3.tgz#00258b2a44cd78718382251c4e8769ea33f88b16"
-  integrity sha512-NRC3e5m5xDX8ka8msSRVZmm0KqjycN1GNI4sFcsKGtXjtrcmK/KvFFfLgWcfdzqaEOfP6bCSragMPD9qUqDTEg==
+"@vkontakte/vk-tunnel@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-tunnel/-/vk-tunnel-0.1.4.tgz#87fbb1efb132fbef0a91ffa400f60d6674efa510"
+  integrity sha512-d0vCTYYu9VLP2/3uso8Zm8GB/3pvByrWmnRK95oBtNehqgxgL/ee1vAeRxw3cVknZvqI8lAiyXnHggj/ciJgew==
   dependencies:
     axios "^0.21.1"
     chalk "^3.0.0"
