@@ -30,7 +30,7 @@
     "eslint-plugin-vue": "^8.0.3",
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
-    "sass": "^1.64.1",
+    "sass": "^1.64.2",
     "sass-loader": "^13.3.2",
     "typescript": "~5.1.6"
   },
