@@ -78,7 +78,9 @@ export class ViewHistory {
   }
 
   private pop(record: ViewNavigationRecord): void {
-    this.positionInternal = this.history.findIndex(({ locationKey }) => locationKey === record.locationKey);
+    this.positionInternal = this.history.findIndex(
+      ({ locationKey }) => locationKey === record.locationKey,
+    );
   }
 
   private hasKey(key: string): boolean {
@@ -86,7 +88,7 @@ export class ViewHistory {
   }
 
   private getViewRecordFromState(state: RouterState): ViewNavigationRecord | undefined {
-    const context = getContextFromState(state);
+    const context = getContextFromState(state, []);
     if (!context.match) {
       return undefined;
     }

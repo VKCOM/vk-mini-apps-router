@@ -24,33 +24,62 @@ export interface RouterProviderProps {
   hierarchy?: RouteLeaf[];
 }
 
-export function RouterProvider(
-  {
-    router,
-    children,
-    useBridge = true,
-    notFound = undefined,
-    throttled = true,
-    interval = 400,
-    hierarchy,
-  }: RouterProviderProps,
-): ReactElement {
+export function RouterProvider({
+  router,
+  children,
+  useBridge = true,
+  notFound = undefined,
+  throttled = true,
+  interval = 400,
+  hierarchy,
+}: RouterProviderProps): ReactElement {
   const forceUpdate = useForceUpdate();
-  const routeContext = getContextFromState(router.state);
-  const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
-  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(new TransactionExecutor(forceUpdate));
   const [popout, setPopout] = useState<JSX.Element | null>(null);
   const [viewHistory] = useState<ViewHistory>(new ViewHistory());
-  
+  const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
+  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(
+    new TransactionExecutor(forceUpdate),
+  );
+  const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
+
+  const dataRouterContext = useMemo(() => {
+    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(
+      router,
+      viewHistory,
+      transactionExecutor,
+      setPopout,
+    );
+    return { router, routeNavigator, viewHistory };
+  }, [router, setPopout, viewHistory]);
+
+  const throttlingOptions = useMemo(() => {
+    return {
+      enabled: throttled || Boolean(transactionExecutor.initialDelay),
+      firstActionDelay: transactionExecutor.initialDelay,
+      interval,
+    };
+  }, []);
+
+  const routeContext = useMemo(
+    () => getContextFromState(router.state, panelsHistory),
+    [router.state, panelsHistory],
+  );
+
+  const dataPopoutContext = useMemo(() => {
+    return { popout: isPopoutShown ? popout : null };
+  }, [isPopoutShown, popout]);
+
   useBlockForwardToModals(router, viewHistory);
   useEffect(() => {
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
+
     router.subscribe((state) => {
       viewHistory.updateNavigation(state);
       setPanelsHistory(viewHistory.panelsHistory);
       transactionExecutor.doNext();
     });
+
     if (useBridge) {
       bridge.subscribe((event) => {
         if (event.detail.type === 'VKWebAppChangeFragment') {
@@ -63,21 +92,6 @@ export function RouterProvider(
       });
     }
   }, [router, viewHistory]);
-  routeContext.panelsHistory = panelsHistory;
-  const routeNotFound = Boolean(!routeContext.match ||
-    routeContext.state.errors && routeContext.state.errors[routeContext.match.route.id] &&
-      routeContext.state.errors[routeContext.match.route.id].status === 404);
-  const dataRouterContext = useMemo(() => {
-    const routeNavigator: RouteNavigator = new DefaultRouteNavigator(router, viewHistory, transactionExecutor, setPopout);
-    return { router, routeNavigator, viewHistory };
-  }, [router, setPopout, viewHistory]);
-
-  const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
-  const throttlingOptions = {
-    enabled: throttled || Boolean(transactionExecutor.initialDelay),
-    firstActionDelay: transactionExecutor.initialDelay,
-    interval,
-  };
 
   useEffect(() => {
     viewHistory.resetHistory();
@@ -85,14 +99,24 @@ export function RouterProvider(
     setTransactionExecutor(executor);
     const searchParams = createSearchParams(router.state.location.search);
     const enableFilling = Boolean(searchParams.get(SEARCH_PARAM_INFLATE));
-    hierarchy && enableFilling && fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
+    hierarchy &&
+      enableFilling &&
+      fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
   }, [router]);
-  
+
+  const routeNotFound = Boolean(
+    !routeContext.match ||
+      (routeContext.state.errors &&
+        routeContext.state.errors[routeContext.match.route.id] &&
+        routeContext.state.errors[routeContext.match.route.id].status === 404),
+  );
+
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <ThrottledContext.Provider value={throttlingOptions}>
-        <PopoutContext.Provider value={{ popout: isPopoutShown ? popout : null }}>
-          {routeNotFound && (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
+        <PopoutContext.Provider value={dataPopoutContext}>
+          {routeNotFound &&
+            (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
           {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
         </PopoutContext.Provider>
       </ThrottledContext.Provider>

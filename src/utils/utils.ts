@@ -22,11 +22,11 @@ export function fillParamsIntoPath(path: string, params: Params): string {
   return parameters.reduce(paramInjector, path);
 }
 
-export function getContextFromState(state: RouterState): RouteContextObject {
+export function getContextFromState(state: RouterState, panelsHistory: string[]): RouteContextObject {
   return {
     state,
     match: state.matches.length ? state.matches[state.matches.length - 1] as AgnosticRouteMatch<string, PageInternal> : undefined,
-    panelsHistory: [],
+    panelsHistory: panelsHistory,
   };
 }
 
