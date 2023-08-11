@@ -4,7 +4,7 @@ import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/DefaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
-import { getContextFromState, useForceUpdate } from '../utils/utils';
+import { getRouteContext, useForceUpdate } from '../utils/utils';
 import { ViewHistory } from '../services/ViewHistory';
 import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { SEARCH_PARAM_INFLATE, STATE_KEY_SHOW_POPOUT } from '../const';
@@ -58,10 +58,10 @@ export function RouterProvider({
       firstActionDelay: transactionExecutor.initialDelay,
       interval,
     };
-  }, []);
+  }, [transactionExecutor.initialDelay, interval, throttled]);
 
   const routeContext = useMemo(
-    () => getContextFromState(router.state, panelsHistory),
+    () => getRouteContext(router.state, panelsHistory),
     [router.state, panelsHistory],
   );
 
