@@ -50,7 +50,7 @@ export function RouterProvider({
       setPopout,
     );
     return { router, routeNavigator, viewHistory };
-  }, [router, setPopout, viewHistory]);
+  }, [router, viewHistory, transactionExecutor, setPopout]);
 
   const throttlingOptions = useMemo(() => {
     return {
