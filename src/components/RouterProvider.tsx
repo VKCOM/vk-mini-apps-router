@@ -71,6 +71,7 @@ export function RouterProvider({
 
   useBlockForwardToModals(router, viewHistory);
   useEffect(() => {
+    viewHistory.resetHistory();
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
 
@@ -91,10 +92,9 @@ export function RouterProvider({
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
-  }, [router, viewHistory]);
+  }, [router]);
 
   useEffect(() => {
-    viewHistory.resetHistory();
     const executor = new TransactionExecutor(forceUpdate);
     setTransactionExecutor(executor);
     const searchParams = createSearchParams(router.state.location.search);

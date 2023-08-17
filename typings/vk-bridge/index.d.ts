@@ -1,4 +1,56 @@
 declare module '@vkontakte/vk-bridge' {
+  export type ChangeFragmentResponse = {
+    location: string;
+  };
+  /**
+   * Map of types of request props of VK Bridge methods
+   */
+  /* eslint-disable @typescript-eslint/ban-types */
+  export type RequestPropsMap = {
+    VKWebAppSetSwipeSettings: { history: boolean };
+    VKWebAppDisableSwipeBack: {};
+    VKWebAppEnableSwipeBack: {};
+    VKWebAppSetLocation: { location: string; replace_state?: boolean };
+  };
+  /**
+   * Map of types of response data of VK Bridge methods
+   */
+  export type ReceiveDataMap = {
+    VKWebAppChangeFragment: ChangeFragmentResponse;
+    VKWebAppSetSwipeSettings: { result: true };
+    VKWebAppDisableSwipeBack: { result: true };
+    VKWebAppEnableSwipeBack: { result: true };
+    VKWebAppSetLocation: { result: true };
+  };
+  type EventReceiveNames<
+    T extends keyof RequestPropsMap,
+    R extends string,
+    F extends string,
+    > = Record<T, { result: R; failed: F }>;
+  /**
+   * Map of event names.
+   */
+  export type ReceiveEventMap =
+    EventReceiveNames<
+      'VKWebAppSetSwipeSettings',
+      'VKWebAppSetSwipeSettingsResult',
+      'VKWebAppSetSwipeSettingsFailed'
+      > &
+    EventReceiveNames<
+      'VKWebAppDisableSwipeBack',
+      'VKWebAppDisableSwipeBackResult',
+      'VKWebAppDisableSwipeBackFailed'
+      > &
+    EventReceiveNames<
+      'VKWebAppEnableSwipeBack',
+      'VKWebAppEnableSwipeBackResult',
+      'VKWebAppEnableSwipeBackFailed'
+      > &
+    EventReceiveNames<
+      'VKWebAppSetLocation',
+      'VKWebAppSetLocationResult',
+      'VKWebAppSetLocationFailed'
+      >;
   /**
    * Name of a method that can be sent.
    */
@@ -10,7 +62,7 @@ declare module '@vkontakte/vk-bridge' {
   /**
    * Name of a method that can be only received.
    */
-  export declare type AnyReceiveOnlyMethodName = Exclude<AnyReceiveMethodName, AnyRequestMethodName>;
+  export type AnyReceiveOnlyMethodName = Exclude<AnyReceiveMethodName, AnyRequestMethodName>;
   /**
    * The name of the method that can be both sent and received.
    */
@@ -158,6 +210,6 @@ declare module '@vkontakte/vk-bridge' {
     supports: <K extends AnyRequestMethodName>(method: K) => boolean;
   }
 
-  declare const bridge: VKBridge;
+  const bridge: VKBridge;
   export { bridge as default };
 }
