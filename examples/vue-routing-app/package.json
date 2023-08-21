@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@vkontakte/vk-bridge": "^2.9.0",
-    "core-js": "^3.32.0",
+    "core-js": "^3.32.1",
     "vue": "^3.2.13",
     "vue-router": "^4.2.4"
   },
