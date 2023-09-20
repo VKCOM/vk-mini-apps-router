@@ -10,7 +10,7 @@
     "@types/node": "^20.5.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
-    "@vkontakte/icons": "^2.51.0",
+    "@vkontakte/icons": "^2.68.0",
     "@vkontakte/vk-bridge": "latest",
     "@vkontakte/vk-mini-apps-router": "^1.1.0",
     "@vkontakte/vkui": "^5.7.1",
