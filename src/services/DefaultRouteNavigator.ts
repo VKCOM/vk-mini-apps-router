@@ -3,7 +3,7 @@ import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../u
 import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
 import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
-import { InternalRouteConfig, ModalWithRoot } from '../type';
+import { InternalRouteConfig, ModalWithRoot, RouteWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
 import { ViewHistory } from './ViewHistory';
 import { TransactionExecutor } from './TransactionExecutor';
@@ -12,15 +12,18 @@ import { NavigationTransaction } from '../entities/NavigationTransaction';
 export class DefaultRouteNavigator implements RouteNavigator {
   private readonly router: Router;
   private readonly setPopout: (popout: JSX.Element | null) => void;
+  public fallbackPath?: string
 
   constructor(
     router: Router,
     private viewHistory: ViewHistory,
     private transactionExecutor: TransactionExecutor,
     setPopout: (popout: JSX.Element | null) => void,
+    fallbackPath?: string,
   ) {
     this.router = router;
     this.setPopout = setPopout;
+    this.fallbackPath = this.isPathValid(fallbackPath) ? fallbackPath : undefined
   }
 
   public async push(
@@ -135,6 +138,10 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     }
   }
 
+  private isPathValid(path?: string) {
+    return this.router.routes.some(route => route.path === path)
+  }
+
   private async navigate(
     to: string | Page | PageWithParams<string>,
     opts?: RouterNavigateOptions & NavigationOptions,
@@ -150,6 +157,16 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
       path += this.router.state.location.search;
     }
 
-    await this.router.navigate(path, opts);
+    if (this.fallbackPath && !this.isPathValid(path))
+      this.goToFallback()
+    else await this.router.navigate(path, opts, );
+  }
+
+  private goToFallback() {
+    const routes = this.router.routes as unknown as RouteWithRoot[];
+    const currentPanelName = this.viewHistory.panelsHistory[this.viewHistory.position]
+    const currentPanelPath = routes.find(route => route.panel === currentPanelName)?.path
+    if (!this.fallbackPath || currentPanelPath === this.fallbackPath) return
+    else this.replace(this.fallbackPath)
   }
 }

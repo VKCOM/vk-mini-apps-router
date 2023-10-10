@@ -1,6 +1,6 @@
 import { Action, Router } from '@remix-run/router';
 import { PopoutContext, RouteContext, RouterContext, ThrottledContext } from '../contexts';
-import { ReactElement, useEffect, useMemo, useState, ReactNode, useRef } from 'react';
+import { ReactElement, useEffect, useMemo, useState, ReactNode } from 'react';
 import { DefaultRouteNavigator } from '../services/DefaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
@@ -12,7 +12,7 @@ import { RouteNavigator } from '../services/RouteNavigator.type';
 import { TransactionExecutor } from '../services/TransactionExecutor';
 import { fillHistory } from '../utils/fillHistory';
 import { createSearchParams } from '../utils/createSearchParams';
-import { RouteLeaf, RouteWithRoot } from '../type';
+import { RouteLeaf } from '../type';
 
 export interface RouterProviderProps {
   router: Router;
@@ -20,7 +20,7 @@ export interface RouterProviderProps {
   interval?: number;
   useBridge?: boolean;
   throttled?: boolean;
-  fallbackUrl?: string;
+  fallbackPath?: string;
   notFound?: ReactNode;
   hierarchy?: RouteLeaf[];
   showInvalidUrlPage?: boolean;
@@ -31,11 +31,10 @@ export function RouterProvider({
   children,
   notFound,
   hierarchy,
-  fallbackUrl,
+  fallbackPath,
   interval = 400,
   useBridge = true,
   throttled = true,
-  showInvalidUrlPage = true,
 }: RouterProviderProps): ReactElement {
   const forceUpdate = useForceUpdate();
   const [popout, setPopout] = useState<JSX.Element | null>(null);
@@ -44,14 +43,15 @@ export function RouterProvider({
   const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(
     new TransactionExecutor(forceUpdate),
   );
-  const showDefaultNotFoundForce = useRef(false);
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
+
   const dataRouterContext = useMemo(() => {
     const routeNavigator: RouteNavigator = new DefaultRouteNavigator(
       router,
       viewHistory,
       transactionExecutor,
       setPopout,
+      fallbackPath
     );
     return { router, routeNavigator, viewHistory };
   }, [router, viewHistory, transactionExecutor, setPopout]);
@@ -68,7 +68,6 @@ export function RouterProvider({
     () => getRouteContext(router.state, panelsHistory),
     [router.state, panelsHistory],
   );
-
   const dataPopoutContext = useMemo(() => {
     return { popout: isPopoutShown ? popout : null };
   }, [isPopoutShown, popout]);
@@ -111,37 +110,14 @@ export function RouterProvider({
         routeContext.state.errors[routeContext.match.route.id] &&
         routeContext.state.errors[routeContext.match.route.id].status === 404),
   );
-  let showDefaultNotFound = false
-
-  if (routeNotFound && fallbackUrl) {
-    if (fallbackUrl === router.state.location.pathname) {
-      console.warn('Некорректный fallbackUrl');
-      showDefaultNotFound = true
-    } else {
-      dataRouterContext.routeNavigator.replace(fallbackUrl);
-      const userRoutes = router.routes as unknown as RouteWithRoot[];
-      const lastPanelName = panelsHistory[dataRouterContext.viewHistory.position - 1];
-      const lastPath = userRoutes.find((route) => route.panel === lastPanelName)?.path;
-      if (fallbackUrl === lastPath) dataRouterContext.routeNavigator.back();
-    }
-  } else if (routeNotFound) {
-    if (!showInvalidUrlPage) {
-      dataRouterContext.routeNavigator.back();
-      showDefaultNotFoundForce.current = true;
-    }
-    showDefaultNotFound = true
-  } else if (showDefaultNotFoundForce.current) {
-    showDefaultNotFound = true
-    showDefaultNotFoundForce.current = false
-  }
 
   return (
     <RouterContext.Provider value={dataRouterContext}>
       <ThrottledContext.Provider value={throttlingOptions}>
         <PopoutContext.Provider value={dataPopoutContext}>
-          {showDefaultNotFound &&
+          {routeNotFound &&
             (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
-          {!showDefaultNotFound && <RouteContext.Provider value={routeContext} children={children} />}
+          {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
         </PopoutContext.Provider>
       </ThrottledContext.Provider>
     </RouterContext.Provider>
