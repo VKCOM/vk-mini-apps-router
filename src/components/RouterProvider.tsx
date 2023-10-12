@@ -20,9 +20,9 @@ export interface RouterProviderProps {
   interval?: number;
   useBridge?: boolean;
   throttled?: boolean;
-  redirectPath?: string;
   hierarchy?: RouteLeaf[];
   notFound?: ReactNode;
+  notFoundRedirectPath?: string;
 }
 
 export function RouterProvider({
@@ -30,7 +30,7 @@ export function RouterProvider({
   children,
   notFound,
   hierarchy,
-  redirectPath,
+  notFoundRedirectPath,
   interval = 400,
   useBridge = true,
   throttled = true,
@@ -111,10 +111,10 @@ export function RouterProvider({
         routeContext.state.errors[routeContext.match.route.id].status === 404),
   );
 
-  if (redirectPath && (routeNotFound || routeContext.match?.route.path === UNIVERSAL_URL)) {
-    if (router.state.location.pathname === redirectPath) {
-      console.warn('Incorrect redirectPath');
-    } else dataRouterContext.routeNavigator.replace(redirectPath);
+  if (notFoundRedirectPath && (routeNotFound || routeContext.match?.route.path === UNIVERSAL_URL)) {
+    if (router.state.location.pathname === notFoundRedirectPath) {
+      console.warn('Incorrect notFoundRedirectPath');
+    } else dataRouterContext.routeNavigator.replace(notFoundRedirectPath);
   }
 
   return (
