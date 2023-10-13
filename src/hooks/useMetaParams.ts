@@ -1,7 +1,5 @@
 import { useLocation } from './hooks';
 
-export type SetMetaParams = (newMetaParams: Record<string, string>) => void;
-
 /**
  * A hook for transferring state between pages
  */
