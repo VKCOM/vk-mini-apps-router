@@ -13,6 +13,7 @@ export {
 } from './hooks/hooks';
 export { useGetPanelForView } from './hooks/useGetPanelForView';
 export { useSearchParams } from './hooks/useSearchParams';
+export { useMetaParams } from './hooks/useMetaParams';
 export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 export { useEnableSwipeBack } from './hooks/useEnableSwipeBack';

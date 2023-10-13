@@ -3,11 +3,13 @@ import { Params } from '@remix-run/router';
 
 export interface NavigationOptions {
   keepSearchParams?: boolean;
+  state?: Object;
 }
 
 export function hasNavigationOptionsKeys<T extends {}>(object: T): boolean {
   const base: Required<NavigationOptions> = {
     keepSearchParams: true,
+    state: {}
   };
   return Object.keys(object).some((key) => key in base);
 }
