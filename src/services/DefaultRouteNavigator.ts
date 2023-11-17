@@ -1,6 +1,11 @@
-import { Params, Router, RouterNavigateOptions } from '@remix-run/router';
+import { BlockerFunction, Params, Router, RouterNavigateOptions } from '@remix-run/router';
 import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
-import { STATE_KEY_BLOCK_FORWARD_NAVIGATION, STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
+import {
+  NAVIGATION_BLOCKER_KEY,
+  STATE_KEY_BLOCK_FORWARD_NAVIGATION,
+  STATE_KEY_SHOW_MODAL,
+  STATE_KEY_SHOW_POPOUT,
+} from '../const';
 import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
@@ -12,6 +17,8 @@ import { NavigationTransaction } from '../entities/NavigationTransaction';
 export class DefaultRouteNavigator implements RouteNavigator {
   private readonly router: Router;
   private readonly setPopout: (popout: JSX.Element | null) => void;
+  private blockers: Map<string, BlockerFunction> = new Map();
+  private blockerId = 0;
 
   constructor(
     router: Router,
@@ -26,23 +33,26 @@ export class DefaultRouteNavigator implements RouteNavigator {
   public async push(
     to: string | Page | PageWithParams<string>,
     paramsOrOptions: Params | NavigationOptions = {},
-    options: NavigationOptions = {}
+    options: NavigationOptions = {},
   ): Promise<void> {
     const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
     const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
-    const fullOptions = { ...preparedOptions, replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]) };
-    const preparedParams: Params = paramsAreOptions ? {} : paramsOrOptions as Params;
+    const fullOptions = {
+      ...preparedOptions,
+      replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]),
+    };
+    const preparedParams: Params = paramsAreOptions ? {} : (paramsOrOptions as Params);
     await this.navigate(to, fullOptions, preparedParams);
   }
 
   public async replace(
     to: string | Page | PageWithParams<string>,
     paramsOrOptions: Params | NavigationOptions = {},
-    options: NavigationOptions = {}
+    options: NavigationOptions = {},
   ): Promise<void> {
     const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
     const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
-    const preparedParams: Params = paramsAreOptions ? {} : paramsOrOptions as Params;
+    const preparedParams: Params = paramsAreOptions ? {} : (paramsOrOptions as Params);
     await this.navigate(to, { ...preparedOptions, replace: true }, preparedParams);
   }
 
@@ -84,7 +94,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public async hideModal(pushPanel = false): Promise<void> {
-    if (!pushPanel && !this.viewHistory.isFirstPage || isModalShown(this.router.state.location)) {
+    if ((!pushPanel && !this.viewHistory.isFirstPage) || isModalShown(this.router.state.location)) {
       await this.router.navigate(-1);
     } else {
       const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
@@ -112,7 +122,8 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     if (isModalShown(this.router.state.location)) {
       state[STATE_KEY_SHOW_MODAL] = this.router.state.location.state[STATE_KEY_SHOW_MODAL];
     }
-    const replace = isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
+    const replace =
+      isModalShown(this.router.state.location) || isPopoutShown(this.router.state.location);
     await this.router.navigate(this.router.state.location, { state, replace });
   }
 
@@ -135,11 +146,25 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     }
   }
 
+  public block(blocker: BlockerFunction) {
+    const key = (++this.blockerId).toString();
+    this.blockers.set(key, blocker);
+    const onLeave: BlockerFunction = (data) => {
+      return Array.from(this.blockers.values()).some((fn) => fn(data));
+    };
+    this.router.getBlocker(NAVIGATION_BLOCKER_KEY, onLeave);
+
+    return () => {
+      this.blockers.delete(key);
+    };
+  }
+
   private async navigate(
     to: string | Page | PageWithParams<string>,
     opts?: RouterNavigateOptions & NavigationOptions,
-    params: Params = {}
+    params: Params = {},
   ): Promise<void> {
+    // prettier-ignore
     let path = typeof to === 'string'
       ? to
       : to.hasParams

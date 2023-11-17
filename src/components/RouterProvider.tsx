@@ -71,7 +71,7 @@ export function RouterProvider({
     return { popout: isPopoutShown ? popout : null };
   }, [isPopoutShown, popout]);
 
-  useBlockForwardToModals(router, viewHistory);
+  useBlockForwardToModals(router, viewHistory, dataRouterContext.routeNavigator);
   useEffect(() => {
     viewHistory.resetHistory();
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
@@ -106,9 +106,9 @@ export function RouterProvider({
 
   const routeNotFound = Boolean(
     !routeContext.match ||
-      (routeContext.state.errors &&
-        routeContext.state.errors[routeContext.match.route.id] &&
-        routeContext.state.errors[routeContext.match.route.id].status === 404),
+    (routeContext.state.errors &&
+      routeContext.state.errors[routeContext.match.route.id] &&
+      routeContext.state.errors[routeContext.match.route.id].status === 404),
   );
 
   if (notFoundRedirectPath && (routeNotFound || routeContext.match?.route.path === UNIVERSAL_URL)) {
