@@ -2368,10 +2368,10 @@
   resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.9.0.tgz#24aed0217f0c508f4c62ed44fe52ce3fe7f47e53"
   integrity sha512-fyOdtZq+68Jnp8FNmas3fnJ4b1bjc1fmAovl2afV14VeJ1KG1OwoAaE7zpVL4U4VVZJGhhdANxEsc4tBYUSkxA==
 
-"@vkontakte/vk-mini-apps-router@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.1.0.tgz#a9df63a57d6542a9835a8731aaf38b2dde0651d2"
-  integrity sha512-WBb5ds7UtbNAVsVzLyFEAxlH3+3Wok0/Hwckd1b78G4BZCCm5bl7/TbhycIp+coUBs7E3NorPJvaErAgPblndw==
+"@vkontakte/vk-mini-apps-router@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.2.0.tgz#87127fa2e6b0ea38aeb3ac59102fe467cd7c03fb"
+  integrity sha512-JB+i47dAyQUq20j7MGwQbFz/PRkPpWGO1AMzMdRV4xqkIWWuMg2iG1KboE89MfWyJvQqrt7fvaNkkR/NzX9Rvw==
   dependencies:
     "@remix-run/router" "^1.7.1"
 

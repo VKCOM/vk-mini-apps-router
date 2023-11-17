@@ -20,6 +20,7 @@ export const DEFAULT_VIEW_PANELS = {
 
 export enum HOME_PANEL_MODALS {
   USER = 'user_modal',
+  BLOCKER = 'blocker_modal',
   ONBOARDING_1 = 'onboarding_1',
   ONBOARDING_2 = 'onboarding_2',
   ONBOARDING_3 = 'onboarding_3',
@@ -54,22 +55,40 @@ export const routes = RoutesConfig.create([
     createView(DEFAULT_VIEW, [
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', [
         createModal(HOME_PANEL_MODALS.USER, `/${HOME_PANEL_MODALS.USER}`),
+        createModal(HOME_PANEL_MODALS.BLOCKER, `/${HOME_PANEL_MODALS.BLOCKER}`),
         createModal(HOME_PANEL_MODALS.ONBOARDING_1, `/${HOME_PANEL_MODALS.ONBOARDING_1}`),
         createModal(HOME_PANEL_MODALS.ONBOARDING_2, `/${HOME_PANEL_MODALS.ONBOARDING_2}`),
         createModal(HOME_PANEL_MODALS.ONBOARDING_3, `/${HOME_PANEL_MODALS.ONBOARDING_3}`),
       ]),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, [
-        createModal(PERSIK_PANEL_MODALS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}`),
-        createModal(HOME_PANEL_MODALS.USER, `/${DEFAULT_VIEW_PANELS.PERSIK}/${HOME_PANEL_MODALS.USER}`),
+        createModal(
+          PERSIK_PANEL_MODALS.PERSIK,
+          `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}`,
+        ),
+        createModal(
+          HOME_PANEL_MODALS.USER,
+          `/${DEFAULT_VIEW_PANELS.PERSIK}/${HOME_PANEL_MODALS.USER}`,
+        ),
       ]),
-      createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`, [
-        createModal(PERSIK_PANEL_MODALS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}/:em`, ['em', 'emotion'] as const),
-        createModal(HOME_PANEL_MODALS.USER, `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${HOME_PANEL_MODALS.USER}`, ['emotion'] as const),
-      ], ['emotion'] as const),
+      createPanel(
+        DEFAULT_VIEW_PANELS.PERSIK,
+        `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
+        [
+          createModal(
+            PERSIK_PANEL_MODALS.PERSIK,
+            `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}/:em`,
+            ['em', 'emotion'] as const,
+          ),
+          createModal(
+            HOME_PANEL_MODALS.USER,
+            `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${HOME_PANEL_MODALS.USER}`,
+            ['emotion'] as const,
+          ),
+        ],
+        ['emotion'] as const,
+      ),
     ]),
-    createView(EMPTY_VIEW, [
-      createPanel(EMPTY_VIEW_PANELS.EMPTY, '/empty'),
-    ]),
+    createView(EMPTY_VIEW, [createPanel(EMPTY_VIEW_PANELS.EMPTY, '/empty')]),
   ]),
   createRoot(ALTERNATIVE_ROOT, [
     createView(ALTERNATIVE_VIEW, [
@@ -77,26 +96,37 @@ export const routes = RoutesConfig.create([
         createTab(ALTERNATIVE_PANEL_TABS.TAB_1, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_1}`),
         createTab(ALTERNATIVE_PANEL_TABS.TAB_2, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_2}`),
         createTab(ALTERNATIVE_PANEL_TABS.TAB_3, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}`, [
-          createModal(PERSIK_PANEL_MODALS.PERSIK, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${PERSIK_PANEL_MODALS.PERSIK}`),
-          createModal(HOME_PANEL_MODALS.USER, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`),
+          createModal(
+            PERSIK_PANEL_MODALS.PERSIK,
+            `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${PERSIK_PANEL_MODALS.PERSIK}`,
+          ),
+          createModal(
+            HOME_PANEL_MODALS.USER,
+            `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`,
+          ),
         ]),
       ]),
     ]),
   ]),
 ]);
 
-export const hierarchy: RouteLeaf[] = [{
-  path: '/',
-  children: [
-    {
-      path: `/${DEFAULT_VIEW_PANELS.PERSIK}`,
-      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}` }],
-    }, {
-      path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
-      children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}` }],
-    },
-  ],
-}];
+export const hierarchy: RouteLeaf[] = [
+  {
+    path: '/',
+    children: [
+      {
+        path: `/${DEFAULT_VIEW_PANELS.PERSIK}`,
+        children: [{ path: `/${DEFAULT_VIEW_PANELS.PERSIK}/${PERSIK_PANEL_MODALS.PERSIK}` }],
+      },
+      {
+        path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
+        children: [
+          { path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}` },
+        ],
+      },
+    ],
+  },
+];
 
 export const router = createHashParamRouter(routes.getRoutes());
 
@@ -112,6 +142,19 @@ export const router = createHashParamRouter(routes.getRoutes());
 //     modal: HOME_PANEL_MODALS.USER,
 //     panel: DEFAULT_VIEW_PANELS.HOME,
 //     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
+//   },
+//   {
+//     path: `/${HOME_PANEL_MODALS.BLOCKER}`,
+//     modal: HOME_PANEL_MODALS.BLOCKER,
+//     panel: DEFAULT_VIEW_PANELS.HOME,
+//     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
+//   },
+//   {
+//     path: `/${EMPTY_VIEW_PANELS.EMPTY}`,
+//     panel: EMPTY_VIEW_PANELS.EMPTY,
+//     view: EMPTY_VIEW,
 //     root: DEFAULT_ROOT,
 //   },
 //   {
@@ -155,15 +198,37 @@ export const router = createHashParamRouter(routes.getRoutes());
 //     root: DEFAULT_ROOT,
 //   },
 //   {
-//     path: '/empty',
-//     panel: EMPTY_VIEW_PANELS.EMPTY,
-//     view: EMPTY_VIEW,
+//     path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}/:em`,
+//     modal: PERSIK_PANEL_MODALS.PERSIK,
+//     panel: DEFAULT_VIEW_PANELS.PERSIK,
+//     view: DEFAULT_VIEW,
 //     root: DEFAULT_ROOT,
 //   },
 //   {
-//     path: '/alternative',
+//     path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}`,
 //     panel: ALTERNATIVE_VIEW_PANELS.ALTERNATIVE,
 //     view: ALTERNATIVE_VIEW,
 //     root: ALTERNATIVE_ROOT,
+//   },
+//   {
+//     path: `/${HOME_PANEL_MODALS.ONBOARDING_1}`,
+//     modal: HOME_PANEL_MODALS.ONBOARDING_1,
+//     panel: DEFAULT_VIEW_PANELS.HOME,
+//     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
+//   },
+//   {
+//     path: `/${HOME_PANEL_MODALS.ONBOARDING_2}`,
+//     modal: HOME_PANEL_MODALS.ONBOARDING_2,
+//     panel: DEFAULT_VIEW_PANELS.HOME,
+//     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
+//   },
+//   {
+//     path: `/${HOME_PANEL_MODALS.ONBOARDING_3}`,
+//     modal: HOME_PANEL_MODALS.ONBOARDING_3,
+//     panel: DEFAULT_VIEW_PANELS.HOME,
+//     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
 //   },
 // ]);
