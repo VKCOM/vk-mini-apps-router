@@ -1,5 +1,5 @@
 import { Page, PageWithParams } from '../page-types/common';
-import { Params } from '@remix-run/router';
+import { BlockerFunction, Params } from '@remix-run/router';
 
 export interface NavigationOptions {
   keepSearchParams?: boolean;
@@ -9,16 +9,24 @@ export interface NavigationOptions {
 export function hasNavigationOptionsKeys<T extends {}>(object: T): boolean {
   const base: Required<NavigationOptions> = {
     keepSearchParams: true,
-    state: {}
+    state: {},
   };
   return Object.keys(object).some((key) => key in base);
 }
 
 export interface RouteNavigator {
-  push<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): Promise<void>;
+  push<T extends string>(
+    to: PageWithParams<T>,
+    params: Params<T>,
+    options?: NavigationOptions,
+  ): Promise<void>;
   push(to: string | Page, options?: NavigationOptions): Promise<void>;
 
-  replace<T extends string>(to: PageWithParams<T>, params: Params<T>, options?: NavigationOptions): Promise<void>;
+  replace<T extends string>(
+    to: PageWithParams<T>,
+    params: Params<T>,
+    options?: NavigationOptions,
+  ): Promise<void>;
   replace(to: string | Page, options?: NavigationOptions): Promise<void>;
 
   back(to?: number): Promise<void>;
@@ -28,6 +36,8 @@ export interface RouteNavigator {
   go(to: number): Promise<void>;
 
   showModal(id: string): Promise<void>;
+
+  block(onLeave: BlockerFunction): () => void;
 
   /**
    * Закрыть модальное окно, открытое методом showModal или навигацией (push/replace/back).
