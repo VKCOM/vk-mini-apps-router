@@ -73,6 +73,9 @@ export function RouterProvider({
 
   useBlockForwardToModals(router, viewHistory, dataRouterContext.routeNavigator);
   useEffect(() => {
+    // Отключаем браузерное восстановление скролла, используем решения от VKUI
+    history.scrollRestoration = "manual";
+
     viewHistory.resetHistory();
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
