@@ -3,13 +3,19 @@ import bridge from '@vkontakte/vk-bridge';
 import { SplitCol, SplitLayout, View, Root, Epic, ModalRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import { useActiveVkuiLocation, usePopout, useRouteNavigator, useGetPanelForView } from '@vkontakte/vk-mini-apps-router';
+import {
+  useActiveVkuiLocation,
+  usePopout,
+  useRouteNavigator,
+  useGetPanelForView,
+} from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
 import Persik from './panels/Persik';
 import {
   ALTERNATIVE_ROOT,
-  ALTERNATIVE_VIEW, ALTERNATIVE_VIEW_PANELS,
+  ALTERNATIVE_VIEW,
+  ALTERNATIVE_VIEW_PANELS,
   DEFAULT_ROOT,
   DEFAULT_VIEW,
   DEFAULT_VIEW_PANELS,
@@ -22,6 +28,7 @@ import { Empty } from './panels/Empty';
 import { PersikModal } from './modals/PersikModal';
 import { UserModal } from './modals/UserModal';
 import { Alternative } from './panels/Alternative';
+import { BlockerModal } from './modals/BlockerModal';
 import { OnboardingOne } from './onboarding/OnboardingOne';
 import { OnboardingTwo } from './onboarding/OnboardingTwo';
 import { OnboardingThree } from './onboarding/OnboardingThree';
@@ -54,11 +61,9 @@ function App() {
   };
 
   const modal = (
-    <ModalRoot
-      activeModal={activeModal}
-      onClose={() => routeNavigator.hideModal()}
-    >
+    <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal()}>
       <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK}></PersikModal>
+      <BlockerModal nav={HOME_PANEL_MODALS.BLOCKER} />
       <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser}></UserModal>
       <OnboardingOne nav={HOME_PANEL_MODALS.ONBOARDING_1} />
       <OnboardingTwo nav={HOME_PANEL_MODALS.ONBOARDING_2} />
@@ -66,7 +71,7 @@ function App() {
     </ModalRoot>
   );
 
-  const history = (activeModal || routerPopout) ? [] : panelsHistory;
+  const history = activeModal || routerPopout ? [] : panelsHistory;
   return (
     <SplitLayout popout={routerPopout} modal={modal}>
       <SplitCol>
