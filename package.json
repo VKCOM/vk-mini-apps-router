@@ -25,7 +25,7 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@remix-run/router": "^1.7.1"
+    "@remix-run/router": "^1.13.0"
   },
   "peerDependencies": {
     "@vkontakte/vk-bridge": "^2.7.2",
