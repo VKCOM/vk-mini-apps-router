@@ -1,3 +1,8 @@
+v1.3.2
+-
+- Фикс проблем с навигацией при использовании тега base
+- Фикс совсестимости с vite nx сборкой
+
 v1.3.1
 -
 - Фикс проблемы UNSAFE_getPathContributingMatches в версии 1.13.0 @remix-run/router (https://github.com/VKCOM/vk-mini-apps-router/issues/299)

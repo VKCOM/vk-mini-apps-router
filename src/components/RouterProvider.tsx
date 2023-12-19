@@ -13,6 +13,7 @@ import { TransactionExecutor } from '../services/TransactionExecutor';
 import { fillHistory } from '../utils/fillHistory';
 import { createSearchParams } from '../utils/createSearchParams';
 import { RouteLeaf } from '../type';
+import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
 
 export interface RouterProviderProps {
   router: Router;
@@ -74,7 +75,7 @@ export function RouterProvider({
   useBlockForwardToModals(router, viewHistory, dataRouterContext.routeNavigator);
   useEffect(() => {
     // Отключаем браузерное восстановление скролла, используем решения от VKUI
-    history.scrollRestoration = "manual";
+    history.scrollRestoration = 'manual';
 
     viewHistory.resetHistory();
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
@@ -93,7 +94,10 @@ export function RouterProvider({
         }
       });
       router.subscribe((state) => {
-        const location = router.createHref(state.location).replace(/^#/, '');
+        const href = router.createHref(state.location);
+        const hrefWithoutHash = getHrefWithoutHash();
+        const location = href.replace(hrefWithoutHash, '').replace(/^#/, '');
+
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
@@ -109,9 +113,9 @@ export function RouterProvider({
 
   const routeNotFound = Boolean(
     !routeContext.match ||
-    (routeContext.state.errors &&
-      routeContext.state.errors[routeContext.match.route.id] &&
-      routeContext.state.errors[routeContext.match.route.id].status === 404),
+      (routeContext.state.errors &&
+        routeContext.state.errors[routeContext.match.route.id] &&
+        routeContext.state.errors[routeContext.match.route.id].status === 404),
   );
 
   if (notFoundRedirectPath && (routeNotFound || routeContext.match?.route.path === UNIVERSAL_URL)) {
