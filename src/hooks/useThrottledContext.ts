@@ -25,6 +25,8 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
     const throttleDelay = interval - timeDiff;
     const initialDelay = throttleDelay <= 0 ? firstActionDelay : 0;
     const delay = Math.max(initialDelay, throttleDelay);
+    prevValue.current = throttledValue;
+
     if (delay <= 0) {
       updated.current = Date.now();
       setThrottledValue(value);
@@ -37,6 +39,7 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
       };
       updateTimer.current = setTimeout(updateCallback.current, delay);
     }
+
     return () => clearTimeout(updateTimer.current);
   }, [value]);
 
@@ -50,6 +53,5 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null, () =>
   }, []);
 
   const returnPrev = prevValue.current;
-  prevValue.current = throttledValue;
   return [throttledValue, returnPrev, onTransitionEnd];
 }
