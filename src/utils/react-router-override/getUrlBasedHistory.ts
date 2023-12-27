@@ -1,15 +1,9 @@
-import {
-  Action,
-  createPath,
-  History,
-  Location,
-  To,
-  UNSAFE_invariant as invariant,
-} from '@remix-run/router';
+import { Action, createPath, History, Location, To } from '@remix-run/router';
 import { UrlHistoryOptions } from './UrlHistoryOptions.type';
 import { Listener } from '@remix-run/router/dist/history';
 import { createLocation } from './createLocation';
 import { getHistoryState } from './getHistoryState';
+import { invariant } from '../utils';
 
 const PopStateEventType = 'popstate';
 
@@ -18,7 +12,7 @@ export function getUrlBasedHistory(
   getLocation: (window: Window, globalHistory: Window['history']) => Location,
   createHref: (window: Window, to: To) => string,
   validateLocation: ((location: Readonly<Location>, to: To) => void) | null,
-  options: UrlHistoryOptions = {}
+  options: UrlHistoryOptions = {},
 ): History {
   const { window = document.defaultView!, v5Compat = false } = options;
   const globalHistory = window.history;
@@ -100,16 +94,10 @@ export function getUrlBasedHistory(
     // window.location.origin is "null" (the literal string value) in Firefox
     // under certain conditions, notably when serving from a local HTML file
     // See https://bugzilla.mozilla.org/show_bug.cgi?id=878297
-    const base =
-      window.location.origin !== 'null'
-        ? window.location.origin
-        : window.location.href;
+    const base = window.location.origin !== 'null' ? window.location.origin : window.location.href;
 
     const href = typeof to === 'string' ? to : createPath(to);
-    invariant(
-      base,
-      `No window.location.(origin|href) available to create URL for href: ${href}`
-    );
+    invariant(base, `No window.location.(origin|href) available to create URL for href: ${href}`);
     return new URL(href, base);
   }
 

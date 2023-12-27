@@ -1,13 +1,9 @@
-import {
-  Location,
-  RelativeRoutingType,
-  To,
-  UNSAFE_invariant as invariant,
-} from '@remix-run/router';
+import { Location, RelativeRoutingType, To } from '@remix-run/router';
 import { RouterContext } from '../contexts';
 import { useContext } from 'react';
 import { useResolvedPath } from './useResolvedPath';
 import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
+import { invariant } from '../utils/utils';
 
 export function useHref(to: To, { relative }: { relative?: RelativeRoutingType } = {}): string {
   const routeContext = useContext(RouterContext);

@@ -1,8 +1,13 @@
 import { useLocation } from './hooks';
-import { RelativeRoutingType, UNSAFE_warning as warning } from '@remix-run/router';
+import { RelativeRoutingType } from '@remix-run/router';
 import { useCallback, useContext, useMemo, useRef } from 'react';
-import { createSearchParams, getSearchParamsForLocation, URLSearchParamsInit } from '../utils/createSearchParams';
+import {
+  createSearchParams,
+  getSearchParamsForLocation,
+  URLSearchParamsInit,
+} from '../utils/createSearchParams';
 import { RouterContext } from '../contexts';
+import { warning } from '../utils/utils';
 
 export interface NavigateOptions {
   replace?: boolean;
@@ -12,10 +17,8 @@ export interface NavigateOptions {
 }
 
 export type SetURLSearchParams = (
-  nextInit?:
-  | URLSearchParamsInit
-  | ((prev: URLSearchParams) => URLSearchParamsInit),
-  navigateOpts?: NavigateOptions
+  nextInit?: URLSearchParamsInit | ((prev: URLSearchParams) => URLSearchParamsInit),
+  navigateOpts?: NavigateOptions,
 ) => void;
 
 /**
@@ -23,18 +26,18 @@ export type SetURLSearchParams = (
  * URLSearchParams interface.
  */
 export function useSearchParams(
-  defaultInit?: URLSearchParamsInit
+  defaultInit?: URLSearchParamsInit,
 ): [URLSearchParams, SetURLSearchParams] {
   warning(
     typeof URLSearchParams !== 'undefined',
     'You cannot use the `useSearchParams` hook in a browser that does not ' +
-    'support the URLSearchParams API. If you need to support Internet ' +
-    'Explorer 11, we recommend you load a polyfill such as ' +
-    'https://github.com/ungap/url-search-params\n\n' +
-    'If you\'re unsure how to load polyfills, we recommend you check out ' +
-    'https://polyfill.io/v3/ which provides some recommendations about how ' +
-    'to load polyfills only for users that need them, instead of for every ' +
-    'user.'
+      'support the URLSearchParams API. If you need to support Internet ' +
+      'Explorer 11, we recommend you load a polyfill such as ' +
+      'https://github.com/ungap/url-search-params\n\n' +
+      "If you're unsure how to load polyfills, we recommend you check out " +
+      'https://polyfill.io/v3/ which provides some recommendations about how ' +
+      'to load polyfills only for users that need them, instead of for every ' +
+      'user.',
   );
 
   let defaultSearchParamsRef = useRef(createSearchParams(defaultInit));
@@ -48,21 +51,21 @@ export function useSearchParams(
       // remove a param with setSearchParams({}) if it has an initial value
       getSearchParamsForLocation(
         location.search,
-        hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current
+        hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current,
       ),
-    [location.search]
+    [location.search],
   );
 
   let router = useContext(RouterContext).router;
   let setSearchParams = useCallback<SetURLSearchParams>(
     (nextInit, navigateOptions) => {
       const newSearchParams = createSearchParams(
-        typeof nextInit === 'function' ? nextInit(searchParams) : nextInit
+        typeof nextInit === 'function' ? nextInit(searchParams) : nextInit,
       );
       hasSetSearchParamsRef.current = true;
       router.navigate(`${location.pathname}?${newSearchParams}`, navigateOptions);
     },
-    [router, searchParams, location.pathname]
+    [router, searchParams, location.pathname],
   );
 
   return [searchParams, setSearchParams];
