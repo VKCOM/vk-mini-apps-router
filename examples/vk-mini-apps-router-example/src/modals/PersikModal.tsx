@@ -28,7 +28,7 @@ export const PersikModal = (props: NavProp) => {
           <CellButton onClick={() => routeNavigator.push(`/persik${panelEmotion ? '/' + panelEmotion : ''}/user_modal`, { keepSearchParams: true })}>Информация о пользователе</CellButton>
           <CellButton onClick={() => routeNavigator.showPopout(popup)}>Открыть Popout из модального окна</CellButton>
         </Group>
-        <img className="Persik" src={image} alt="Persik The Cat" />
+        <img height={130} className="Persik" src={image} alt="Persik The Cat" />
       </ModalPage>
   );
 };

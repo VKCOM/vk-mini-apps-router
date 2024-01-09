@@ -18,6 +18,7 @@ export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 export { useEnableSwipeBack } from './hooks/useEnableSwipeBack';
 export { useHref } from './hooks/useHref';
+export { useBlocker } from './hooks/useBlocker';
 export { useLinkClickHandler } from './hooks/useLinkClickHandler';
 
 export { withRouter } from './hoc/withRouter';

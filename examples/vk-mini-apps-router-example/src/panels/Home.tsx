@@ -70,6 +70,12 @@ export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
               На другой Root
             </Button>
           </ButtonGroup>
+
+          <ButtonGroup mode="horizontal" stretched>
+            <Button stretched size="l" mode="secondary" onClick={() => go('/blocker')}>
+              Страница выхода с подтверждением
+            </Button>
+          </ButtonGroup>
         </ButtonGroup>
       </Group>
       <AppMap></AppMap>

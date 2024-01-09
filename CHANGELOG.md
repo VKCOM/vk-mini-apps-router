@@ -2,6 +2,7 @@ v1.4.0
 -
 - Избавились от UNSAFE методов библиотеки @remix-run/router
 - Фикс useThrottledContext
+- Добавили useBlocker
 
 v1.3.2
 -

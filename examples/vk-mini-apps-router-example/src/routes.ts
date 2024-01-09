@@ -16,6 +16,7 @@ export const DEFAULT_VIEW = 'default_view';
 export const DEFAULT_VIEW_PANELS = {
   HOME: 'home',
   PERSIK: 'persik',
+  BLOCKER: 'blocker'
 } as const;
 
 export enum HOME_PANEL_MODALS {
@@ -25,6 +26,7 @@ export enum HOME_PANEL_MODALS {
   ONBOARDING_2 = 'onboarding_2',
   ONBOARDING_3 = 'onboarding_3',
 }
+
 
 export enum PERSIK_PANEL_MODALS {
   PERSIK = 'persik_modal',
@@ -60,6 +62,7 @@ export const routes = RoutesConfig.create([
         createModal(HOME_PANEL_MODALS.ONBOARDING_2, `/${HOME_PANEL_MODALS.ONBOARDING_2}`),
         createModal(HOME_PANEL_MODALS.ONBOARDING_3, `/${HOME_PANEL_MODALS.ONBOARDING_3}`),
       ]),
+      createPanel(DEFAULT_VIEW_PANELS.BLOCKER, `/${DEFAULT_VIEW_PANELS.BLOCKER}`, []),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, [
         createModal(
           PERSIK_PANEL_MODALS.PERSIK,
@@ -92,17 +95,17 @@ export const routes = RoutesConfig.create([
   ]),
   createRoot(ALTERNATIVE_ROOT, [
     createView(ALTERNATIVE_VIEW, [
-      createPanel(ALTERNATIVE_VIEW_PANELS.ALTERNATIVE, '/alternative', [
-        createTab(ALTERNATIVE_PANEL_TABS.TAB_1, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_1}`),
-        createTab(ALTERNATIVE_PANEL_TABS.TAB_2, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_2}`),
-        createTab(ALTERNATIVE_PANEL_TABS.TAB_3, `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}`, [
+      createPanel(ALTERNATIVE_VIEW_PANELS.ALTERNATIVE, `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}`, [
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_1, `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_1}`),
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_2, `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_2}`),
+        createTab(ALTERNATIVE_PANEL_TABS.TAB_3, `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}`, [
           createModal(
             PERSIK_PANEL_MODALS.PERSIK,
-            `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${PERSIK_PANEL_MODALS.PERSIK}`,
+            `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}/${PERSIK_PANEL_MODALS.PERSIK}`,
           ),
           createModal(
             HOME_PANEL_MODALS.USER,
-            `/alternative/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`,
+            `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`,
           ),
         ]),
       ]),
@@ -128,7 +131,7 @@ export const hierarchy: RouteLeaf[] = [
   },
 ];
 
-export const router = createHashParamRouter(routes.getRoutes());
+ export const router = createHashParamRouter(routes.getRoutes());
 
 // export const router = createHashRouter([
 //   {
@@ -160,6 +163,12 @@ export const router = createHashParamRouter(routes.getRoutes());
 //   {
 //     path: `/${DEFAULT_VIEW_PANELS.PERSIK}`,
 //     panel: DEFAULT_VIEW_PANELS.PERSIK,
+//     view: DEFAULT_VIEW,
+//     root: DEFAULT_ROOT,
+//   },
+//   {
+//     path: `/${DEFAULT_VIEW_PANELS.BLOCKER}`,
+//     panel: DEFAULT_VIEW_PANELS.BLOCKER,
 //     view: DEFAULT_VIEW,
 //     root: DEFAULT_ROOT,
 //   },
@@ -209,6 +218,27 @@ export const router = createHashParamRouter(routes.getRoutes());
 //     panel: ALTERNATIVE_VIEW_PANELS.ALTERNATIVE,
 //     view: ALTERNATIVE_VIEW,
 //     root: ALTERNATIVE_ROOT,
+//   },
+//   {
+//     path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_1}`,
+//     panel: ALTERNATIVE_VIEW_PANELS.ALTERNATIVE,
+//     view: ALTERNATIVE_VIEW,
+//     root: ALTERNATIVE_ROOT,
+//     tab: ALTERNATIVE_PANEL_TABS.TAB_1
+//   },
+//   {
+//     path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_2}`,
+//     panel: ALTERNATIVE_VIEW_PANELS.ALTERNATIVE,
+//     view: ALTERNATIVE_VIEW,
+//     root: ALTERNATIVE_ROOT,
+//     tab: ALTERNATIVE_PANEL_TABS.TAB_2
+//   },
+//   {
+//     path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}`,
+//     panel: ALTERNATIVE_VIEW_PANELS.ALTERNATIVE,
+//     view: ALTERNATIVE_VIEW,
+//     root: ALTERNATIVE_ROOT,
+//     tab: ALTERNATIVE_PANEL_TABS.TAB_3
 //   },
 //   {
 //     path: `/${HOME_PANEL_MODALS.ONBOARDING_1}`,

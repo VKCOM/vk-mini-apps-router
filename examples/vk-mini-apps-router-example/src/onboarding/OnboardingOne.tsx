@@ -10,7 +10,7 @@ export const OnboardingOne = ({ nav }: { nav: string }) => {
     <ModalPage header={<ModalPageHeader>Шаг 1</ModalPageHeader>} id={nav}>
       <Div>Добро пожаловать в наше замечательное приложение!</Div>
       <Div>Когда персик доволен, он выглядит так:</Div>
-      <img className="Persik" src={persik} alt="Persik The Cat" />
+      <img height={130} className="Persik" src={persik} alt="Persik The Cat" />
       <Group>
         <CellButton onClick={() => routeNavigator.push(`/${HOME_PANEL_MODALS.ONBOARDING_2}`)}>Далее</CellButton>
       </Group>

@@ -17,7 +17,7 @@ export const OnboardingThree = ({ nav }: { nav: string }) => {
     <ModalPage header={<ModalPageHeader>Шаг 3</ModalPageHeader>} id={nav}>
       <Div>Завершаем!</Div>
       <Div>Когда персик огорчен, он выглядит так:</Div>
-      <img className="Persik" src={persik_sad} alt="Persik The Cat" />
+      <img height={130} className="Persik" src={persik_sad} alt="Persik The Cat" />
       <Group>
         <CellButton onClick={onClick}>Закончить</CellButton>
       </Group>
