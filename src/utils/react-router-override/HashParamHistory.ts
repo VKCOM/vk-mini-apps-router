@@ -1,7 +1,8 @@
-import { createPath, History, Location, parsePath, To, UNSAFE_warning as warning } from '@remix-run/router';
+import { createPath, History, Location, parsePath, To } from '@remix-run/router';
 import { createLocation } from './createLocation';
 import { UrlHistoryOptions } from './UrlHistoryOptions.type';
 import { getUrlBasedHistory } from './getUrlBasedHistory';
+import { warning } from '../utils';
 
 export type HashParamHistoryOptions = UrlHistoryOptions & {
   paramName?: string;
@@ -13,28 +14,19 @@ const DEFAULT_PATH_PARAM_NAME = 'path';
  * Специальная история для интеграции с платформой Mini Apps ВКонтакте.
  * Позволяет передавать в хэше путь вместе с параметрами запуска.
  */
-export function createHashParamHistory(
-  options: HashParamHistoryOptions = {}
-): History {
+export function createHashParamHistory(options: HashParamHistoryOptions = {}): History {
   const paramName = options.paramName || DEFAULT_PATH_PARAM_NAME;
 
-  function createHashParamLocation(
-    window: Window,
-    globalHistory: Window['history']
-  ) {
+  function createHashParamLocation(window: Window, globalHistory: Window['history']) {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const pathFromHash = hashParams.get(paramName) || '';
-    const {
-      pathname = '/',
-      search = '',
-      hash = '',
-    } = parsePath(pathFromHash);
+    const { pathname = '/', search = '', hash = '' } = parsePath(pathFromHash);
     return createLocation(
       '',
       { pathname, search, hash },
       // state defaults to `null` because `window.history.state` does
-      globalHistory.state && globalHistory.state.usr || null,
-      globalHistory.state && globalHistory.state.key || 'default'
+      (globalHistory.state && globalHistory.state.usr) || null,
+      (globalHistory.state && globalHistory.state.key) || 'default',
     );
   }
 
@@ -56,9 +48,7 @@ export function createHashParamHistory(
   function validateHashParamLocation(location: Readonly<Location>, to: To) {
     warning(
       location.pathname.startsWith('/'),
-      `relative pathnames are not supported in hash param history.push(${JSON.stringify(
-        to
-      )})`
+      `relative pathnames are not supported in hash param history.push(${JSON.stringify(to)})`,
     );
   }
 
@@ -66,6 +56,6 @@ export function createHashParamHistory(
     createHashParamLocation,
     createHashParamHref,
     validateHashParamLocation,
-    options
+    options,
   );
 }
