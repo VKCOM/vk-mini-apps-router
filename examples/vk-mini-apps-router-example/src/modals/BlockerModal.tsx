@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import {
   Button,
@@ -12,17 +12,29 @@ import {
 
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
+import { BlockerFunction } from '@remix-run/router';
 
 const PASSWORD = '1234';
 
 export const BlockerModal = (props: NavProp) => {
+  const routeNavigator = useRouteNavigator();
   const unblock = useRef<() => void>();
   const passInput = useRef<HTMLInputElement>(null);
-  const routeNavigator = useRouteNavigator();
+
+  const blockerFn = useCallback<BlockerFunction>(
+    ({ currentLocation, nextLocation, historyAction }) => {
+      console.log('Current location', currentLocation);
+      console.log('Next location', nextLocation);
+      console.log('historyAction', historyAction);
+
+      return true;
+    },
+    [],
+  );
 
   useEffect(() => {
-    unblock.current = routeNavigator.block(() => true);
-  }, [routeNavigator]);
+    unblock.current = routeNavigator.block(blockerFn);
+  }, [routeNavigator, blockerFn]);
 
   const onHandleSubmit = () => {
     const unblockFn = unblock.current;

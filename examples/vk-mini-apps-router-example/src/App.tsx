@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import { SplitCol, SplitLayout, View, Root, Epic, ModalRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
@@ -11,7 +11,9 @@ import {
 } from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
-import Persik from './panels/Persik';
+import { Persik } from './panels/Persik';
+import { Blocker } from './panels/Blocker';
+
 import {
   ALTERNATIVE_ROOT,
   ALTERNATIVE_VIEW,
@@ -85,6 +87,7 @@ function App() {
             >
               <Home nav={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} go={go} />
               <Persik nav={DEFAULT_VIEW_PANELS.PERSIK} />
+              <Blocker nav={DEFAULT_VIEW_PANELS.BLOCKER} />
             </View>
             <View
               nav={EMPTY_VIEW}

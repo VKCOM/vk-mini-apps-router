@@ -13,7 +13,7 @@ import { AppMap } from '../appMap/AppMap';
 
 const IMAGES = { persik, persik_fish, persik_sad };
 
-const Persik = (props: NavProp) => {
+export const Persik = (props: NavProp) => {
 	const { emotion } = useParams({ panel: props.nav }) ?? {};
 	const [params, setParams] = useSearchParams();
 	const [additional, setAdditional] = useState(params.get('additional'));
@@ -87,5 +87,3 @@ const Persik = (props: NavProp) => {
 		</Panel>
 	);
 };
-
-export default Persik;
