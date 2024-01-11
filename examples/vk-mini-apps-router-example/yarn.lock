@@ -2441,9 +2441,9 @@
     "@vkontakte/icons-sprite" "2.0.0"
 
 "@vkontakte/vk-bridge@latest":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.9.0.tgz#24aed0217f0c508f4c62ed44fe52ce3fe7f47e53"
-  integrity sha512-fyOdtZq+68Jnp8FNmas3fnJ4b1bjc1fmAovl2afV14VeJ1KG1OwoAaE7zpVL4U4VVZJGhhdANxEsc4tBYUSkxA==
+  version "2.12.2"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.12.2.tgz#d905781812c7688b9ffda7d6a9169c6aa806f983"
+  integrity sha512-3LK9qZg/khrbFKo9PuOs9f0WL4O7Nx8AAtvT/yiASrGdoo2cZWpshWN905SGN+Oi1PVlaD5XpqiF8SGn5/eZCQ==
 
 "@vkontakte/vk-mini-apps-router@latest":
   version "1.3.2"
