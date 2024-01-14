@@ -7,8 +7,8 @@ import {
   useEnableSwipeBack,
   useBlocker,
   useActiveVkuiLocation,
+  BlockerFunction,
 } from '@vkontakte/vk-mini-apps-router';
-import { Action, BlockerFunction } from '@remix-run/router';
 import { DEFAULT_VIEW_PANELS } from '../routes';
 
 export const Blocker = ({ nav }: NavProp) => {
@@ -17,7 +17,7 @@ export const Blocker = ({ nav }: NavProp) => {
   const routeNavigator = useRouteNavigator();
 
   const blockerFn = useCallback<BlockerFunction>(({ historyAction }) => {
-    return historyAction !== Action.Push;
+    return historyAction !== "PUSH";
   }, []);
 
   const blocker = useBlocker(blockerFn);

@@ -1,3 +1,7 @@
+v1.4.1
+-
+- Добавили типы BlockerFunction и Blocker
+
 v1.4.0
 -
 - Избавились от UNSAFE методов библиотеки @remix-run/router

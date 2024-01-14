@@ -10,9 +10,8 @@ import {
   ModalPageHeader,
 } from '@vkontakte/vkui';
 
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { BlockerFunction, useRouteNavigator,  } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
-import { BlockerFunction } from '@remix-run/router';
 
 const PASSWORD = '1234';
 
