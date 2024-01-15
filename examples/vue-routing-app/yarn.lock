@@ -1519,10 +1519,10 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vkontakte/vk-bridge@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.9.0.tgz#24aed0217f0c508f4c62ed44fe52ce3fe7f47e53"
-  integrity sha512-fyOdtZq+68Jnp8FNmas3fnJ4b1bjc1fmAovl2afV14VeJ1KG1OwoAaE7zpVL4U4VVZJGhhdANxEsc4tBYUSkxA==
+"@vkontakte/vk-bridge@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.13.0.tgz#ea1085e0274b4d7955768a04ada0dbba91f51950"
+  integrity sha512-fACaGwJ1RUXR7E6EVZhQyR5fmfQdoiAALOl7S+1lpwd9j2omqRyOC/p4zxZPFiufBGF3GH9dF9TdNbTpXMB2/A==
 
 "@vkontakte/vk-tunnel@^0.1.4":
   version "0.1.4"
