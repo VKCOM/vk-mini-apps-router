@@ -3,14 +3,13 @@ import { useCallback, useEffect, useRef } from 'react';
 import {
   Button,
   FormItem,
-  FormLayout,
-  Group,
+  FormLayoutGroup,
   Input,
   ModalPage,
   ModalPageHeader,
 } from '@vkontakte/vkui';
 
-import { BlockerFunction, useRouteNavigator,  } from '@vkontakte/vk-mini-apps-router';
+import { BlockerFunction, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavProp } from '../types';
 
 const PASSWORD = '1234';
@@ -47,19 +46,17 @@ export const BlockerModal = (props: NavProp) => {
 
   return (
     <ModalPage id={props.nav} header={<ModalPageHeader>Разблокируйте навигацию!</ModalPageHeader>}>
-      <Group>
-        <FormLayout>
-          <FormItem top={`Код разблокировки ${PASSWORD}`}>
-            <Input getRef={passInput} id="pass" type="password" placeholder={PASSWORD} />
-          </FormItem>
+      <FormLayoutGroup>
+        <FormItem top={`Код разблокировки ${PASSWORD}`}>
+          <Input getRef={passInput} id="pass" type="password" placeholder={PASSWORD} />
+        </FormItem>
 
-          <FormItem>
-            <Button type="submit" onClick={onHandleSubmit} size="l" stretched>
-              Применить код
-            </Button>
-          </FormItem>
-        </FormLayout>
-      </Group>
+        <FormItem>
+          <Button type="submit" onClick={onHandleSubmit} size="l" stretched>
+            Применить код
+          </Button>
+        </FormItem>
+      </FormLayoutGroup>
     </ModalPage>
   );
 };

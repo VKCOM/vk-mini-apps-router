@@ -8,12 +8,10 @@ export function OffencePersikPopout() {
     actions={[
       {
         title: 'Отмена',
-        autoClose: true,
         mode: 'cancel',
       },
       {
         title: 'Забрать',
-        autoClose: true,
         mode: 'destructive',
         action: () => setTimeout(() => routeNavigator.replace('/persik/sad/persik_modal/sad', { keepSearchParams: true }), 100),
       },
