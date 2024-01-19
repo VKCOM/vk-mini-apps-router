@@ -9,12 +9,10 @@ export const EmptyPopout = () => {
       actions={[
         {
           title: 'Отмена',
-          autoClose: true,
           mode: 'cancel',
         },
         {
           title: 'Да',
-          autoClose: true,
           mode: 'destructive',
           action: () => console.log('Кнопка нажата.'),
         },

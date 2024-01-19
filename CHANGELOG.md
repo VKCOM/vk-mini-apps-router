@@ -1,3 +1,8 @@
+v1.4.2
+-
+- Обновили peer зависимости
+- Добавили поддержку @vkontakte/vkui v6.0.0
+
 v1.4.1
 -
 - Добавили типы BlockerFunction и Blocker
