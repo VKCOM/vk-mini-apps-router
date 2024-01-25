@@ -18,7 +18,9 @@ export function useActiveVkuiLocation(): ActiveVkuiLocationObject {
   const popout = usePopout();
   const { match, state, panelsHistory } = routeContext;
   const route = match?.route;
-  const modal = state.location.state?.[STATE_KEY_SHOW_MODAL] ?? (route && 'modal' in route ? route.modal : undefined);
+  const modal =
+    state.location.state?.[STATE_KEY_SHOW_MODAL] ??
+    (route && 'modal' in route ? route.modal : undefined);
   return {
     root: route && 'root' in route ? route.root : undefined,
     view: route?.view,

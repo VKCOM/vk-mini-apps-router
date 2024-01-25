@@ -32,4 +32,8 @@ export interface ThrottledContextObject {
   interval: number;
 }
 
-export const ThrottledContext = createContext<ThrottledContextObject>({ enabled: false, firstActionDelay: 0, interval: 0 });
+export const ThrottledContext = createContext<ThrottledContextObject>({
+  enabled: false,
+  firstActionDelay: 0,
+  interval: 0,
+});

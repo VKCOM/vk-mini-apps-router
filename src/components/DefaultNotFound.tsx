@@ -17,7 +17,10 @@ export type DefaultNotFoundProps = {
 
 export function DefaultNotFound({ routeNavigator }: DefaultNotFoundProps): ReactElement {
   return (
-    <div onClick={() => routeNavigator.replace('/')} className="default-not-found" style={DivStyles}>
-    </div>
+    <div
+      onClick={() => void routeNavigator.replace('/')}
+      className="default-not-found"
+      style={DivStyles}
+    ></div>
   );
 }
