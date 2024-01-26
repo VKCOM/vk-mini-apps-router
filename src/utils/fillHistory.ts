@@ -7,26 +7,14 @@ import { fillParamsIntoPath } from './utils';
 import { createSearchParams } from './createSearchParams';
 import { SEARCH_PARAM_INFLATE } from '../const';
 
-function flattenBranch(
-  leafs: RouteLeaf[],
-  parents: RouteLeafWithParents[],
-): RouteLeafWithParents[] {
-  return leafs
-    .map((leaf) => {
-      const leafWithParents = { ...leaf, parents };
-      return leaf.children
-        ? flattenBranch(leaf.children, [...parents, leafWithParents])
-        : leafWithParents;
-    })
-    .flat();
+function flattenBranch(leafs: RouteLeaf[], parents: RouteLeafWithParents[]): RouteLeafWithParents[] {
+  return leafs.map((leaf) => {
+    const leafWithParents = { ...leaf, parents };
+    return leaf.children ? flattenBranch(leaf.children, [...parents, leafWithParents]) : leafWithParents;
+  }).flat();
 }
 
-export function fillHistory(
-  config: RouteLeaf[],
-  routeNavigator: RouteNavigator,
-  context: RouteContextObject,
-  transactionExecutor: TransactionExecutor,
-) {
+export function fillHistory(config: RouteLeaf[], routeNavigator: RouteNavigator, context: RouteContextObject, transactionExecutor: TransactionExecutor) {
   const leafs = flattenBranch(config, []);
   const currentLocation = context.state.location;
   const params = context.match?.params ?? {};

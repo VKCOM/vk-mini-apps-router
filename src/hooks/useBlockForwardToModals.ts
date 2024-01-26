@@ -23,7 +23,7 @@ export function useBlockForwardToModals(
     };
     const unbblocker = routeNavigator.block(blockerFunction);
 
-    return () => unbblocker();
+    return () => unbblocker()
   }, [routeNavigator, viewHistory]);
 
   useEffect(() => {

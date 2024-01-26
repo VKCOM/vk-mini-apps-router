@@ -6,10 +6,7 @@ export class TransactionExecutor {
   constructor(private forceUpdate: () => void) {}
 
   get initialDelay(): number {
-    return this.transactions.length > 1 ||
-      (this.transactions.length > 0 && this.transactions[0].isMultiAction)
-      ? 100
-      : 0;
+    return this.transactions.length > 1 || this.transactions.length > 0 && this.transactions[0].isMultiAction ? 100 : 0;
   }
 
   add(transaction: NavigationTransaction): void {

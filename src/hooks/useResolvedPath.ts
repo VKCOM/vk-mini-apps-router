@@ -1,4 +1,10 @@
-import { Path, RelativeRoutingType, resolveTo, To, AgnosticRouteMatch } from '@remix-run/router';
+import {
+  Path,
+  RelativeRoutingType,
+  resolveTo,
+  To,
+  AgnosticRouteMatch
+} from '@remix-run/router';
 import { RouterContext } from '../contexts';
 import { useContext, useMemo } from 'react';
 import { useLocation } from './hooks';
@@ -26,11 +32,12 @@ import { useLocation } from './hooks';
  *     </Route>
  *   </Route>
  */
-function getPathContributingMatches<T extends AgnosticRouteMatch = AgnosticRouteMatch>(
-  matches: T[],
-) {
+function getPathContributingMatches<
+  T extends AgnosticRouteMatch = AgnosticRouteMatch
+  >(matches: T[]) {
   return matches.filter(
-    (match, index) => index === 0 || (match.route.path && match.route.path.length > 0),
+    (match, index) =>
+      index === 0 || (match.route.path && match.route.path.length > 0)
   );
 }
 
@@ -41,21 +48,23 @@ function getPathContributingMatches<T extends AgnosticRouteMatch = AgnosticRoute
  */
 export function useResolvedPath(
   to: To,
-  { relative }: { relative?: RelativeRoutingType } = {},
+  { relative }: { relative?: RelativeRoutingType } = {}
 ): Path {
-  const {
-    router: {
-      state: { matches },
-    },
-  } = useContext(RouterContext);
+  const { router: { state: { matches } } } = useContext(RouterContext);
   const { pathname: locationPathname } = useLocation();
 
   const routePathnamesJson = JSON.stringify(
-    getPathContributingMatches(matches).map((match) => match.pathnameBase),
+    getPathContributingMatches(matches).map((match) => match.pathnameBase)
   );
 
   return useMemo(
-    () => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === 'path'),
-    [to, routePathnamesJson, locationPathname, relative],
+    () =>
+      resolveTo(
+        to,
+        JSON.parse(routePathnamesJson),
+        locationPathname,
+        relative === 'path'
+      ),
+    [to, routePathnamesJson, locationPathname, relative]
   );
 }

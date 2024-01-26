@@ -8,14 +8,14 @@ export function createLocation(
   current: string | Location,
   to: To,
   state: any = null,
-  key?: string,
+  key?: string
 ): Readonly<Location> {
   return {
     pathname: typeof current === 'string' ? current : current.pathname,
     search: '',
     hash: '',
-    ...(typeof to === 'string' ? parsePath(to) : to),
+    ...typeof to === 'string' ? parsePath(to) : to,
     state,
-    key: (to && (to as Location).key) || key || createKey(),
+    key: to && (to as Location).key || key || createKey(),
   };
 }

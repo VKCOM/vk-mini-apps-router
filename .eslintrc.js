@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   root: true,
-  extends: ['plugin:@vkontakte/eslint-plugin/typescript', "plugin:import/recommended", 'prettier'],
+  extends: ['@vkontakte/eslint-config/typescript', 'prettier'],
   overrides: [
     {
       files: '**/*.{ts,tsx}',
@@ -12,8 +12,6 @@ module.exports = {
     },
   ],
   rules: {
-    'import/named': 'off',
-    'import/no-unresolved': 'off',
     'no-shadow': 'off',
     'guard-for-in': 'off',
     '@typescript-eslint/ban-types': 'off',
