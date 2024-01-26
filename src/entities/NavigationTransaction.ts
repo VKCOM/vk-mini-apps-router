@@ -1,7 +1,11 @@
 export class NavigationTransaction {
   private pointer = 0;
-  private resolve: VoidFunction = () => { /* Empty */ };
-  private reject: VoidFunction = () => { /* Empty */ };
+  private resolve: VoidFunction = () => {
+    /* Empty */
+  };
+  private reject: VoidFunction = () => {
+    /* Empty */
+  };
   private promise: Promise<void> = new Promise((resolve, reject) => {
     this.resolve = resolve;
     this.reject = reject;

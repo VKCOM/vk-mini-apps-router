@@ -26,9 +26,7 @@ export class BridgeService {
     /**
      * Тот, кто попросил отключить нативный свайпбек, выходит из списка.
      */
-    instance.swipeBackConsumers = instance.swipeBackConsumers.filter(
-      (id) => id !== consumerId,
-    );
+    instance.swipeBackConsumers = instance.swipeBackConsumers.filter((id) => id !== consumerId);
 
     /**
      * Нативный свайпбек будет отключен только если больше не осталось тех, кому он нужен.

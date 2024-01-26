@@ -41,7 +41,9 @@ type RouterProps = {
  * ```
  * @param Component
  */
-export function withRouter<T extends RouterProps>(Component: ComponentType<T>): ComponentType<Omit<T, keyof RouterProps>> {
+export function withRouter<T extends RouterProps>(
+  Component: ComponentType<T>,
+): ComponentType<Omit<T, keyof RouterProps>> {
   function WithRouter(props: Omit<T, keyof RouterProps>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const routerProps: RouterProps = {
