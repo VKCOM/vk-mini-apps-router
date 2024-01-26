@@ -2253,10 +2253,19 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.2.20":
+"@types/react@*":
   version "18.2.20"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.20.tgz#1605557a83df5c8a2cc4eeb743b3dfc0eb6aaeb2"
   integrity sha512-WKNtmsLWJM/3D5mG4U84cysVY31ivmyw85dE84fOCk5Hx78wezB/XEjVPWl2JTZ5FkEeaTJf+VgUAUn3PE7Isw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.2.48":
+  version "18.2.48"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.48.tgz#11df5664642d0bd879c1f58bc1d37205b064e8f1"
+  integrity sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2467,10 +2476,10 @@
   resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.9.0.tgz#24aed0217f0c508f4c62ed44fe52ce3fe7f47e53"
   integrity sha512-fyOdtZq+68Jnp8FNmas3fnJ4b1bjc1fmAovl2afV14VeJ1KG1OwoAaE7zpVL4U4VVZJGhhdANxEsc4tBYUSkxA==
 
-"@vkontakte/vk-mini-apps-router@latest":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.3.2.tgz#ce3d1dfe0dfb95c02b8449988ee049573d57a521"
-  integrity sha512-X9gDgt9z1ffE2u1tUtCr2cSgB44ld3qave78gDXTBitTpkTZncP/ZyU+6IWWbSxhHwp8qSsUMES+JI2kj83E8A==
+"@vkontakte/vk-mini-apps-router@1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-mini-apps-router/-/vk-mini-apps-router-1.4.2.tgz#804c8a3906249bc6e9c0d2d597a0409a12fdd88b"
+  integrity sha512-yQnCoWDy5rnX+RHhi7iSELu+lJi7O+1KToNwWA+pGblZmPWOQnOnwRNc6R0DO+uvDaMqh6k9NQa2AJvHZNcq3Q==
   dependencies:
     "@remix-run/router" "^1.13.0"
 
