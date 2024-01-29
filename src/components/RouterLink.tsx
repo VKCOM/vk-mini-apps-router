@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Link } from '@vkontakte/vkui';
 import { useHref } from '../hooks/useHref';
 import { RelativeRoutingType, To } from '@remix-run/router';
@@ -20,13 +18,11 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
 }
 
 export interface RouterLinkProps extends Omit<LinkProps, 'className' | 'style' | 'children'> {
-  children?: ReactNode | ((props: { isActive: boolean; isPending: boolean }) => ReactNode);
+  children?: ReactNode;
   caseSensitive?: boolean;
-  className?: string | ((props: { isActive: boolean; isPending: boolean }) => string | undefined);
+  className?: string;
   end?: boolean;
-  style?:
-    | CSSProperties
-    | ((props: { isActive: boolean; isPending: boolean }) => CSSProperties | undefined);
+  style?: CSSProperties;
 }
 
 const ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
@@ -83,7 +79,7 @@ export const RouterLink = forwardRef<HTMLAnchorElement, RouterLinkProps>(functio
       {...rest}
       href={absoluteHref || href}
       onClick={isExternal || reloadDocument ? onClick : handleClick}
-      ref={ref}
+      getRootRef={ref}
       target={target}
     ></Link>
   );

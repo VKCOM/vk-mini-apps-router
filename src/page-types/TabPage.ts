@@ -10,6 +10,7 @@ interface TabRoutePartial extends CommonRouteObject {
 abstract class BaseTabPage<I extends string> implements RepresentsRoutes<TabRoutePartial>, HasId<I> {
   protected constructor(public id: I, public path: string, protected modals: AnyModalPage[]) {
     modals.forEach((modal) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       this[uniqueKey(this, modal.id)] = modal;
     });

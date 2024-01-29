@@ -11,11 +11,18 @@ module.exports = {
       },
     },
   ],
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   rules: {
     'import/named': 'off',
-    'import/no-unresolved': 'off',
     'no-shadow': 'off',
     'guard-for-in': 'off',
+    'import/no-unresolved': ['error', { ignore: ['^[a-z@]'] }],
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/array-type': 'off',
     '@typescript-eslint/prefer-readonly': 'off',

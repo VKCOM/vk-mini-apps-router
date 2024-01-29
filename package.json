@@ -20,8 +20,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint:js": "eslint src/ --ext ts,tsx --fix",
-    "lint:prettier": "prettier --check .",
+    "eslint:check": "eslint src/ --ext ts,tsx",
+    "eslint:fix": "eslint src/ --ext ts,tsx",
+    "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "prepare": "husky install",
     "prepublishOnly": "yarn build"

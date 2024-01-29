@@ -50,6 +50,7 @@ export class RoutesConfig implements RepresentsRoutes<RoutePartial> {
     const config = new RoutesConfig();
     config.items = routes;
     routes.forEach((route) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       config[uniqueKey(config, route.id)] = route;
     });
