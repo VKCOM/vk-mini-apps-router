@@ -14,6 +14,7 @@ type AnySubPage = AnyModalPage | AnyTabPage;
 abstract class BasePanelPage<I extends string> implements RepresentsRoutes<PanelRoutePartial>, HasId<I> {
   protected constructor(public id: I, public path: string, protected modals: AnySubPage[]) {
     modals.forEach((modal) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       this[uniqueKey(this, modal.id)] = modal;
     });

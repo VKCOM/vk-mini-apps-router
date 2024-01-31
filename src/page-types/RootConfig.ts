@@ -15,6 +15,7 @@ export class RootConfig<T extends string> implements HasId<T>, HasChildren<ViewC
       throw new Error(`Trying to create root ${id} without views. Root must have at least one view.`);
     }
     views.forEach((views) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       this[uniqueKey(this, views.id)] = views;
     });

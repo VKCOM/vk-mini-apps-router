@@ -1,0 +1,13 @@
+# Исключаем по умолчанию все файлы
+/**/*.*
+
+# Включаем проверку только в src на расширения(ts, tsx, html)
+!src/**/*.ts
+!src/**/*.tsx
+!src/**/*.html
+
+# Исключаем файлы в директориях node_modules, dist, build
+**/node_modules/*.*
+**/dist/*.*
+**/build/*.*
+**/page-types/*.*

@@ -11,6 +11,7 @@ interface ViewRoutePartial extends CommonRouteObject {
 export class ViewConfig<T extends string> implements HasId<T>, HasChildren<AnyPanel>, RepresentsRoutes<ViewRoutePartial> {
   constructor(public id: T, private panels: AnyPanel[]) {
     panels.forEach((panel) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       this[uniqueKey(this, panel.id)] = panel;
     });

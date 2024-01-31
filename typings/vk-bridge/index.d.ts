@@ -1,4 +1,64 @@
 declare module '@vkontakte/vk-bridge' {
+  export enum EGetLaunchParamsResponseLanguages {
+    RU = 'ru',
+    UK = 'uk',
+    UA = 'ua',
+    EN = 'en',
+    BE = 'be',
+    KZ = 'kz',
+    PT = 'pt',
+    ES = 'es',
+  }
+
+  export enum EGetLaunchParamsResponseGroupRole {
+    EDITOR = 'editor',
+    MEMBER = 'member',
+    ADMIN = 'admin',
+    MODER = 'moder',
+    NONE = 'none',
+  }
+
+  export enum EGetLaunchParamsResponsePlatforms {
+    DESKTOP_WEB = 'desktop_web',
+    DESKTOP_WEB_MESSENGER = 'desktop_web_messenger',
+    DESKTOP_APP_MESSENGER = 'desktop_app_messenger',
+    MOBILE_WEB = 'mobile_web',
+    MOBILE_ANDROID = 'mobile_android',
+    MOBILE_ANDROID_MESSENGER = 'mobile_android_messenger',
+    MOBILE_IPHONE = 'mobile_iphone',
+    MOBILE_IPHONE_MESSENGER = 'mobile_iphone_messenger',
+    MOBILE_IPAD = 'mobile_ipad',
+  }
+
+  export type GetLaunchParamsResponse = {
+    vk_user_id: number;
+    vk_app_id: number;
+    vk_is_app_user: 0 | 1;
+    vk_are_notifications_enabled: 0 | 1;
+    vk_language: EGetLaunchParamsResponseLanguages;
+    vk_ref: string;
+    vk_access_token_settings: string;
+    vk_group_id?: number;
+    vk_viewer_group_role?: EGetLaunchParamsResponseGroupRole;
+    vk_platform: EGetLaunchParamsResponsePlatforms;
+    vk_is_favorite: 0 | 1;
+    vk_ts: number;
+    sign: string;
+  };
+
+  export interface LaunchParams extends GetLaunchParamsResponse {
+    vk_chat_id: string;
+    vk_is_recommended: number;
+    vk_profile_id: number;
+    vk_has_profile_button: number;
+    vk_testing_group_id: number;
+    odr_enabled: undefined | 1;
+  }
+
+  export declare const parseURLSearchParamsForGetLaunchParams: (
+    searchParams: string,
+  ) => Partial<LaunchParams>;
+
   export type ChangeFragmentResponse = {
     location: string;
   };
@@ -26,31 +86,30 @@ declare module '@vkontakte/vk-bridge' {
     T extends keyof RequestPropsMap,
     R extends string,
     F extends string,
-    > = Record<T, { result: R; failed: F }>;
+  > = Record<T, { result: R; failed: F }>;
   /**
    * Map of event names.
    */
-  export type ReceiveEventMap =
-    EventReceiveNames<
-      'VKWebAppSetSwipeSettings',
-      'VKWebAppSetSwipeSettingsResult',
-      'VKWebAppSetSwipeSettingsFailed'
-      > &
+  export type ReceiveEventMap = EventReceiveNames<
+    'VKWebAppSetSwipeSettings',
+    'VKWebAppSetSwipeSettingsResult',
+    'VKWebAppSetSwipeSettingsFailed'
+  > &
     EventReceiveNames<
       'VKWebAppDisableSwipeBack',
       'VKWebAppDisableSwipeBackResult',
       'VKWebAppDisableSwipeBackFailed'
-      > &
+    > &
     EventReceiveNames<
       'VKWebAppEnableSwipeBack',
       'VKWebAppEnableSwipeBackResult',
       'VKWebAppEnableSwipeBackFailed'
-      > &
+    > &
     EventReceiveNames<
       'VKWebAppSetLocation',
       'VKWebAppSetLocationResult',
       'VKWebAppSetLocationFailed'
-      >;
+    >;
   /**
    * Name of a method that can be sent.
    */
@@ -70,15 +129,18 @@ declare module '@vkontakte/vk-bridge' {
   /**
    * Getter of failed event name of a method.
    */
-  export type FailedResponseEventName<M extends AnyRequestMethodName> = M extends keyof ReceiveEventMap ? ReceiveEventMap[M]['failed'] : never;
+  export type FailedResponseEventName<M extends AnyRequestMethodName> =
+    M extends keyof ReceiveEventMap ? ReceiveEventMap[M]['failed'] : never;
   /**
    * Getter of result event name of a method.
    */
-  export type ResultResponseEventName<M extends AnyRequestMethodName> = M extends keyof ReceiveEventMap ? ReceiveEventMap[M]['result'] : never;
+  export type ResultResponseEventName<M extends AnyRequestMethodName> =
+    M extends keyof ReceiveEventMap ? ReceiveEventMap[M]['result'] : never;
   /**
    * Getter of request properties of a method.
    */
-  export type RequestProps<M extends AnyRequestMethodName = AnyRequestMethodName> = RequestPropsMap[M];
+  export type RequestProps<M extends AnyRequestMethodName = AnyRequestMethodName> =
+    RequestPropsMap[M];
   /**
    * Getter of response data of a method.
    */
@@ -116,19 +178,22 @@ declare module '@vkontakte/vk-bridge' {
   /**
    * Type of error data
    */
-  export type ErrorData = {
-    error_type: 'client_error';
-    error_data: ErrorDataClientError;
-    request_id?: number | string;
-  } | {
-    error_type: 'api_error';
-    error_data: ErrorDataAPIError;
-    request_id?: number | string;
-  } | {
-    error_type: 'auth_error';
-    error_data: ErrorDataAuthError;
-    request_id?: number | string;
-  };
+  export type ErrorData =
+    | {
+        error_type: 'client_error';
+        error_data: ErrorDataClientError;
+        request_id?: number | string;
+      }
+    | {
+        error_type: 'api_error';
+        error_data: ErrorDataAPIError;
+        request_id?: number | string;
+      }
+    | {
+        error_type: 'auth_error';
+        error_data: ErrorDataAuthError;
+        request_id?: number | string;
+      };
   /**
    * Generic event type for creating event types.
    */
@@ -141,7 +206,10 @@ declare module '@vkontakte/vk-bridge' {
   /**
    * Type of error event data
    */
-  export type VKBridgeErrorEvent<M extends AnyReceiveMethodName> = VKBridgeEventBase<M extends AnyRequestMethodName ? FailedResponseEventName<M> : never, ErrorData>;
+  export type VKBridgeErrorEvent<M extends AnyReceiveMethodName> = VKBridgeEventBase<
+    M extends AnyRequestMethodName ? FailedResponseEventName<M> : never,
+    ErrorData
+  >;
   /**
    * Type of event that is a response to a request
    */
@@ -157,11 +225,18 @@ declare module '@vkontakte/vk-bridge' {
   /**
    * Type of result event data
    */
-  export type VKBridgeResultEvent<M extends AnyReceiveMethodName> = M extends AnyReceiveOnlyMethodName ? VKBridgeReceiveOnlyEvent<M> : M extends AnyIOMethodName ? VKBridgeIOEvent<M> : never;
+  export type VKBridgeResultEvent<M extends AnyReceiveMethodName> =
+    M extends AnyReceiveOnlyMethodName
+      ? VKBridgeReceiveOnlyEvent<M>
+      : M extends AnyIOMethodName
+      ? VKBridgeIOEvent<M>
+      : never;
   /**
    * VK Bridge event.
    */
-  export type VKBridgeEvent<M extends AnyReceiveMethodName> = VKBridgeErrorEvent<M> | VKBridgeResultEvent<M>;
+  export type VKBridgeEvent<M extends AnyReceiveMethodName> =
+    | VKBridgeErrorEvent<M>
+    | VKBridgeResultEvent<M>;
   /**
    * Type of function that will be subscribed to VK Bridge events.
    */
@@ -173,7 +248,10 @@ declare module '@vkontakte/vk-bridge' {
    * @param props Method properties.
    * @returns The Promise object with response data.
    */
-  export type VKBridgeSend = <K extends AnyRequestMethodName>(method: K, props?: RequestProps<K> & RequestIdProp) => Promise<K extends AnyReceiveMethodName ? ReceiveData<K> : void>;
+  export type VKBridgeSend = <K extends AnyRequestMethodName>(
+    method: K,
+    props?: RequestProps<K> & RequestIdProp,
+  ) => Promise<K extends AnyReceiveMethodName ? ReceiveData<K> : void>;
   /**
    * VK Bridge interface.
    */

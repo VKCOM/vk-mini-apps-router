@@ -9,9 +9,7 @@ export type URLSearchParamsInit =
 function convertObjectToURLInit(init: Record<string, string | string[]>) {
   return Object.keys(init).reduce<ParamKeyValuePair[]>((memo, key) => {
     const value = init[key];
-    return memo.concat(
-      Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]],
-    );
+    return memo.concat(Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]);
   }, []);
 }
 
@@ -36,18 +34,15 @@ function convertObjectToURLInit(init: Record<string, string | string[]>) {
  *     sort: ['name', 'price']
  *   });
  */
-export function createSearchParams(
-  init: URLSearchParamsInit = ''
-): URLSearchParams {
-  const inputIsReadyForInstantiation = typeof init === 'string' ||
-    Array.isArray(init) ||
-    init instanceof URLSearchParams;
+export function createSearchParams(init: URLSearchParamsInit = ''): URLSearchParams {
+  const inputIsReadyForInstantiation =
+    typeof init === 'string' || Array.isArray(init) || init instanceof URLSearchParams;
   return new URLSearchParams(inputIsReadyForInstantiation ? init : convertObjectToURLInit(init));
 }
 
 export function getSearchParamsForLocation(
   locationSearch: string,
-  defaultSearchParams: URLSearchParams | null
+  defaultSearchParams: URLSearchParams | null,
 ) {
   const searchParams = createSearchParams(locationSearch);
 
