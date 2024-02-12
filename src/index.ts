@@ -7,7 +7,7 @@ export { createHashRouter } from './utils/createHashRouter';
 export { createHashParamRouter } from './utils/createHashParamRouter';
 export { createBrowserRouter } from './utils/createBrowserRouter';
 
-export { useRouteNavigator, useParams, usePopout } from './hooks/hooks';
+export { useRouteNavigator, useParams, usePopout, useLocation } from './hooks/hooks';
 export { useGetPanelForView } from './hooks/useGetPanelForView';
 export { useSearchParams } from './hooks/useSearchParams';
 export { useMetaParams } from './hooks/useMetaParams';
