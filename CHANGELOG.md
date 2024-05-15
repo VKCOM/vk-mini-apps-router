@@ -1,3 +1,7 @@
+v1.4.4
+-
+- Добавили экспорт типа SetURLSearchParams
+
 v1.4.3
 -
 - Добавили проверку платформы в useEnableSwipeBack
