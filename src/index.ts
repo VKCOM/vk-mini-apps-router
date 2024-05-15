@@ -10,6 +10,7 @@ export { createBrowserRouter } from './utils/createBrowserRouter';
 export { useRouteNavigator, useParams, usePopout } from './hooks/hooks';
 export { useGetPanelForView } from './hooks/useGetPanelForView';
 export { useSearchParams } from './hooks/useSearchParams';
+export type { SetURLSearchParams } from './hooks/useSearchParams';
 export { useMetaParams } from './hooks/useMetaParams';
 export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
