@@ -4,9 +4,10 @@ import { RouteNavigator } from '../services/RouteNavigator.type';
 import { useThrottledContext } from './useThrottledContext';
 import { ModalWithRoot } from '../type';
 import { invariant } from '../utils/utils';
+import { useContext } from 'react';
 
 export function useRouteNavigator(): RouteNavigator {
-  const [routerContext] = useThrottledContext(RouterContext);
+  const routerContext = useContext(RouterContext);
   invariant(
     routerContext,
     'You can not use useNavigator hook outside of RouterContext. Make sure calling it inside RouterProvider.',
