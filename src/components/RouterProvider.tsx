@@ -1,6 +1,6 @@
 import { Action, Router } from '@remix-run/router';
-import { PopoutContext, RouteContext, RouterContext, ThrottledContext } from '../contexts';
-import { ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
+import { PopoutContext, RouteContext, RouterContext } from '../contexts';
+import { ReactElement, ReactNode, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { DefaultRouteNavigator } from '../services/DefaultRouteNavigator';
 import bridge from '@vkontakte/vk-bridge';
 import { DefaultNotFound } from './DefaultNotFound';
@@ -14,6 +14,7 @@ import { fillHistory } from '../utils/fillHistory';
 import { createSearchParams } from '../utils/createSearchParams';
 import { RouteLeaf } from '../type';
 import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
+import { ContextThrottleService } from '../services/ContextThrottleService';
 
 export interface RouterProviderProps {
   router: Router;
@@ -54,14 +55,6 @@ export function RouterProvider({
     );
     return { router, routeNavigator, viewHistory };
   }, [router, viewHistory, transactionExecutor, setPopout]);
-
-  const throttlingOptions = useMemo(() => {
-    return {
-      enabled: throttled || Boolean(transactionExecutor.initialDelay),
-      firstActionDelay: transactionExecutor.initialDelay,
-      interval,
-    };
-  }, [transactionExecutor.initialDelay, interval, throttled]);
 
   const routeContext = useMemo(
     () => getRouteContext(router.state, panelsHistory),
@@ -111,6 +104,14 @@ export function RouterProvider({
       fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
   }, [router]);
 
+  useLayoutEffect(() => {
+    ContextThrottleService.updateThrottledServiceSettings({
+      interval,
+      firstActionDelay: transactionExecutor.initialDelay,
+      enable: throttled || Boolean(transactionExecutor.initialDelay),
+    });
+  }, [transactionExecutor.initialDelay, interval, throttled]);
+
   const routeNotFound = Boolean(
     !routeContext.match ||
       (routeContext.state.errors &&
@@ -126,13 +127,11 @@ export function RouterProvider({
 
   return (
     <RouterContext.Provider value={dataRouterContext}>
-      <ThrottledContext.Provider value={throttlingOptions}>
-        <PopoutContext.Provider value={dataPopoutContext}>
-          {routeNotFound &&
-            (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
-          {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
-        </PopoutContext.Provider>
-      </ThrottledContext.Provider>
+      <PopoutContext.Provider value={dataPopoutContext}>
+        {routeNotFound &&
+          (notFound || <DefaultNotFound routeNavigator={dataRouterContext.routeNavigator} />)}
+        {!routeNotFound && <RouteContext.Provider value={routeContext} children={children} />}
+      </PopoutContext.Provider>
     </RouterContext.Provider>
   );
 }
