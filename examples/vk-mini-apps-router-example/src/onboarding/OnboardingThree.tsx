@@ -8,9 +8,8 @@ export const OnboardingThree = ({ nav }: { nav: string }) => {
   const onClick = async () => {
     routeNavigator.runSync([
       () => routeNavigator.backToFirst(),
-      () => routeNavigator.replace('/'),
-      () => routeNavigator.push('/'),
-      () => routeNavigator.back(),
+      () => routeNavigator.push('/persik'),
+      () => routeNavigator.push('/persik/persik_modal'),
     ]);
   };
   return (
@@ -19,7 +18,10 @@ export const OnboardingThree = ({ nav }: { nav: string }) => {
       <Div>Когда персик огорчен, он выглядит так:</Div>
       <img height={130} className="Persik" src={persik_sad} alt="Persik The Cat" />
       <Group>
-        <CellButton onClick={onClick}>Закончить</CellButton>
+        <Div>1) Возвращаемся в начало навигации</Div>
+        <Div>2) /persik</Div>
+        <Div>3) /persik/persik_modal</Div>
+        <CellButton onClick={onClick}>Выполнить runSync</CellButton>
       </Group>
     </ModalPage>
   );

@@ -1,20 +1,19 @@
-import { Action, Router } from '@remix-run/router';
-import { PopoutContext, RouteContext, RouterContext } from '../contexts';
 import { ReactElement, ReactNode, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { DefaultRouteNavigator } from '../services/DefaultRouteNavigator';
+import { Action, Router } from '@remix-run/router';
 import bridge from '@vkontakte/vk-bridge';
-import { DefaultNotFound } from './DefaultNotFound';
-import { getRouteContext, useForceUpdate } from '../utils/utils';
-import { ViewHistory } from '../services/ViewHistory';
-import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
 import { SEARCH_PARAM_INFLATE, STATE_KEY_SHOW_POPOUT, UNIVERSAL_URL } from '../const';
-import { RouteNavigator } from '../services/RouteNavigator.type';
-import { TransactionExecutor } from '../services/TransactionExecutor';
-import { fillHistory } from '../utils/fillHistory';
-import { createSearchParams } from '../utils/createSearchParams';
+import { PopoutContext, RouteContext, RouterContext } from '../contexts';
+import { getRouteContext, fillHistory, createSearchParams, getHrefWithoutHash } from '../utils';
+import {
+  DefaultRouteNavigator,
+  ContextThrottleService,
+  TransactionExecutor,
+  RouteNavigator,
+  ViewHistory,
+} from '../services';
+import { useBlockForwardToModals } from '../hooks/useBlockForwardToModals';
+import { DefaultNotFound } from './DefaultNotFound';
 import { RouteLeaf } from '../type';
-import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
-import { ContextThrottleService } from '../services/ContextThrottleService';
 
 export interface RouterProviderProps {
   router: Router;
@@ -37,24 +36,19 @@ export function RouterProvider({
   useBridge = true,
   throttled = true,
 }: RouterProviderProps): ReactElement {
-  const forceUpdate = useForceUpdate();
   const [popout, setPopout] = useState<JSX.Element | null>(null);
   const [viewHistory] = useState<ViewHistory>(new ViewHistory());
   const [panelsHistory, setPanelsHistory] = useState<string[]>([]);
-  const [transactionExecutor, setTransactionExecutor] = useState<TransactionExecutor>(
-    new TransactionExecutor(forceUpdate),
-  );
   const isPopoutShown = router.state.location.state?.[STATE_KEY_SHOW_POPOUT];
 
   const dataRouterContext = useMemo(() => {
     const routeNavigator: RouteNavigator = new DefaultRouteNavigator(
       router,
       viewHistory,
-      transactionExecutor,
       setPopout,
     );
     return { router, routeNavigator, viewHistory };
-  }, [router, viewHistory, transactionExecutor, setPopout]);
+  }, [router, viewHistory, setPopout]);
 
   const routeContext = useMemo(
     () => getRouteContext(router.state, panelsHistory),
@@ -70,6 +64,7 @@ export function RouterProvider({
     // Отключаем браузерное восстановление скролла, используем решения от VKUI
     history.scrollRestoration = 'manual';
 
+    TransactionExecutor.resetTransactions();
     viewHistory.resetHistory();
     viewHistory.updateNavigation({ ...router.state, historyAction: Action.Push });
     setPanelsHistory(viewHistory.panelsHistory);
@@ -77,7 +72,7 @@ export function RouterProvider({
     router.subscribe((state) => {
       viewHistory.updateNavigation(state);
       setPanelsHistory(viewHistory.panelsHistory);
-      transactionExecutor.doNext();
+      TransactionExecutor.doNext();
     });
 
     if (useBridge) {
@@ -86,31 +81,28 @@ export function RouterProvider({
           router.navigate(event.detail.data.location, { replace: true });
         }
       });
+
       router.subscribe((state) => {
         const href = router.createHref(state.location);
         const hrefWithoutHash = getHrefWithoutHash();
         const location = href.replace(hrefWithoutHash, '').replace(/^#/, '');
-
         bridge.send('VKWebAppSetLocation', { location, replace_state: true });
       });
     }
 
-    const executor = new TransactionExecutor(forceUpdate);
-    setTransactionExecutor(executor);
     const searchParams = createSearchParams(router.state.location.search);
     const enableFilling = Boolean(searchParams.get(SEARCH_PARAM_INFLATE));
-    hierarchy &&
-      enableFilling &&
-      fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext, executor);
+    if (hierarchy && enableFilling) {
+      fillHistory(hierarchy, dataRouterContext.routeNavigator, routeContext);
+    }
   }, [router]);
 
   useLayoutEffect(() => {
     ContextThrottleService.updateThrottledServiceSettings({
       interval,
-      firstActionDelay: transactionExecutor.initialDelay,
-      enable: throttled || Boolean(transactionExecutor.initialDelay),
+      throttled,
     });
-  }, [transactionExecutor.initialDelay, interval, throttled]);
+  }, [interval, throttled]);
 
   const routeNotFound = Boolean(
     !routeContext.match ||

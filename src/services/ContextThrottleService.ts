@@ -1,23 +1,22 @@
 import { EventBus } from './EventBus';
+import { TransactionExecutor } from './TransactionExecutor';
 
 interface ContextThrottleInfo {
   prevValue: unknown;
+  updateTimerId: number;
   throttledValue: unknown;
   lastUpdateTimestamp: number;
-  updateTimerId: number;
 }
 
 interface ContextThrottleServiceSettings {
   interval: number;
-  firstActionDelay: number;
-  enable: boolean;
+  throttled: boolean;
 }
 
 export class ContextThrottleService {
   private static instance?: ContextThrottleService;
-  private enable = true;
   private interval = 0;
-  private firstActionDelay = 0;
+  private throttled = true;
   private contextThrottleMap: Record<string, ContextThrottleInfo> = {};
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -51,8 +50,7 @@ export class ContextThrottleService {
   private getTimeUntilNextUpdate(lastUpdateTimestamp: number) {
     const timeSinceLastUpdate = Date.now() - lastUpdateTimestamp;
     const delayUntilNextUpdate = this.interval - timeSinceLastUpdate;
-    const initialDelay = delayUntilNextUpdate <= 0 ? this.firstActionDelay : 0;
-    return Math.max(initialDelay, delayUntilNextUpdate);
+    return delayUntilNextUpdate;
   }
 
   private updateContextValue<T>(contextName: string, newValue: T) {
@@ -65,17 +63,23 @@ export class ContextThrottleService {
 
   private throttleUpdateContextValue<T>(contextName: string, newValue: T) {
     const contextData = this.getContextThrottleInfoByName(contextName);
+    clearTimeout(contextData.updateTimerId);
+    if (this.isRunSyncActive()) return;
+
     const lastUpdateTimestamp = contextData.lastUpdateTimestamp;
     const timeUntilNextUpdate = this.getTimeUntilNextUpdate(lastUpdateTimestamp);
 
     if (timeUntilNextUpdate <= 0) {
       this.updateContextValue(contextName, newValue);
     } else {
-      clearTimeout(contextData.updateTimerId);
       contextData.updateTimerId = setTimeout(() => {
         this.updateContextValue(contextName, newValue);
       }, timeUntilNextUpdate);
     }
+  }
+
+  private isRunSyncActive() {
+    return TransactionExecutor.isRunSyncActive;
   }
 
   public static triggerContextUpdate<T>(contextName: string, newValue: T) {
@@ -85,7 +89,7 @@ export class ContextThrottleService {
       return;
     }
 
-    if (!throttledService.enable) {
+    if (!throttledService.throttled && !throttledService.isRunSyncActive()) {
       throttledService.updateContextValue(contextName, newValue);
     } else {
       throttledService.throttleUpdateContextValue(contextName, newValue);
@@ -94,8 +98,7 @@ export class ContextThrottleService {
 
   public static updateThrottledServiceSettings(settings: ContextThrottleServiceSettings) {
     const throttledService = ContextThrottleService.getInstance();
-    throttledService.enable = settings.enable;
     throttledService.interval = settings.interval;
-    throttledService.firstActionDelay = settings.firstActionDelay;
+    throttledService.throttled = settings.throttled;
   }
 }
