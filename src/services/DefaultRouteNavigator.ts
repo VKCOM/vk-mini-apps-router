@@ -23,7 +23,6 @@ export class DefaultRouteNavigator implements RouteNavigator {
   constructor(
     router: Router,
     private viewHistory: ViewHistory,
-    private transactionExecutor: TransactionExecutor,
     setPopout: (popout: JSX.Element | null) => void,
   ) {
     this.router = router;
@@ -67,13 +66,13 @@ export class DefaultRouteNavigator implements RouteNavigator {
     if (this.viewHistory.position > 0) {
       await this.go(-this.viewHistory.position);
     } else {
-      await this.transactionExecutor.doNext();
+      await TransactionExecutor.doNext();
     }
   }
 
   public async go(to: number): Promise<void> {
     if (to === 0) {
-      await this.transactionExecutor.doNext();
+      await TransactionExecutor.doNext();
     } else {
       await this.router.navigate(to);
     }
@@ -81,8 +80,8 @@ export class DefaultRouteNavigator implements RouteNavigator {
 
   public runSync(actions: VoidFunction[]): Promise<void> {
     const transaction = new NavigationTransaction(actions);
-    this.transactionExecutor.add(transaction);
-    this.transactionExecutor.doNext();
+    TransactionExecutor.add(transaction);
+    TransactionExecutor.doNext();
     return transaction.donePromise;
   }
 
@@ -108,7 +107,7 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
         }
         await this.navigate(path, { keepSearchParams: true });
       } else {
-        await this.transactionExecutor.doNext();
+        await TransactionExecutor.doNext();
       }
     }
   }
@@ -142,7 +141,7 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
         await this.router.navigate(-1);
       }
     } else {
-      await this.transactionExecutor.doNext();
+      await TransactionExecutor.doNext();
     }
   }
 
