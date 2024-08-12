@@ -25,7 +25,6 @@ export function fillHistory(
   config: RouteLeaf[],
   routeNavigator: RouteNavigator,
   context: RouteContextObject,
-  transactionExecutor: TransactionExecutor,
 ) {
   const leafs = flattenBranch(config, []);
   const currentLocation = context.state.location;
@@ -49,8 +48,8 @@ export function fillHistory(
         () => routeNavigator.push(to),
       ];
       const transaction = new NavigationTransaction(actions);
-      transactionExecutor.add(transaction);
-      transactionExecutor.doNext();
+      TransactionExecutor.add(transaction);
+      TransactionExecutor.doNext();
     }
   });
 }

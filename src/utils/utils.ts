@@ -2,7 +2,6 @@ import { AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/ro
 import { RouteContextObject } from '../contexts';
 import { PageInternal } from '../type';
 import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
-import { useState } from 'react';
 
 export function getParamKeys(path: string | undefined): string[] {
   return path?.match(/\/:[^\/]+/g)?.map((param) => param.replace('/', '')) ?? [];
@@ -52,14 +51,6 @@ export function createKey() {
 
 export function getDisplayName(WrappedComponent: { displayName?: string; name?: string }) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-}
-
-export function useForceUpdate() {
-  const [, setState] = useState(0);
-
-  return () => {
-    setState(Date.now());
-  };
 }
 
 export function warning(cond: any, message: string) {
