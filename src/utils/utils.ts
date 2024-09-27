@@ -1,19 +1,25 @@
-import { AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
+import {
+  AgnosticRouteMatch,
+  createPath,
+  Location,
+  Params,
+  RouterState,
+  To,
+} from '@remix-run/router';
 import { RouteContextObject } from '../contexts';
 import { PageInternal } from '../type';
 import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
+import { Page, PageWithParams } from '../page-types/common';
 
 export function getParamKeys(path: string | undefined): string[] {
   return path?.match(/\/:[^\/]+/g)?.map((param) => param.replace('/', '')) ?? [];
 }
 
-export function fillParamsIntoPath(path: string, params: Params): string {
+export function fillParamsIntoPath(path: string, params?: Params): string {
   const parameters = getParamKeys(path);
   const paramInjector = (acc: string, param: string): string => {
     const paramName = param.replace(':', '');
-    if (!params[paramName]) {
-      throw new Error(`Missing parameter ${paramName} while building route ${path}`);
-    }
+    invariant(params?.[paramName], `Missing parameter ${paramName} while building route ${path}`);
     return acc.replace(param, params[paramName] as string);
   };
   return parameters.reduce(paramInjector, path);
@@ -71,4 +77,26 @@ export function invariant(value: any, message?: string) {
   if (value === false || value === null || typeof value === 'undefined') {
     throw new Error(message);
   }
+}
+
+export function getPathFromTo({
+  to,
+  params,
+  defaultPathname = '',
+}: {
+  to: To | Page | PageWithParams<string>;
+  params?: Params;
+  defaultPathname?: string;
+}) {
+  const isToObj = typeof to === 'object' && !('path' in to);
+  const path = typeof to === 'string' ? to : isToObj ? to.pathname || defaultPathname : to.path;
+  const hasParams = getParamKeys(path).length > 0;
+
+  if (hasParams) {
+    const filledPath = fillParamsIntoPath(path, params);
+
+    return isToObj ? createPath({ ...to, pathname: filledPath }) : filledPath;
+  }
+
+  return isToObj ? createPath({ ...to, pathname: path }) : path;
 }

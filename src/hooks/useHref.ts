@@ -3,16 +3,31 @@ import { RouterContext } from '../contexts';
 import { useContext } from 'react';
 import { useResolvedPath } from './useResolvedPath';
 import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
-import { invariant } from '../utils/utils';
+import { getPathFromTo, invariant } from '../utils/utils';
+import { InjectParamsIfNeeded, Page, PageWithParams } from '../page-types/common';
 
-export function useHref(to: To, { relative }: { relative?: RelativeRoutingType } = {}): string {
+export type UseHrefOptions<T extends To | Page | PageWithParams<string>> = InjectParamsIfNeeded<
+  T,
+  { relative?: RelativeRoutingType }
+>;
+
+export function useHref<T extends To | Page | PageWithParams<string>>(
+  to: T,
+  { relative, params }: UseHrefOptions<T>,
+): string {
   const routeContext = useContext(RouterContext);
   invariant(
     routeContext,
     'You can not use useHref hook outside of RouteContext. Make sure calling it inside RouterProvider.',
   );
 
-  const { hash, pathname, search } = useResolvedPath(to, { relative });
+  const path = getPathFromTo({
+    to,
+    params,
+    defaultPathname: routeContext.router.state.location.pathname,
+  });
+
+  const { hash, pathname, search } = useResolvedPath(path, { relative });
 
   const hrefWithoutHash = getHrefWithoutHash();
   const href = routeContext.router.createHref({ pathname, search, hash } as Location);

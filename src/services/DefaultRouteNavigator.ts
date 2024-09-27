@@ -1,12 +1,18 @@
-import { BlockerFunction, Params, Router, RouterNavigateOptions } from '@remix-run/router';
-import { createKey, fillParamsIntoPath, isModalShown, isPopoutShown } from '../utils/utils';
+import { BlockerFunction, Params, Router, RouterNavigateOptions, To } from '@remix-run/router';
+import {
+  createKey,
+  getParamKeys,
+  getPathFromTo,
+  isModalShown,
+  isPopoutShown,
+} from '../utils/utils';
 import {
   NAVIGATION_BLOCKER_KEY,
   STATE_KEY_BLOCK_FORWARD_NAVIGATION,
   STATE_KEY_SHOW_MODAL,
   STATE_KEY_SHOW_POPOUT,
 } from '../const';
-import { hasNavigationOptionsKeys, NavigationOptions, RouteNavigator } from './RouteNavigator.type';
+import { NavigationOptions, RouteNavigator } from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { Page, PageWithParams } from '../page-types/common';
@@ -30,28 +36,26 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public async push(
-    to: string | Page | PageWithParams<string>,
+    to: To | Page | PageWithParams<string>,
     paramsOrOptions: Params | NavigationOptions = {},
     options: NavigationOptions = {},
   ): Promise<void> {
-    const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
-    const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
+    const { preparedOptions, preparedParams } = this.parseParams(to, paramsOrOptions, options);
     const fullOptions = {
       ...preparedOptions,
       replace: Boolean(this.router.state.location.state?.[STATE_KEY_BLOCK_FORWARD_NAVIGATION]),
     };
-    const preparedParams: Params = paramsAreOptions ? {} : (paramsOrOptions as Params);
+
     await this.navigate(to, fullOptions, preparedParams);
   }
 
   public async replace(
-    to: string | Page | PageWithParams<string>,
+    to: To | Page | PageWithParams<string>,
     paramsOrOptions: Params | NavigationOptions = {},
     options: NavigationOptions = {},
   ): Promise<void> {
-    const paramsAreOptions = hasNavigationOptionsKeys(paramsOrOptions);
-    const preparedOptions: NavigationOptions = paramsAreOptions ? paramsOrOptions : options;
-    const preparedParams: Params = paramsAreOptions ? {} : (paramsOrOptions as Params);
+    const { preparedOptions, preparedParams } = this.parseParams(to, paramsOrOptions, options);
+
     await this.navigate(to, { ...preparedOptions, replace: true }, preparedParams);
   }
 
@@ -159,21 +163,45 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
   }
 
   private async navigate(
-    to: string | Page | PageWithParams<string>,
+    to: To | Page | PageWithParams<string>,
     opts?: RouterNavigateOptions & NavigationOptions,
     params: Params = {},
   ): Promise<void> {
-    // prettier-ignore
-    let path = typeof to === 'string'
-      ? to
-      : to.hasParams
-        ? fillParamsIntoPath(to.path, params)
-        : to.path;
+    let path = getPathFromTo({ to, params, defaultPathname: this.router.state.location.pathname });
+    const newUrl = new URL(path, window.location.origin);
 
-    if (opts?.keepSearchParams) {
+    if (opts?.keepSearchParams && !newUrl.search) {
       path += this.router.state.location.search;
     }
 
     await this.router.navigate(path, opts);
+  }
+
+  private validateOptions({ state, keepSearchParams }: NavigationOptions = {}) {
+    const invalidState = state && typeof state !== 'object';
+    const invalidKeepSearchParams = keepSearchParams && typeof keepSearchParams !== 'boolean';
+
+    if (invalidState || invalidKeepSearchParams) {
+      console.warn('Invalid navigate options type');
+      return {};
+    }
+    return { state, keepSearchParams };
+  }
+
+  private parseParams(
+    to: To | Page | PageWithParams<string>,
+    paramsOrOptions: Params | NavigationOptions = {},
+    options: NavigationOptions = {},
+  ) {
+    const path = typeof to === 'object' ? ('path' in to ? to.path : to.pathname || '') : to;
+
+    if (getParamKeys(path).length) {
+      return {
+        preparedParams: paramsOrOptions as Params,
+        preparedOptions: this.validateOptions(options),
+      };
+    }
+
+    return { preparedParams: {}, preparedOptions: this.validateOptions(paramsOrOptions) };
   }
 }

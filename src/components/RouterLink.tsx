@@ -1,5 +1,5 @@
 import { Link } from '@vkontakte/vkui';
-import { useHref } from '../hooks/useHref';
+import { useHref, UseHrefOptions } from '../hooks/useHref';
 import { RelativeRoutingType, To } from '@remix-run/router';
 import {
   AnchorHTMLAttributes,
@@ -7,17 +7,21 @@ import {
   forwardRef,
   ReactNode,
   MouseEvent as ReactMouseEvent,
+  Ref,
 } from 'react';
-import { useLinkClickHandler } from '../hooks/useLinkClickHandler';
+import { useLinkClickHandler, UseClickHandlerOptions } from '../hooks/useLinkClickHandler';
+import { InjectParamsIfNeeded, Page, PageWithParams } from '../page-types/common';
 
-export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+export interface LinkProps<T extends To | Page | PageWithParams<string>>
+  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+  to: T;
   reloadDocument?: boolean;
   replace?: boolean;
   relative?: RelativeRoutingType;
-  to: To;
 }
 
-export interface RouterLinkProps extends Omit<LinkProps, 'className' | 'style' | 'children'> {
+export interface RouterLinkProps<T extends To | Page | PageWithParams<string>>
+  extends Omit<LinkProps<T>, 'className' | 'style' | 'children'> {
   children?: ReactNode;
   caseSensitive?: boolean;
   className?: string;
@@ -32,10 +36,19 @@ const isBrowser =
   typeof window.document !== 'undefined' &&
   typeof window.document.createElement !== 'undefined';
 
-export const RouterLink = forwardRef<HTMLAnchorElement, RouterLinkProps>(function (
-  { to, relative, replace, target, reloadDocument, onClick, ...rest }: RouterLinkProps,
-  ref,
-) {
+const RouterLinkInner = <T extends To | Page | PageWithParams<string>>(
+  {
+    to,
+    relative,
+    replace,
+    target,
+    reloadDocument,
+    params,
+    onClick,
+    ...rest
+  }: InjectParamsIfNeeded<T, RouterLinkProps<T>>,
+  ref: Ref<HTMLAnchorElement>,
+) => {
   // Rendered into <a href> for absolute URLs
   let absoluteHref;
   let isExternal = false;
@@ -52,20 +65,21 @@ export const RouterLink = forwardRef<HTMLAnchorElement, RouterLinkProps>(functio
 
       if (targetUrl.origin === currentUrl.origin) {
         // Strip the protocol/origin/basename for same-origin absolute URLs
-        to = path + targetUrl.search + targetUrl.hash;
+        to = (path + targetUrl.search + targetUrl.hash) as T;
       } else {
         isExternal = true;
       }
     }
   }
 
-  const href = useHref(to, { relative });
+  const href = useHref(to, { relative, params: params } as UseHrefOptions<T>);
 
   const internalOnClick = useLinkClickHandler(to, {
     replace,
     target,
     relative,
-  });
+    params,
+  } as UseClickHandlerOptions<T>);
 
   function handleClick(event: ReactMouseEvent<HTMLAnchorElement>) {
     if (onClick) onClick(event);
@@ -83,4 +97,10 @@ export const RouterLink = forwardRef<HTMLAnchorElement, RouterLinkProps>(functio
       target={target}
     ></Link>
   );
-});
+};
+
+export const RouterLink = forwardRef(RouterLinkInner) as <
+  T extends To | Page | PageWithParams<string>,
+>(
+  props: InjectParamsIfNeeded<T, RouterLinkProps<T>> & { ref?: Ref<HTMLAnchorElement> },
+) => JSX.Element;

@@ -1,3 +1,5 @@
+import { Params } from "@remix-run/router";
+
 export type WithChildren<Target extends {}, Children extends {}> = Target & {
   [key in keyof Children]: Children[key];
 };
@@ -44,3 +46,7 @@ export function uniqueKey<Obj extends {}, K extends string>(target: Obj, key: K)
   }
   return key as UniqueKey<Obj, K>;
 }
+
+export type InjectParamsIfNeeded<T, Base extends object> = T extends PageWithParams<infer U>
+  ? Base & { params: Params<U> }
+  : Base & { params?: Params };

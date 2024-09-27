@@ -1,33 +1,25 @@
 import { Page, PageWithParams } from '../page-types/common';
-import { BlockerFunction, Params } from '@remix-run/router';
+import { BlockerFunction, Params, To } from '@remix-run/router';
 
 export interface NavigationOptions {
   keepSearchParams?: boolean;
-  state?: Object;
-}
-
-export function hasNavigationOptionsKeys<T extends {}>(object: T): boolean {
-  const base: Required<NavigationOptions> = {
-    keepSearchParams: true,
-    state: {},
-  };
-  return Object.keys(object).some((key) => key in base);
+  state?: Record<string, unknown>;
 }
 
 export interface RouteNavigator {
   push<T extends string>(
-    to: PageWithParams<T>,
+    to: To | PageWithParams<T>,
     params: Params<T>,
     options?: NavigationOptions,
   ): Promise<void>;
-  push(to: string | Page, options?: NavigationOptions): Promise<void>;
+  push(to: To | Page, options?: NavigationOptions): Promise<void>;
 
   replace<T extends string>(
-    to: PageWithParams<T>,
+    to: To | PageWithParams<T>,
     params: Params<T>,
     options?: NavigationOptions,
   ): Promise<void>;
-  replace(to: string | Page, options?: NavigationOptions): Promise<void>;
+  replace(to: To | Page, options?: NavigationOptions): Promise<void>;
 
   back(to?: number): Promise<void>;
 
