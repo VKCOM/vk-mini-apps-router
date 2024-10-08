@@ -1,6 +1,6 @@
 import { Link } from '@vkontakte/vkui';
 import { useHref, UseHrefOptions } from '../hooks/useHref';
-import { RelativeRoutingType, To } from '@remix-run/router';
+import { RelativeRoutingType } from '@remix-run/router';
 import {
   AnchorHTMLAttributes,
   CSSProperties,
@@ -10,9 +10,10 @@ import {
   Ref,
 } from 'react';
 import { useLinkClickHandler, UseClickHandlerOptions } from '../hooks/useLinkClickHandler';
-import { InjectParamsIfNeeded, Page, PageWithParams } from '../page-types/common';
+import { InjectParamsIfNeeded } from '../page-types/common';
+import { NavigationTarget } from '../services';
 
-export interface LinkProps<T extends To | Page | PageWithParams<string>>
+export interface LinkProps<T extends NavigationTarget>
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   to: T;
   reloadDocument?: boolean;
@@ -20,7 +21,7 @@ export interface LinkProps<T extends To | Page | PageWithParams<string>>
   relative?: RelativeRoutingType;
 }
 
-export interface RouterLinkProps<T extends To | Page | PageWithParams<string>>
+export interface RouterLinkProps<T extends NavigationTarget>
   extends Omit<LinkProps<T>, 'className' | 'style' | 'children'> {
   children?: ReactNode;
   caseSensitive?: boolean;
@@ -36,7 +37,7 @@ const isBrowser =
   typeof window.document !== 'undefined' &&
   typeof window.document.createElement !== 'undefined';
 
-const RouterLinkInner = <T extends To | Page | PageWithParams<string>>(
+const RouterLinkInner = <T extends NavigationTarget>(
   {
     to,
     relative,
@@ -99,8 +100,6 @@ const RouterLinkInner = <T extends To | Page | PageWithParams<string>>(
   );
 };
 
-export const RouterLink = forwardRef(RouterLinkInner) as <
-  T extends To | Page | PageWithParams<string>,
->(
+export const RouterLink = forwardRef(RouterLinkInner) as <T extends NavigationTarget>(
   props: InjectParamsIfNeeded<T, RouterLinkProps<T>> & { ref?: Ref<HTMLAnchorElement> },
 ) => JSX.Element;

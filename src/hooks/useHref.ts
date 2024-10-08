@@ -1,17 +1,18 @@
-import { Location, RelativeRoutingType, To } from '@remix-run/router';
+import { Location, RelativeRoutingType } from '@remix-run/router';
 import { RouterContext } from '../contexts';
 import { useContext } from 'react';
 import { useResolvedPath } from './useResolvedPath';
 import { getHrefWithoutHash } from '../utils/getHrefWithoutHash';
 import { getPathFromTo, invariant } from '../utils/utils';
-import { InjectParamsIfNeeded, Page, PageWithParams } from '../page-types/common';
+import { InjectParamsIfNeeded } from '../page-types/common';
+import { NavigationTarget } from '../services';
 
-export type UseHrefOptions<T extends To | Page | PageWithParams<string>> = InjectParamsIfNeeded<
+export type UseHrefOptions<T extends NavigationTarget> = InjectParamsIfNeeded<
   T,
   { relative?: RelativeRoutingType }
 >;
 
-export function useHref<T extends To | Page | PageWithParams<string>>(
+export function useHref<T extends NavigationTarget>(
   to: T,
   { relative, params }: UseHrefOptions<T>,
 ): string {

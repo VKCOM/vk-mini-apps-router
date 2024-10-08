@@ -1,21 +1,21 @@
-import { createPath, RelativeRoutingType, To } from '@remix-run/router';
+import { createPath, RelativeRoutingType } from '@remix-run/router';
 import { HTMLAttributeAnchorTarget, MouseEvent as ReactMouseEvent, useCallback } from 'react';
 import { useLocation, useRouteNavigator } from './hooks';
 import { useResolvedPath } from './useResolvedPath';
-import { InjectParamsIfNeeded, Page, PageWithParams } from '../page-types/common';
+import { InjectParamsIfNeeded } from '../page-types/common';
 import { getPathFromTo } from '../utils';
+import { NavigationTarget } from '../services';
 
 type LimitedMouseEvent = Pick<MouseEvent, 'button' | 'metaKey' | 'altKey' | 'ctrlKey' | 'shiftKey'>;
-export type UseClickHandlerOptions<T extends To | Page | PageWithParams<string>> =
-  InjectParamsIfNeeded<
-    T,
-    {
-      target?: HTMLAttributeAnchorTarget;
-      replace?: boolean;
-      preventScrollReset?: boolean;
-      relative?: RelativeRoutingType;
-    }
-  >;
+export type UseClickHandlerOptions<T extends NavigationTarget> = InjectParamsIfNeeded<
+  T,
+  {
+    target?: HTMLAttributeAnchorTarget;
+    replace?: boolean;
+    preventScrollReset?: boolean;
+    relative?: RelativeRoutingType;
+  }
+>;
 
 function isModifiedEvent(event: LimitedMouseEvent): boolean {
   return Boolean(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -30,7 +30,7 @@ export function shouldProcessLinkClick(event: LimitedMouseEvent, target?: string
 }
 
 export function useLinkClickHandler<
-  T extends To | Page | PageWithParams<string>,
+  T extends NavigationTarget,
   E extends Element = HTMLAnchorElement,
 >(
   to: T,

@@ -1,4 +1,5 @@
 import { Params } from "@remix-run/router";
+import { ExtendedPathWithParams } from "../services";
 
 export type WithChildren<Target extends {}, Children extends {}> = Target & {
   [key in keyof Children]: Children[key];
@@ -35,7 +36,7 @@ export interface PageWithParams<T extends string> extends WithParams<T> {
 }
 
 type UniqueKey<Obj extends {}, K extends string> = '' extends K ? K :
-  (K extends keyof Obj ? (`${K}_0` extends keyof Obj ? `${UniqueKey<Obj, `${K}_0`>}` : `${K}_0`) : K);
+(K extends keyof Obj ? (`${K}_0` extends keyof Obj ? `${UniqueKey<Obj, `${K}_0`>}` : `${K}_0`) : K);
 
 export function uniqueKey<Obj extends {}, K extends string>(target: Obj, key: K): UniqueKey<Obj, K> {
   if (key && key.length && typeof target === 'object') {
@@ -47,6 +48,6 @@ export function uniqueKey<Obj extends {}, K extends string>(target: Obj, key: K)
   return key as UniqueKey<Obj, K>;
 }
 
-export type InjectParamsIfNeeded<T, Base extends object> = T extends PageWithParams<infer U>
+export type InjectParamsIfNeeded<T, Base extends object> = T extends (PageWithParams<infer U> | ExtendedPathWithParams<infer U>)
   ? Base & { params: Params<U> }
   : Base & { params?: Params };

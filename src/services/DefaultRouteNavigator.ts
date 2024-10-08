@@ -1,7 +1,8 @@
-import { BlockerFunction, Params, Router, RouterNavigateOptions, To } from '@remix-run/router';
+import { BlockerFunction, Params, Router, RouterNavigateOptions } from '@remix-run/router';
 import {
   createKey,
   getParamKeys,
+  extractPathFromNavigationTarget,
   getPathFromTo,
   isModalShown,
   isPopoutShown,
@@ -12,10 +13,9 @@ import {
   STATE_KEY_SHOW_MODAL,
   STATE_KEY_SHOW_POPOUT,
 } from '../const';
-import { NavigationOptions, RouteNavigator } from './RouteNavigator.type';
+import { NavigationOptions, NavigationTarget, RouteNavigator } from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
-import { Page, PageWithParams } from '../page-types/common';
 import { ViewHistory } from './ViewHistory';
 import { TransactionExecutor } from './TransactionExecutor';
 import { NavigationTransaction } from '../entities/NavigationTransaction';
@@ -36,7 +36,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public async push(
-    to: To | Page | PageWithParams<string>,
+    to: NavigationTarget,
     paramsOrOptions: Params | NavigationOptions = {},
     options: NavigationOptions = {},
   ): Promise<void> {
@@ -50,7 +50,7 @@ export class DefaultRouteNavigator implements RouteNavigator {
   }
 
   public async replace(
-    to: To | Page | PageWithParams<string>,
+    to: NavigationTarget,
     paramsOrOptions: Params | NavigationOptions = {},
     options: NavigationOptions = {},
   ): Promise<void> {
@@ -163,7 +163,7 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
   }
 
   private async navigate(
-    to: To | Page | PageWithParams<string>,
+    to: NavigationTarget,
     opts?: RouterNavigateOptions & NavigationOptions,
     params: Params = {},
   ): Promise<void> {
@@ -189,11 +189,11 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
   }
 
   private parseParams(
-    to: To | Page | PageWithParams<string>,
+    to: NavigationTarget,
     paramsOrOptions: Params | NavigationOptions = {},
     options: NavigationOptions = {},
   ) {
-    const path = typeof to === 'object' ? ('path' in to ? to.path : to.pathname || '') : to;
+    const path = extractPathFromNavigationTarget(to);
 
     if (getParamKeys(path).length) {
       return {

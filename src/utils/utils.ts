@@ -1,15 +1,8 @@
-import {
-  AgnosticRouteMatch,
-  createPath,
-  Location,
-  Params,
-  RouterState,
-  To,
-} from '@remix-run/router';
+import { AgnosticRouteMatch, createPath, Location, Params, RouterState } from '@remix-run/router';
 import { RouteContextObject } from '../contexts';
 import { PageInternal } from '../type';
 import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
-import { Page, PageWithParams } from '../page-types/common';
+import { NavigationTarget } from '../services';
 
 export function getParamKeys(path: string | undefined): string[] {
   return path?.match(/\/:[^\/]+/g)?.map((param) => param.replace('/', '')) ?? [];
@@ -79,17 +72,24 @@ export function invariant(value: any, message?: string) {
   }
 }
 
+export function extractPathFromNavigationTarget(to: NavigationTarget, defaultPathname = '') {
+  const isObject = typeof to === 'object';
+  const path = isObject ? ('path' in to ? to.path : to.pathname || defaultPathname) : to;
+
+  return typeof path === 'object' ? path.path : path;
+}
+
 export function getPathFromTo({
   to,
   params,
   defaultPathname = '',
 }: {
-  to: To | Page | PageWithParams<string>;
+  to: NavigationTarget;
   params?: Params;
   defaultPathname?: string;
 }) {
   const isToObj = typeof to === 'object' && !('path' in to);
-  const path = typeof to === 'string' ? to : isToObj ? to.pathname || defaultPathname : to.path;
+  const path = extractPathFromNavigationTarget(to, defaultPathname);
   const hasParams = getParamKeys(path).length > 0;
 
   if (hasParams) {
