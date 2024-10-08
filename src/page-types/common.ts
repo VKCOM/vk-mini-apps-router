@@ -35,8 +35,18 @@ export interface PageWithParams<T extends string> extends WithParams<T> {
   hasParams: true;
 }
 
-type UniqueKey<Obj extends {}, K extends string> = '' extends K ? K :
-(K extends keyof Obj ? (`${K}_0` extends keyof Obj ? `${UniqueKey<Obj, `${K}_0`>}` : `${K}_0`) : K);
+type IsEmptyKey<K extends string> = '' extends K ? true : false;
+type KeyExists<Obj, K extends string> = K extends keyof Obj ? true : false;
+type KeyWithZeroExists<Obj, K extends string> = `${K}_0` extends keyof Obj ? true : false;
+
+type UniqueKey<Obj extends {}, K extends string> =
+  IsEmptyKey<K> extends true
+    ? K
+    : KeyExists<Obj, K> extends true
+      ? KeyWithZeroExists<Obj, K> extends true
+        ? UniqueKey<Obj, `${K}_0`>
+        : `${K}_0`
+      : K;
 
 export function uniqueKey<Obj extends {}, K extends string>(target: Obj, key: K): UniqueKey<Obj, K> {
   if (key && key.length && typeof target === 'object') {
