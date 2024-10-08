@@ -1,5 +1,5 @@
 import { Link } from '@vkontakte/vkui';
-import { useHref, UseHrefOptions } from '../hooks/useHref';
+import { useHref } from '../hooks/useHref';
 import { RelativeRoutingType } from '@remix-run/router';
 import {
   AnchorHTMLAttributes,
@@ -9,9 +9,10 @@ import {
   MouseEvent as ReactMouseEvent,
   Ref,
 } from 'react';
-import { useLinkClickHandler, UseClickHandlerOptions } from '../hooks/useLinkClickHandler';
+import { useLinkClickHandler } from '../hooks/useLinkClickHandler';
 import { InjectParamsIfNeeded } from '../page-types/common';
 import { NavigationTarget } from '../services';
+import { isString } from '../utils';
 
 export interface LinkProps<T extends NavigationTarget>
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -53,8 +54,9 @@ const RouterLinkInner = <T extends NavigationTarget>(
   // Rendered into <a href> for absolute URLs
   let absoluteHref;
   let isExternal = false;
+  let navigationTarget: NavigationTarget = to;
 
-  if (typeof to === 'string' && ABSOLUTE_URL_REGEX.test(to)) {
+  if (isString(to) && ABSOLUTE_URL_REGEX.test(to)) {
     // Render the absolute href server- and client-side
     absoluteHref = to;
 
@@ -66,21 +68,21 @@ const RouterLinkInner = <T extends NavigationTarget>(
 
       if (targetUrl.origin === currentUrl.origin) {
         // Strip the protocol/origin/basename for same-origin absolute URLs
-        to = (path + targetUrl.search + targetUrl.hash) as T;
+        navigationTarget = path + targetUrl.search + targetUrl.hash;
       } else {
         isExternal = true;
       }
     }
   }
 
-  const href = useHref(to, { relative, params: params } as UseHrefOptions<T>);
+  const href = useHref(navigationTarget, { relative, params: params });
 
-  const internalOnClick = useLinkClickHandler(to, {
+  const internalOnClick = useLinkClickHandler(navigationTarget, {
     replace,
     target,
     relative,
     params,
-  } as UseClickHandlerOptions<T>);
+  });
 
   function handleClick(event: ReactMouseEvent<HTMLAnchorElement>) {
     if (onClick) onClick(event);

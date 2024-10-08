@@ -170,8 +170,18 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
     let path = getPathFromTo({ to, params, defaultPathname: this.router.state.location.pathname });
     const newUrl = new URL(path, window.location.origin);
 
-    if (opts?.keepSearchParams && !newUrl.search) {
-      path += this.router.state.location.search;
+    if (opts?.keepSearchParams) {
+      const currentSearchParams = new URLSearchParams(this.router.state.location.search);
+      const newSearchParams = new URLSearchParams(newUrl.search);
+
+      currentSearchParams.forEach((value, key) => {
+        if (!newSearchParams.has(key)) {
+          newSearchParams.set(key, value);
+        }
+      });
+
+      newUrl.search = newSearchParams.toString();
+      path = newUrl.pathname + (newUrl.search ? `${newUrl.search}` : '');
     }
 
     await this.router.navigate(path, opts);

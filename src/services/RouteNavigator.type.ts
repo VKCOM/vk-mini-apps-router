@@ -1,33 +1,42 @@
 import { Page, PageWithParams } from '../page-types/common';
-import { BlockerFunction, Params, Path, To } from '@remix-run/router';
+import { BlockerFunction, Params } from '@remix-run/router';
 
 export interface NavigationOptions {
   keepSearchParams?: boolean;
   state?: Record<string, unknown>;
 }
 
-export interface ExtendedPathWithParams<T extends string> extends Partial<Omit<Path, 'pathname'>> {
+type NavigationPath = {
+  pathname?: string;
+  search?: URLSearchParams | Record<string, string> | string;
+  hash?: string;
+};
+
+type NavigationTo = string | Partial<NavigationPath>;
+
+export interface ExtendedPathWithParams<T extends string>
+  extends Partial<Omit<NavigationPath, 'pathname'>> {
   pathname: PageWithParams<T>;
 }
 
-export interface ExtendedPath extends Partial<Omit<Path, 'pathname'>> {
+export interface ExtendedPath extends Partial<Omit<NavigationPath, 'pathname'>> {
   pathname: Page;
 }
 
 export interface RouteNavigator {
   push<T extends string>(
-    to: To | PageWithParams<T> | ExtendedPathWithParams<T>,
+    to: NavigationTo | PageWithParams<T> | ExtendedPathWithParams<T>,
     params: Params<T>,
     options?: NavigationOptions,
   ): Promise<void>;
-  push(to: To | Page | ExtendedPath, options?: NavigationOptions): Promise<void>;
+  push(to: NavigationTo | Page | ExtendedPath, options?: NavigationOptions): Promise<void>;
 
   replace<T extends string>(
-    to: To | PageWithParams<T>,
+    to: NavigationTo | PageWithParams<T>,
     params: Params<T>,
     options?: NavigationOptions,
   ): Promise<void>;
-  replace(to: To | Page, options?: NavigationOptions): Promise<void>;
+  replace(to: NavigationTo | Page, options?: NavigationOptions): Promise<void>;
 
   back(to?: number): Promise<void>;
 
@@ -57,8 +66,8 @@ export interface RouteNavigator {
 }
 
 export type NavigationTarget =
-  | To
-  | Page
+  | NavigationTo
   | PageWithParams<string>
+  | Page
   | ExtendedPathWithParams<string>
   | ExtendedPath;

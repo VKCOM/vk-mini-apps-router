@@ -7,6 +7,7 @@ import { getPathFromTo } from '../utils';
 import { NavigationTarget } from '../services';
 
 type LimitedMouseEvent = Pick<MouseEvent, 'button' | 'metaKey' | 'altKey' | 'ctrlKey' | 'shiftKey'>;
+
 export type UseClickHandlerOptions<T extends NavigationTarget> = InjectParamsIfNeeded<
   T,
   {

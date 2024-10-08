@@ -15,8 +15,9 @@ export type UseHrefOptions<T extends NavigationTarget> = InjectParamsIfNeeded<
 export function useHref<T extends NavigationTarget>(
   to: T,
   { relative, params }: UseHrefOptions<T>,
-): string {
+) {
   const routeContext = useContext(RouterContext);
+
   invariant(
     routeContext,
     'You can not use useHref hook outside of RouteContext. Make sure calling it inside RouterProvider.',
