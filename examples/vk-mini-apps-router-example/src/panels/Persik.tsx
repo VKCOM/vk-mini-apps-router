@@ -70,11 +70,11 @@ export const Persik = (props: NavProp) => {
 					{emotion !== 'sad' && <FormItem><Button
 						stretched size="l"
 						mode="secondary"
-						onClick={() => routeNavigator.push(persikEmotionPanel, { emotion: 'sad' }, { keepSearchParams: true })}
+						onClick={() => routeNavigator.push({pathname: persikEmotionPanel, hash: 'persik'}, { emotion: 'sad' }, { keepSearchParams: true })}
 					>А еды нет...</Button></FormItem>}
 					<FormItem>
 						<Button stretched size="l" mode="secondary" onClick={() =>
-							routeNavigator.push(`/persik${emotion ? '/' + emotion : ''}/persik_modal${emotion ? '/sad' : ''}`, { keepSearchParams: true })}>
+						routeNavigator.push(`/persik${emotion ? '/' + emotion : ''}/persik_modal${emotion ? '/sad' : ''}`, { keepSearchParams: true })}>
 							Персик в модалке
 						</Button>
 					</FormItem>

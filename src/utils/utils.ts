@@ -1,19 +1,38 @@
-import { AgnosticRouteMatch, Location, Params, RouterState } from '@remix-run/router';
+import {
+  AgnosticRouteMatch,
+  createPath,
+  Location,
+  Params,
+  Path,
+  RouterState,
+} from '@remix-run/router';
 import { RouteContextObject } from '../contexts';
 import { PageInternal } from '../type';
 import { STATE_KEY_SHOW_MODAL, STATE_KEY_SHOW_POPOUT } from '../const';
+import { ExtendedPath, ExtendedPathWithParams, NavigationTarget } from '../services';
+import { Page, PageWithParams } from '../page-types/common';
+
+export const isString = (tmp: unknown): tmp is string => typeof tmp === 'string';
+
+export const isPageObject = (path: NavigationTarget): path is Page | PageWithParams<string> => {
+  return typeof path === 'object' && 'path' in path;
+};
+
+export const isPageWithOptionsPath = (
+  path: NavigationTarget,
+): path is Partial<Path> | ExtendedPathWithParams<string> | ExtendedPath => {
+  return typeof path === 'object' && !isPageObject(path);
+};
 
 export function getParamKeys(path: string | undefined): string[] {
   return path?.match(/\/:[^\/]+/g)?.map((param) => param.replace('/', '')) ?? [];
 }
 
-export function fillParamsIntoPath(path: string, params: Params): string {
+export function fillParamsIntoPath(path: string, params?: Params): string {
   const parameters = getParamKeys(path);
   const paramInjector = (acc: string, param: string): string => {
     const paramName = param.replace(':', '');
-    if (!params[paramName]) {
-      throw new Error(`Missing parameter ${paramName} while building route ${path}`);
-    }
+    invariant(params?.[paramName], `Missing parameter ${paramName} while building route ${path}`);
     return acc.replace(param, params[paramName] as string);
   };
   return parameters.reduce(paramInjector, path);
@@ -71,4 +90,52 @@ export function invariant(value: any, message?: string) {
   if (value === false || value === null || typeof value === 'undefined') {
     throw new Error(message);
   }
+}
+
+export function extractPathFromNavigationTarget(to: NavigationTarget, defaultPathname = '') {
+  if (isString(to)) {
+    return to;
+  }
+
+  const path = isPageObject(to) ? to.path : to.pathname || defaultPathname;
+
+  if (isString(path)) {
+    return path;
+  }
+
+  return path.path;
+}
+
+export function transformSearchParams(
+  searchParams: URLSearchParams | Record<string, string> | string = '',
+) {
+  if (!isString(searchParams) && !(searchParams instanceof URLSearchParams)) {
+    return `${new URLSearchParams(searchParams)}`;
+  }
+
+  return searchParams.toString();
+}
+
+export function getPathFromTo({
+  to,
+  params,
+  defaultPathname = '',
+}: {
+  to: NavigationTarget;
+  params?: Params;
+  defaultPathname?: string;
+}) {
+  const path = extractPathFromNavigationTarget(to, defaultPathname);
+  const search = isPageWithOptionsPath(to) ? transformSearchParams(to.search) : '';
+  const hasParams = getParamKeys(path).length > 0;
+
+  if (hasParams) {
+    const filledPath = fillParamsIntoPath(path, params);
+
+    return isPageWithOptionsPath(to)
+      ? createPath({ ...to, pathname: filledPath, search })
+      : filledPath;
+  }
+
+  return isPageWithOptionsPath(to) ? createPath({ ...to, pathname: path, search }) : path;
 }

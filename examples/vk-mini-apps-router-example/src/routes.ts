@@ -1,5 +1,4 @@
 import {
-  createHashParamRouter,
   createModal,
   createPanel,
   createRoot,
@@ -7,6 +6,7 @@ import {
   createView,
   RoutesConfig,
   RouteLeaf,
+  createHashRouter
 } from '@vkontakte/vk-mini-apps-router';
 
 export const DEFAULT_ROOT = 'default_root';
@@ -131,7 +131,7 @@ export const hierarchy: RouteLeaf[] = [
   },
 ];
 
- export const router = createHashParamRouter(routes.getRoutes());
+ export const router = createHashRouter(routes.getRoutes());
 
 // export const router = createHashRouter([
 //   {

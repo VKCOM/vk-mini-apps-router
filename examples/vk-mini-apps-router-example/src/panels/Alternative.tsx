@@ -4,7 +4,7 @@ import { Panel, PanelHeader, Header, Button, ButtonGroup, Group, Tabs, TabsItem,
 import bridge from '@vkontakte/vk-bridge';
 import { GoFunctionProp, NavProp } from '../types';
 import { useEnableSwipeBack, useActiveVkuiLocation, RouterLink } from '@vkontakte/vk-mini-apps-router';
-import { ALTERNATIVE_PANEL_TABS, HOME_PANEL_MODALS, PERSIK_PANEL_MODALS } from '../routes';
+import { ALTERNATIVE_PANEL_TABS, HOME_PANEL_MODALS, PERSIK_PANEL_MODALS, routes } from '../routes';
 import { AppMap } from '../appMap/AppMap';
 
 export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
@@ -58,7 +58,7 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
           </ButtonGroup>
           <Spacing size={12}></Spacing>
           <InfoRow header="Ссылки">
-            <RouterLink to="/persik">Можно использовать ссылки (на Персика)</RouterLink>
+          <RouterLink params={{emotion: 'sad'}} to={routes.default_root.default_view.persik_0}>Можно использовать ссылки (на Персика)</RouterLink>
           </InfoRow>
         </Group>
       }
