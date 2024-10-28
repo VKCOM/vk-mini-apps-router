@@ -55,8 +55,14 @@ export interface RouteNavigator {
    * В случае, если модальное окно было открыто через навигацию, можно закрыть окно шагом назад
    * или навигацией вперед на родительскую панель.<br>
    * По умолчанию false.
+   *
+   * @param options - Необязательный параметр для дополнительных настроек навигации.
+   *
+   * @param options.replace - Если true, текущее модальное окно будет закрыто с заменой
+   * текущей записи истории на родительскую панель. По умолчанию false, что означает закрытие модального окна
+   * с добавлением новой записи в историю или возвратом на один шаг назад.
    */
-  hideModal(pushPanel?: boolean): Promise<void>;
+  hideModal(pushPanel?: boolean, options?: { replace: boolean }): Promise<void>;
 
   showPopout(popout: JSX.Element): Promise<void>;
 

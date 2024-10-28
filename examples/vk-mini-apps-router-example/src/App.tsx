@@ -8,6 +8,7 @@ import {
   usePopout,
   useRouteNavigator,
   useGetPanelForView,
+  useFirstPageCheck,
 } from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
@@ -37,6 +38,7 @@ import { OnboardingThree } from './onboarding/OnboardingThree';
 
 function App() {
   const [fetchedUser, setUser] = useState<any>(null);
+  const isFirstPage = useFirstPageCheck();
   const routerPopout = usePopout();
   const routeNavigator = useRouteNavigator();
   const {
@@ -63,7 +65,7 @@ function App() {
   };
 
   const modal = (
-    <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal()}>
+    <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal(false, {replacePanel: isFirstPage})}>
       <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK}></PersikModal>
       <BlockerModal nav={HOME_PANEL_MODALS.BLOCKER} />
       <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser}></UserModal>
