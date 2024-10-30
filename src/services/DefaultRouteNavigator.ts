@@ -6,6 +6,7 @@ import {
   getPathFromTo,
   isModalShown,
   isPopoutShown,
+  invariant,
 } from '../utils/utils';
 import {
   NAVIGATION_BLOCKER_KEY,
@@ -96,24 +97,31 @@ export class DefaultRouteNavigator implements RouteNavigator {
     });
   }
 
-  public async hideModal(pushPanel = false): Promise<void> {
+  public async hideModal(pushPanel = false, options?: { replace: boolean }): Promise<void> {
     if ((!pushPanel && !this.viewHistory.isFirstPage) || isModalShown(this.router.state.location)) {
-      await this.router.navigate(-1);
-    } else {
-      const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
-      if (modalMatch) {
-        const route = modalMatch.route as ModalWithRoot & InternalRouteConfig;
-        const path = buildPanelPathFromModalMatch(modalMatch, this.router);
-        if (!path) {
-          const rootMessage = route.root ? `root: ${route.root} ` : '';
-          throw new Error(`There is no route registered for panel with ${rootMessage}, view: ${route.view}, panel: ${route.panel}.
-Make sure this route exists or use hideModal with pushPanel set to false.`);
-        }
-        await this.navigate(path, { keepSearchParams: true });
-      } else {
-        await TransactionExecutor.doNext();
-      }
+      return await this.router.navigate(-1);
     }
+    const modalMatch = this.router.state.matches.find((match) => 'modal' in match.route);
+
+    if (modalMatch) {
+      const route = modalMatch.route as ModalWithRoot & InternalRouteConfig;
+      const path = buildPanelPathFromModalMatch(modalMatch, this.router);
+
+      invariant(
+        path,
+        `There is no route registered for panel with ${
+          route.root ? `root: ${route.root} ` : ''
+        }, view: ${route.view}, panel: ${
+          route.panel
+        }. Make sure this route exists or use hideModal with pushPanel set to false.`,
+      );
+
+      return await this.navigate(path, {
+        keepSearchParams: true,
+        replace: Boolean(options?.replace),
+      });
+    }
+    await TransactionExecutor.doNext();
   }
 
   public async showPopout(popout: JSX.Element): Promise<void> {
@@ -151,10 +159,11 @@ Make sure this route exists or use hideModal with pushPanel set to false.`);
 
   public block(blocker: BlockerFunction) {
     const key = (++this.blockerId).toString();
-    this.blockers.set(key, blocker);
     const onLeave: BlockerFunction = (data) => {
       return Array.from(this.blockers.values()).some((fn) => fn(data));
     };
+
+    this.blockers.set(key, blocker);
     this.router.getBlocker(NAVIGATION_BLOCKER_KEY, onLeave);
 
     return () => {
