@@ -12,6 +12,8 @@ export { useGetPanelForView } from './hooks/useGetPanelForView';
 export { useSearchParams } from './hooks/useSearchParams';
 export type { SetURLSearchParams } from './hooks/useSearchParams';
 export { useMetaParams } from './hooks/useMetaParams';
+export { useHistoryManager } from './hooks/useHistoryManager';
+export type { ViewNavigationRecord } from './services/ViewNavigationRecord.type';
 export { useFirstPageCheck } from './hooks/useFirstPageCheck';
 export { useActiveVkuiLocation } from './hooks/useActiveVkuiLocation';
 export { useEnableSwipeBack } from './hooks/useEnableSwipeBack';

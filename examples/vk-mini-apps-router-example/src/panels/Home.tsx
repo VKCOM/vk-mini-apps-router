@@ -10,16 +10,16 @@ import {
   ButtonGroup,
   Avatar,
 } from '@vkontakte/vkui';
-import { GoFunctionProp, NavProp, UserInfo } from '../types';
+import { GoFunctionProp, goToFirstPageProp, NavProp, UserInfo } from '../types';
 import { useEnableSwipeBack } from '@vkontakte/vk-mini-apps-router';
 import { AppMap } from '../appMap/AppMap';
 
 type HomeProps = NavProp &
   GoFunctionProp & {
     fetchedUser: UserInfo;
-  };
+  } & goToFirstPageProp;
 
-export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
+export const Home = ({ nav, go, goToFirstPage, fetchedUser }: HomeProps) => {
   useEnableSwipeBack();
   return (
     <Panel nav={nav}>
@@ -74,6 +74,9 @@ export const Home = ({ nav, go, fetchedUser }: HomeProps) => {
           <ButtonGroup mode="horizontal" stretched>
             <Button stretched size="l" mode="secondary" onClick={() => go('/blocker')}>
               Страница выхода с подтверждением
+            </Button>
+            <Button stretched size="l" mode="secondary" onClick={goToFirstPage}>
+              На самую первую страницу
             </Button>
           </ButtonGroup>
         </ButtonGroup>
