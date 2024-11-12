@@ -9,6 +9,7 @@ import {
   useRouteNavigator,
   useGetPanelForView,
   useFirstPageCheck,
+  useHistoryManager
 } from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from './panels/Home';
@@ -41,6 +42,7 @@ function App() {
   const isFirstPage = useFirstPageCheck();
   const routerPopout = usePopout();
   const routeNavigator = useRouteNavigator();
+  const historyManager = useHistoryManager();
   const {
     root: activeRoot = DEFAULT_ROOT,
     view: activeView = DEFAULT_VIEW,
@@ -60,12 +62,16 @@ function App() {
     fetchData();
   }, []);
 
+  const goToFirstPage = () => {
+    routeNavigator.go(-historyManager.getCurrentPosition());
+  };
+
   const go = (path: string) => {
     routeNavigator.push(path);
   };
 
   const modal = (
-    <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal(false, {replacePanel: isFirstPage})}>
+    <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal(false, {replace: isFirstPage})}>
       <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK}></PersikModal>
       <BlockerModal nav={HOME_PANEL_MODALS.BLOCKER} />
       <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser}></UserModal>
@@ -87,7 +93,7 @@ function App() {
               activePanel={defaultActivePanel || DEFAULT_VIEW_PANELS.HOME}
               onSwipeBack={() => routeNavigator.back()}
             >
-              <Home nav={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} go={go} />
+              <Home nav={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} go={go} goToFirstPage={goToFirstPage} />
               <Persik nav={DEFAULT_VIEW_PANELS.PERSIK} />
               <Blocker nav={DEFAULT_VIEW_PANELS.BLOCKER} />
             </View>

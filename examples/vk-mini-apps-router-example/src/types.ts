@@ -6,6 +6,10 @@ export type GoFunctionProp = {
   go: (path: string) => void,
 };
 
+export type goToFirstPageProp = {
+  goToFirstPage: () => void,
+};
+
 export type UserInfo = {
   photo_200?: string,
   first_name?: string,

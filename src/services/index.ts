@@ -7,3 +7,4 @@ export * from './RouteNavigator.type';
 export * from './TransactionExecutor';
 export * from './ViewHistory';
 export * from './ViewNavigationRecord.type';
+export * from './HistoryManager';

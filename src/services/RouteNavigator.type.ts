@@ -3,7 +3,7 @@ import { BlockerFunction, Params } from '@remix-run/router';
 
 export interface NavigationOptions {
   keepSearchParams?: boolean;
-  state?: Record<string, unknown>;
+  state?: Record<string, unknown> | null;
 }
 
 type NavigationPath = {

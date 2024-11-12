@@ -1,24 +1,29 @@
-import { Action, RouterState } from '@remix-run/router';
+import { Action, AgnosticRouteMatch, RouterState } from '@remix-run/router';
 import { getRouteContext } from '../utils/utils';
 import { STATE_KEY_SHOW_POPOUT } from '../const';
 import { ViewNavigationRecord } from './ViewNavigationRecord.type';
+import { PageInternal } from '../type';
 
 export class ViewHistory {
   private history: ViewNavigationRecord[] = [];
   private positionInternal = -1;
 
   updateNavigation(state: RouterState): void {
-    const record = this.getViewRecordFromState(state);
-    if (!record) {
+    const { match } = getRouteContext(state);
+
+    if (!match) {
       return;
     }
+
+    const record = this.createViewRecord(state, match);
+
     switch (state.historyAction) {
       case Action.Push:
         this.push(record);
         break;
       case Action.Pop:
-        if (this.hasKey(record.locationKey)) {
-          this.pop(record);
+        if (this.hasKey(state.location.key)) {
+          this.pop(state);
         } else {
           // В случае, если пользователь введет в адресную строку новый хэш, мы поймаем POP событие с новой локацией.
           this.push(record);
@@ -35,7 +40,7 @@ export class ViewHistory {
   }
 
   get panelsHistory(): string[] {
-    if (this.positionInternal < 0) {
+    if (this.history.length < 0) {
       return [];
     }
     const currentView = this.history[this.positionInternal].view;
@@ -45,11 +50,16 @@ export class ViewHistory {
       .slice(0, rightLimit > -1 ? rightLimit : reversedClone.length)
       .filter((item) => !item.modal && !item.popout)
       .reverse();
+
     return historyCopy.map(({ panel }) => panel);
   }
 
   get position(): number {
     return this.positionInternal;
+  }
+
+  get historyStack(): ViewNavigationRecord[] {
+    return this.history.map((item) => ({ ...item }));
   }
 
   isPopForward(historyAction: Action, key: string): boolean {
@@ -71,15 +81,17 @@ export class ViewHistory {
     this.history = this.history.slice(0, this.positionInternal + 1);
     this.history.push(record);
     this.positionInternal = this.history.length - 1;
+    record.position = this.position;
   }
 
   private replace(record: ViewNavigationRecord): void {
-    this.history[this.positionInternal] = record;
+    this.history[this.position] = record;
+    record.position = this.position;
   }
 
-  private pop(record: ViewNavigationRecord): void {
+  private pop(state: RouterState): void {
     this.positionInternal = this.history.findIndex(
-      ({ locationKey }) => locationKey === record.locationKey,
+      ({ locationKey }) => locationKey === state.location.key,
     );
   }
 
@@ -87,16 +99,21 @@ export class ViewHistory {
     return Boolean(this.history.find(({ locationKey }) => locationKey === key));
   }
 
-  private getViewRecordFromState(state: RouterState): ViewNavigationRecord | undefined {
-    const context = getRouteContext(state);
-    if (!context.match) {
-      return undefined;
-    }
-    const { route } = context.match;
+  private createViewRecord(
+    state: RouterState,
+    match: AgnosticRouteMatch<string, PageInternal>,
+  ): ViewNavigationRecord {
+    const { route } = match;
+
     return {
+      position: -1,
+      path: state.location.pathname,
+      state: state.location.state,
+      root: 'root' in route ? route.root : undefined,
       view: route.view,
       panel: route.panel,
       modal: 'modal' in route ? route.modal : undefined,
+      tab: route.tab,
       popout: state.location.state?.[STATE_KEY_SHOW_POPOUT],
       locationKey: state.location.key,
     };
