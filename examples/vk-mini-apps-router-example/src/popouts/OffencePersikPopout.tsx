@@ -1,6 +1,5 @@
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Alert } from '@vkontakte/vkui';
-import React from 'react';
 
 export function OffencePersikPopout() {
   const routeNavigator = useRouteNavigator();
@@ -18,7 +17,7 @@ export function OffencePersikPopout() {
     ]}
     actionsLayout="horizontal"
     onClose={() => routeNavigator.hidePopout()}
-    header="Еда персика"
-    text="Вы уверены, что хотите забрать у персика еду?"
+    title="Еда персика"
+    description="Вы уверены, что хотите забрать у персика еду?"
   />;
 }

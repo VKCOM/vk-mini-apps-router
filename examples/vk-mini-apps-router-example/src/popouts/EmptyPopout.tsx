@@ -1,6 +1,5 @@
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Alert } from '@vkontakte/vkui';
-import React from 'react';
 
 export const EmptyPopout = () => {
   const routeNavigator = useRouteNavigator();
@@ -19,8 +18,8 @@ export const EmptyPopout = () => {
       ]}
       actionsLayout="horizontal"
       onClose={() => routeNavigator.hidePopout()}
-      header="Просто попап"
-      text="Точно хотите нажать красную кнопку?"
+      title="Просто попап"
+      description="Точно хотите нажать красную кнопку?"
     />
   );
 }

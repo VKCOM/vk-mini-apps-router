@@ -14,7 +14,7 @@ import { NavProp } from '../types';
 
 const PASSWORD = '1234';
 
-export const BlockerModal = (props: NavProp) => {
+export const BlockerModalContent = () => {
   const routeNavigator = useRouteNavigator();
   const unblock = useRef<() => void>();
   const passInput = useRef<HTMLInputElement>(null);
@@ -45,7 +45,6 @@ export const BlockerModal = (props: NavProp) => {
   };
 
   return (
-    <ModalPage id={props.nav} header={<ModalPageHeader>Разблокируйте навигацию!</ModalPageHeader>}>
       <FormLayoutGroup>
         <FormItem top={`Код разблокировки ${PASSWORD}`}>
           <Input getRef={passInput} id="pass" type="password" placeholder={PASSWORD} />
@@ -57,6 +56,12 @@ export const BlockerModal = (props: NavProp) => {
           </Button>
         </FormItem>
       </FormLayoutGroup>
-    </ModalPage>
   );
 };
+
+export const BlockerModal = (props: NavProp) => (
+    <ModalPage id={props.nav} header={<ModalPageHeader>Разблокируйте навигацию!</ModalPageHeader>}>
+      <BlockerModalContent />
+    </ModalPage>
+  );
+

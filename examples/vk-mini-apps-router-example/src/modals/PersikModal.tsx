@@ -13,22 +13,30 @@ import { OffencePersikPopout } from '../popouts/OffencePersikPopout';
 
 const IMAGES = { persik, persik_fish, persik_sad };
 
-export const PersikModal = (props: NavProp) => {
+export const PersikModalContent = () => {
   const routeNavigator = useRouteNavigator();
   const popup = OffencePersikPopout();
 
   const { em: modalEmotion, emotion: panelEmotion } = useParams({ modal: PERSIK_PANEL_MODALS.PERSIK }) ?? {};
   const image: string = IMAGES[`persik${modalEmotion ? '_' : ''}${modalEmotion ?? ''}` as keyof typeof IMAGES];
+  
   return (
-      <ModalPage
-        id={props.nav}
-        header={<ModalPageHeader>Персик в модалке</ModalPageHeader>}
-      >
-        <Group>
+    <>
+       <Group>
           <CellButton onClick={() => routeNavigator.push(`/persik${panelEmotion ? '/' + panelEmotion : ''}/user_modal`, { keepSearchParams: true })}>Информация о пользователе</CellButton>
           <CellButton onClick={() => routeNavigator.showPopout(popup)}>Открыть Popout из модального окна</CellButton>
         </Group>
         <img height={130} className="Persik" src={image} alt="Persik The Cat" />
-      </ModalPage>
+    </>
   );
 };
+
+export const PersikModal = (props: NavProp) => (
+      <ModalPage
+        id={props.nav}
+        header={<ModalPageHeader>Персик в модалке</ModalPageHeader>}
+      >
+        <PersikModalContent />
+      </ModalPage>
+  );
+

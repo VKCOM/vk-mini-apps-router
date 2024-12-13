@@ -13,7 +13,7 @@ export const UserModal = ({ fetchedUser, nav }: UserModalProps) => {
       header={<ModalPageHeader>Информация о пользователе</ModalPageHeader>}
     >
       {fetchedUser &&
-        <Group header={<Header mode="secondary">Информация о пользователе, полученная через VK Bridge</Header>}>
+        <Group header={<Header>Информация о пользователе, полученная через VK Bridge</Header>}>
           <Cell
             before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200} /> : null}
             subtitle={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}

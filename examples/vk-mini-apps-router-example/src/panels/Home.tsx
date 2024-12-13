@@ -10,23 +10,24 @@ import {
   ButtonGroup,
   Avatar,
 } from '@vkontakte/vkui';
-import { GoFunctionProp, goToFirstPageProp, NavProp, UserInfo } from '../types';
+import { GoFunctionProp, GoToFirstPageProp, NavProp, UserInfo } from '../types';
 import { useEnableSwipeBack } from '@vkontakte/vk-mini-apps-router';
 import { AppMap } from '../appMap/AppMap';
 
 type HomeProps = NavProp &
   GoFunctionProp & {
     fetchedUser: UserInfo;
-  } & goToFirstPageProp;
+  } & GoToFirstPageProp;
 
 export const Home = ({ nav, go, goToFirstPage, fetchedUser }: HomeProps) => {
   useEnableSwipeBack();
+
   return (
     <Panel nav={nav}>
       <PanelHeader>Главная</PanelHeader>
       {fetchedUser && (
         <Group
-          header={<Header mode="secondary">Данные пользователя, полученные через VK Bridge</Header>}
+          header={<Header>Данные пользователя, полученные через VK Bridge</Header>}
         >
           <Cell
             before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200} /> : null}
