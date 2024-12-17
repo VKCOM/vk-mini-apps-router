@@ -72,9 +72,9 @@ function App() {
 
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={() => routeNavigator.hideModal(false, {replace: isFirstPage})}>
-      <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK}></PersikModal>
+      <PersikModal nav={PERSIK_PANEL_MODALS.PERSIK} />
       <BlockerModal nav={HOME_PANEL_MODALS.BLOCKER} />
-      <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser}></UserModal>
+      <UserModal nav={HOME_PANEL_MODALS.USER} fetchedUser={fetchedUser} />
       <OnboardingOne nav={HOME_PANEL_MODALS.ONBOARDING_1} />
       <OnboardingTwo nav={HOME_PANEL_MODALS.ONBOARDING_2} />
       <OnboardingThree nav={HOME_PANEL_MODALS.ONBOARDING_3} />
@@ -83,7 +83,9 @@ function App() {
 
   const history = activeModal || routerPopout ? [] : panelsHistory;
   return (
-    <SplitLayout popout={routerPopout} modal={modal}>
+    <SplitLayout>
+      {routerPopout}
+      {modal}
       <SplitCol>
         <Epic activeStory={activeRoot}>
           <Root activeView={activeView} nav={DEFAULT_ROOT}>

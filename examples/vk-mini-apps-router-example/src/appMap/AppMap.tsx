@@ -80,7 +80,7 @@ function renderModal(modal: ModalButton, location: ActiveLocation): JSX.Element 
 export const AppMap = () => {
   const location = useActiveVkuiLocation();
   return (
-    <Group className="AppMap" header={<Header mode="secondary">Карта навигации в приложении</Header>}>
+    <Group className="AppMap" header={<Header>Карта навигации в приложении</Header>}>
       {arrayToTree(completeRoutes(routes.getRoutes())).map((root) => renderRoot(root, location as any))}
     </Group>
   )

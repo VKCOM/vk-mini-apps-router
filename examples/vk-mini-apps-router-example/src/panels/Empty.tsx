@@ -21,7 +21,7 @@ export const Empty = ({ nav }: NavProp) => {
   return (
     <Panel nav={nav}>
       <PanelHeader>Пустая страница</PanelHeader>
-      <Group header={<Header mode="secondary">{groupHeader}</Header>}>
+      <Group header={<Header>{groupHeader}</Header>}>
         <ButtonGroup stretched mode="vertical">
           <ButtonGroup stretched mode="horizontal">
             <Button

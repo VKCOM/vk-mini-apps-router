@@ -43,7 +43,7 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_1 &&
         <Group
-          header={<Header mode="secondary">Другой Root с Tabs</Header>}
+          header={<Header>Другой Root с Tabs</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_1}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_1}
           tabIndex={0}
@@ -65,7 +65,7 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_2 &&
         <Group
-          header={<Header mode="secondary">Тут ничего</Header>}
+          header={<Header>Тут ничего</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_2}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_2}
           tabIndex={0}
@@ -78,7 +78,7 @@ export const Alternative = ({ nav, go }: NavProp & GoFunctionProp) => {
 
       {activeTab === ALTERNATIVE_PANEL_TABS.TAB_3 &&
         <Group
-          header={<Header mode="secondary">Модальные окна над табом</Header>}
+          header={<Header>Модальные окна над табом</Header>}
           id={`${ALTERNATIVE_PANEL_TABS.TAB_3}_content`}
           aria-labelledby={ALTERNATIVE_PANEL_TABS.TAB_3}
           tabIndex={0}

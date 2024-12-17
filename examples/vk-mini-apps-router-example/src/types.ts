@@ -6,7 +6,7 @@ export type GoFunctionProp = {
   go: (path: string) => void,
 };
 
-export type goToFirstPageProp = {
+export type GoToFirstPageProp = {
   goToFirstPage: () => void,
 };
 
