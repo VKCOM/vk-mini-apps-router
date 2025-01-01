@@ -4,14 +4,11 @@ import { EventBus } from '../services/EventBus';
 
 export function useThrottledContext<T>(context: Context<T>): [T, T | null] {
   const contextValue = useContext(context);
-  const contextName = context.displayName;
-  const [prevValue, setPrevValue] = useState<T>(contextValue);
-  const [throttledValue, setThrottledValue] = useState<T>(contextValue);
+  const contextName = context.displayName ?? '';
+  const initialContextData = ContextThrottleService.retrieveContextInfo(contextName, contextValue);
 
-  if (!contextName) {
-    console.error('No context display name found');
-    return [contextValue, null];
-  }
+  const [prevValue, setPrevValue] = useState<T | null>(initialContextData.prevValue);
+  const [throttledValue, setThrottledValue] = useState<T>(initialContextData.throttledValue);
 
   useEffect(() => {
     const unsubscribe = EventBus.subscribe<(throttleValue: T, prevValue: T) => void>(
@@ -28,6 +25,11 @@ export function useThrottledContext<T>(context: Context<T>): [T, T | null] {
   useEffect(() => {
     ContextThrottleService.triggerContextUpdate(contextName, contextValue);
   }, [contextValue, contextName]);
+
+  if (!contextName) {
+    console.error('No context display name found');
+    return [contextValue, null];
+  }
 
   return [throttledValue, prevValue];
 }
