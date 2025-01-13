@@ -27,9 +27,11 @@ export class NavigationTransaction {
 
   doNext(): void {
     if (!this.finished) {
-      this.actions[this.pointer]();
-      this.pointer += 1;
+      const action = this.actions[this.pointer];
+      this.pointer++;
+      action();
     }
+
     // this.finished изменился при выполнении предыдущего условия - нельзя объединить в if-else.
     if (this.finished) {
       this.resolve();

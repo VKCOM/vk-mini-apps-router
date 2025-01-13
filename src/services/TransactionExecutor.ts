@@ -38,14 +38,11 @@ export class TransactionExecutor {
   public static async doNext(): Promise<void> {
     const transactionExecutor = TransactionExecutor.getInstance();
     const transactions = transactionExecutor.transactions;
-    // Нужно делать асинхронно, иначе будет бесконечный цикл навигация-изменение стейта-навигация...
-    setTimeout(() => {
-      if (transactions.length) {
-        transactions[0].doNext();
-        if (transactions[0].finished) {
-          transactions.shift();
-        }
+    if (transactions.length) {
+      transactions[0].doNext();
+      if (transactions[0]?.finished) {
+        transactions.shift();
       }
-    });
+    }
   }
 }
