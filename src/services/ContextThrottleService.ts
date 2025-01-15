@@ -1,10 +1,10 @@
 import { EventBus } from './EventBus';
 import { TransactionExecutor } from './TransactionExecutor';
 
-interface ContextThrottleInfo {
-  prevValue: unknown;
+interface ContextThrottleInfo<T = unknown> {
+  prevValue: T | null;
   updateTimerId: number;
-  throttledValue: unknown;
+  throttledValue: T;
   lastUpdateTimestamp: number;
 }
 
@@ -17,7 +17,7 @@ export class ContextThrottleService {
   private static instance?: ContextThrottleService;
   private interval = 0;
   private throttled = true;
-  private contextThrottleMap: Record<string, ContextThrottleInfo> = {};
+  private contextThrottleMap: Map<string, ContextThrottleInfo> = new Map();
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
@@ -30,21 +30,22 @@ export class ContextThrottleService {
     return ContextThrottleService.instance;
   }
 
-  private getContextThrottleInfoByName(contextName: string) {
-    if (!(contextName in this.contextThrottleMap)) {
-      this.contextThrottleMap[contextName] = {
+  private getWithInitThrottleInfoByName<T>(
+    contextName: string,
+    contextValue: T,
+  ): ContextThrottleInfo<T> {
+    if (!this.contextThrottleMap.has(contextName)) {
+      const contextData = {
         prevValue: null,
-        throttledValue: null,
+        throttledValue: contextValue,
         lastUpdateTimestamp: 0,
         updateTimerId: 0,
       };
-    }
-    return this.contextThrottleMap[contextName];
-  }
 
-  private isContextChange<T>(contextName: string, newValue: T) {
-    const contextData = this.getContextThrottleInfoByName(contextName);
-    return !(newValue === contextData.throttledValue);
+      this.contextThrottleMap.set(contextName, contextData);
+    }
+
+    return this.contextThrottleMap.get(contextName) as ContextThrottleInfo<T>;
   }
 
   private getTimeUntilNextUpdate(lastUpdateTimestamp: number) {
@@ -54,7 +55,12 @@ export class ContextThrottleService {
   }
 
   private updateContextValue<T>(contextName: string, newValue: T) {
-    const contextData = this.getContextThrottleInfoByName(contextName);
+    const contextData = this.getWithInitThrottleInfoByName(contextName, newValue);
+
+    if (newValue === contextData.throttledValue) {
+      return;
+    }
+
     contextData.prevValue = contextData.throttledValue;
     contextData.lastUpdateTimestamp = Date.now();
     contextData.throttledValue = newValue;
@@ -62,9 +68,12 @@ export class ContextThrottleService {
   }
 
   private throttleUpdateContextValue<T>(contextName: string, newValue: T) {
-    const contextData = this.getContextThrottleInfoByName(contextName);
+    const contextData = this.getWithInitThrottleInfoByName(contextName, newValue);
     clearTimeout(contextData.updateTimerId);
-    if (this.isRunSyncActive()) return;
+
+    if (TransactionExecutor.isRunSyncActive) {
+      return;
+    }
 
     const lastUpdateTimestamp = contextData.lastUpdateTimestamp;
     const timeUntilNextUpdate = this.getTimeUntilNextUpdate(lastUpdateTimestamp);
@@ -78,22 +87,29 @@ export class ContextThrottleService {
     }
   }
 
-  private isRunSyncActive() {
-    return TransactionExecutor.isRunSyncActive;
-  }
-
   public static triggerContextUpdate<T>(contextName: string, newValue: T) {
     const throttledService = ContextThrottleService.getInstance();
+    const contextData = throttledService.getWithInitThrottleInfoByName(contextName, newValue);
 
-    if (!throttledService.isContextChange(contextName, newValue)) {
+    if (newValue === contextData.throttledValue) {
       return;
     }
 
-    if (!throttledService.throttled && !throttledService.isRunSyncActive()) {
+    if (!throttledService.throttled && !TransactionExecutor.isRunSyncActive) {
       throttledService.updateContextValue(contextName, newValue);
     } else {
       throttledService.throttleUpdateContextValue(contextName, newValue);
     }
+  }
+
+  public static retrieveContextInfo<T>(contextName: string, contextValue: T) {
+    const throttledService = ContextThrottleService.getInstance();
+    const { prevValue, throttledValue } = throttledService.getWithInitThrottleInfoByName(
+      contextName,
+      contextValue,
+    );
+
+    return { prevValue, throttledValue };
   }
 
   public static updateThrottledServiceSettings(settings: ContextThrottleServiceSettings) {
