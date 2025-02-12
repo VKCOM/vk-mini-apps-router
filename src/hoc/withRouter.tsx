@@ -2,10 +2,11 @@ import { ActiveVkuiLocationObject, useActiveVkuiLocation } from '../hooks/useAct
 import { RouteNavigator } from '../services/RouteNavigator.type';
 import { ComponentType } from 'react';
 import { getDisplayName } from '../utils/utils';
-import { useParams, usePopout, useRouteNavigator } from '../hooks/hooks';
+import { usePopout, useRouteNavigator } from '../hooks/hooks';
 import { Params } from '@remix-run/router';
 import { useFirstPageCheck } from '../hooks/useFirstPageCheck';
 import { SetURLSearchParams, useSearchParams } from '../hooks/useSearchParams';
+import { useParams } from '../hooks/useParams';
 
 type RouterProps = {
   location: ActiveVkuiLocationObject;

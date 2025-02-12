@@ -103,12 +103,13 @@ export class ViewHistory {
     state: RouterState,
     match: AgnosticRouteMatch<string, PageInternal>,
   ): ViewNavigationRecord {
-    const { route } = match;
+    const { route, params } = match;
 
     return {
       position: -1,
       path: state.location.pathname,
       state: state.location.state,
+      params,
       root: 'root' in route ? route.root : undefined,
       view: route.view,
       panel: route.panel,
