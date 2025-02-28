@@ -1,7 +1,12 @@
 import { ReactElement, ReactNode, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Action, Router } from '@remix-run/router';
 import bridge from '@vkontakte/vk-bridge';
-import { SEARCH_PARAM_INFLATE, STATE_KEY_SHOW_POPOUT, UNIVERSAL_URL } from '../const';
+import {
+  DEFAULT_PATH_PARAM_NAME,
+  SEARCH_PARAM_INFLATE,
+  STATE_KEY_SHOW_POPOUT,
+  UNIVERSAL_URL,
+} from '../const';
 import { PopoutContext, RouteContext, RouterContext } from '../contexts';
 import { getRouteContext, fillHistory, createSearchParams, getHrefWithoutHash } from '../utils';
 import {
@@ -78,7 +83,12 @@ export function RouterProvider({
     if (useBridge) {
       bridge.subscribe((event) => {
         if (event.detail.type === 'VKWebAppChangeFragment') {
-          router.navigate(event.detail.data.location, { replace: true });
+          const location = event.detail.data.location;
+          const hashParams = new URLSearchParams(location);
+          const pathFromHash = hashParams.get(DEFAULT_PATH_PARAM_NAME);
+
+          // Независимо от используемого роутера hashParamRouter или HashRouter оба формата ссылок в VK обрабатываются корректно.
+          router.navigate(pathFromHash ?? location, { replace: true });
         }
       });
 

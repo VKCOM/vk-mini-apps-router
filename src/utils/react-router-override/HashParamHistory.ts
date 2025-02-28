@@ -3,12 +3,11 @@ import { createLocation } from './createLocation';
 import { UrlHistoryOptions } from './UrlHistoryOptions.type';
 import { getUrlBasedHistory } from './getUrlBasedHistory';
 import { warning } from '../utils';
+import { DEFAULT_PATH_PARAM_NAME } from '../../const';
 
 export type HashParamHistoryOptions = UrlHistoryOptions & {
   paramName?: string;
 };
-
-const DEFAULT_PATH_PARAM_NAME = 'path';
 
 /**
  * Специальная история для интеграции с платформой Mini Apps ВКонтакте.
