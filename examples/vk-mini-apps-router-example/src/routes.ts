@@ -124,11 +124,21 @@ export const hierarchy: RouteLeaf[] = [
       {
         path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion`,
         children: [
-          { path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}` },
+          { path: `/${DEFAULT_VIEW_PANELS.PERSIK}/:emotion/${PERSIK_PANEL_MODALS.PERSIK}/:em` },
         ],
       },
+      {
+        path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}`,
+        children: [{
+          path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}`,
+          children: [{
+            path: `/${ALTERNATIVE_VIEW_PANELS.ALTERNATIVE}/${ALTERNATIVE_PANEL_TABS.TAB_3}/${HOME_PANEL_MODALS.USER}`
+          }
+          ]
+        }]
+      }
     ],
-  },
+  }
 ];
 
  export const router = createHashRouter(routes.getRoutes());
