@@ -15,7 +15,7 @@ function flattenBranch(
     .map((leaf) => {
       const leafWithParents = { ...leaf, parents };
       return leaf.children
-        ? flattenBranch(leaf.children, [...parents, leafWithParents])
+        ? [leafWithParents, ...flattenBranch(leaf.children, [...parents, leafWithParents])]
         : leafWithParents;
     })
     .flat();
@@ -29,12 +29,17 @@ export function fillHistory(
   const leafs = flattenBranch(config, []);
   const currentLocation = context.state.location;
   const params = context.match?.params ?? {};
+
   const targetPath = context.match?.route.path;
-  const targetLeaf = leafs.find((leaf) => leaf.path === targetPath);
-  if (!targetLeaf) {
+  const potentialLeafs = leafs.filter((leaf) => leaf.path === targetPath);
+
+  if (!potentialLeafs.length) {
     return;
   }
+
+  const targetLeaf = potentialLeafs.find((leaf) => !leaf.children?.length) ?? potentialLeafs[0];
   const records = targetLeaf.parents.map(({ path }) => fillParamsIntoPath(path, params));
+
   setTimeout(() => {
     if (records.length) {
       const searchParams = createSearchParams(currentLocation.search);
