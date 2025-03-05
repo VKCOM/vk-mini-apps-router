@@ -87,7 +87,6 @@ export function RouterProvider({
           const hashParams = new URLSearchParams(location);
           const pathFromHash = hashParams.get(DEFAULT_PATH_PARAM_NAME);
 
-          // Независимо от используемого роутера hashParamRouter или HashRouter оба формата ссылок в VK обрабатываются корректно.
           router.navigate(pathFromHash ?? location, { replace: true });
         }
       });
