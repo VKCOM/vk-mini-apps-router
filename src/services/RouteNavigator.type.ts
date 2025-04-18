@@ -1,9 +1,11 @@
 import { Page, PageWithParams } from '../page-types/common';
 import { BlockerFunction, Params } from '@remix-run/router';
 
+export type NavigationState = Record<string, unknown> | null;
+
 export interface NavigationOptions {
   keepSearchParams?: boolean;
-  state?: Record<string, unknown> | null;
+  state?: NavigationState;
 }
 
 type NavigationPath = {
@@ -44,7 +46,7 @@ export interface RouteNavigator {
 
   go(to: number): Promise<void>;
 
-  showModal(id: string): Promise<void>;
+  showModal(id: string, options?: { state?: NavigationState }): Promise<void>;
 
   block(onLeave: BlockerFunction): () => void;
 

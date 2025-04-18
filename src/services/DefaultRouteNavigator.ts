@@ -14,7 +14,12 @@ import {
   STATE_KEY_SHOW_MODAL,
   STATE_KEY_SHOW_POPOUT,
 } from '../const';
-import { NavigationOptions, NavigationTarget, RouteNavigator } from './RouteNavigator.type';
+import {
+  NavigationOptions,
+  NavigationTarget,
+  RouteNavigator,
+  NavigationState,
+} from './RouteNavigator.type';
 import { buildPanelPathFromModalMatch } from '../utils/buildPanelPathFromModalMatch';
 import { InternalRouteConfig, ModalWithRoot } from '../type';
 import { ViewHistory } from './ViewHistory';
@@ -90,9 +95,13 @@ export class DefaultRouteNavigator implements RouteNavigator {
     return transaction.donePromise;
   }
 
-  public async showModal(id: string): Promise<void> {
+  public async showModal(id: string, options?: { state?: NavigationState }): Promise<void> {
     await this.router.navigate(this.router.state.location, {
-      state: { [STATE_KEY_SHOW_MODAL]: id, [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true },
+      state: {
+        ...options?.state,
+        [STATE_KEY_SHOW_MODAL]: id,
+        [STATE_KEY_BLOCK_FORWARD_NAVIGATION]: true,
+      },
       replace: isModalShown(this.router.state.location),
     });
   }
