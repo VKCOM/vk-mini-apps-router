@@ -1,6 +1,6 @@
 {
   "name": "@vkontakte/vk-mini-apps-router",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "React-роутер для мини-приложений ВКонтакте, построенных на VKUI",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
