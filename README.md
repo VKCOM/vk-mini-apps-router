@@ -1,7 +1,7 @@
 
 # vk-mini-apps-router
 
-Библиотека vk-mini-apps-router — решение для декларативной маршрутизации и навигации для [мини-приложений](https://dev.vk.com/mini-apps/overview) ВКонтакте, созданных с помощью библиотеки [VKUI](https://github.com/VKCOM/VKUI).
+Библиотека vk-mini-apps-router — решение для декларативной маршрутизации и навигации для [мини-приложений](https://dev.vk.ru/mini-apps/overview) ВКонтакте, созданных с помощью библиотеки [VKUI](https://github.com/VKCOM/VKUI).
 
 ## Ключевые особенности
 
@@ -33,8 +33,8 @@
 
 ## Документация и ресурсы
 
-* https://dev.vk.com/libraries/router — документация библиотеки.
+* https://dev.vk.ru/libraries/router — документация библиотеки.
 
 * [Пример использования](https://github.com/VKCOM/vk-mini-apps-router/tree/master/examples/vk-mini-apps-router-example).
 
-* [VK Mini Apps](https://vk.com/vkappsdev) — сообщество разработчиков мини-приложений ВКонтакте.
+* [VK Mini Apps](https://vk.ru/vkappsdev) — сообщество разработчиков мини-приложений ВКонтакте.

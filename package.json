@@ -1,17 +1,17 @@
 {
   "name": "@vkontakte/vk-mini-apps-router",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "React-роутер для мини-приложений ВКонтакте, построенных на VKUI",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
-  "author": "VK Team <https://vk.com/team>",
+  "author": "VK Team <https://vk.ru/team>",
   "license": "MIT",
-  "homepage": "https://dev.vk.com/libraries/router",
+  "homepage": "https://dev.vk.ru/libraries/router",
   "bugs": "https://github.com/VKCOM/vk-mini-apps-router/issues",
   "contributors": [
     {
       "name": "Nikita Shvyryaev",
-      "url": "https://vk.com/shvyryaevng"
+      "url": "https://vk.ru/shvyryaevng"
     }
   ],
   "repository": {
