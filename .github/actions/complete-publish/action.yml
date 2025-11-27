@@ -17,8 +17,6 @@ inputs:
   token:
     description: token for write access to repository
     required: true
-  npm_token:
-    description: token for publish package to NPM
 
 runs:
   using: composite
@@ -36,13 +34,9 @@ runs:
     - name: Publishing release
       if: ${{ !inputs.npm_tag }}
       run: yarn publish --access public --non-interactive
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm_token }}
       shell: bash
 
     - name: Publishing release with npm_tag
       if: ${{ inputs.npm_tag }}
       run: yarn publish --access public --non-interactive --tag ${{ inputs.npm_tag }}
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm_token }}
       shell: bash
