@@ -23,12 +23,12 @@ runs:
   steps:
     - name: Publishing release
       if: ${{ !inputs.npm_tag }}
-      run: yarn npm publish --access public
+      run: npm publish --access public
       shell: bash
 
     - name: Publishing release with npm_tag
       if: ${{ inputs.npm_tag }}
-      run: yarn npm publish --access public --tag ${{ inputs.npm_tag }}
+      run: npm publish --access public --tag ${{ inputs.npm_tag }}
       shell: bash
 
     - name: Commit version changes
