@@ -21,6 +21,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup NodeJS for OIDC
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        always-auth: true
+        registry-url: 'https://registry.npmjs.org'
+
     - name: Publishing release
       if: ${{ !inputs.npm_tag }}
       run: npm publish --access public
