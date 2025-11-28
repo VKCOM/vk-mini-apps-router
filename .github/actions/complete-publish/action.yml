@@ -21,6 +21,22 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Publishing release
+      if: ${{ !inputs.npm_tag }}
+      run: yarn npm publish --access public
+      shell: bash
+
+    - name: Publishing release with npm_tag
+      if: ${{ inputs.npm_tag }}
+      run: yarn npm publish --access public --tag ${{ inputs.npm_tag }}
+      shell: bash
+
+    - name: Commit version changes
+      run: |
+        git add package.json
+        git commit -m "bump(vk-mini-apps-router): from ${{ inputs.prev_version }} to ${{ inputs.next_version }}"
+      shell: bash
+
     - name: Create tag
       run: git tag vk-mini-apps-router@${{ inputs.next_version }}
       shell: bash
@@ -30,13 +46,4 @@ runs:
       with:
         github_token: ${{ inputs.token }}
         branch: ${{ inputs.branch }}
-
-    - name: Publishing release
-      if: ${{ !inputs.npm_tag }}
-      run: yarn publish --access public --non-interactive
-      shell: bash
-
-    - name: Publishing release with npm_tag
-      if: ${{ inputs.npm_tag }}
-      run: yarn publish --access public --non-interactive --tag ${{ inputs.npm_tag }}
-      shell: bash
+        tags: true
