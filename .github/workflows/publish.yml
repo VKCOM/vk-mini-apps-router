@@ -62,9 +62,9 @@ jobs:
         run: npm publish --access public
         shell: bash
 
-      - name: Commit and tag version bump
+      - name: Commit and tag
         run: |
-          git add package.json
+          git add -A
           git commit -m "bump(vk-mini-apps-router): from ${{ steps.updated_versions_info.outputs.prev_version }} to ${{ steps.updated_versions_info.outputs.next_version }}"
           git tag vk-mini-apps-router@${{ steps.updated_versions_info.outputs.next_version }}
         shell: bash
