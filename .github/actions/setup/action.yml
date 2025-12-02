@@ -11,6 +11,7 @@ runs:
         cache: 'yarn'
         always-auth: true
         registry-url: 'https://registry.npmjs.org'
+        scope: '@vkontakte'
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile --ignore-scripts
