@@ -26,7 +26,12 @@ runs:
         echo "npm version: $(npm --version)"
         echo "node version: $(node --version)"
         npm whoami --registry=https://registry.npmjs.org/ || echo "Not authenticated"
-        cat ~/.npmrc || echo "No .npmrc file"
+        if [ -f ~/.npmrc ]; then
+          echo ".npmrc file exists"
+          grep -q "@vkontakte:registry" ~/.npmrc && echo "Scope @vkontakte configured" || echo "Scope @vkontakte not found"
+        else
+          echo "No .npmrc file"
+        fi
       shell: bash
 
     - name: Publishing release
