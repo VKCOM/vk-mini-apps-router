@@ -21,6 +21,19 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Debug npm configuration
+      run: |
+        echo "npm version: $(npm --version)"
+        echo "node version: $(node --version)"
+        npm whoami --registry=https://registry.npmjs.org/ || echo "Not authenticated"
+        if [ -f ~/.npmrc ]; then
+          echo ".npmrc file exists"
+          grep -q "@vkontakte:registry" ~/.npmrc && echo "Scope @vkontakte configured" || echo "Scope @vkontakte not found"
+        else
+          echo "No .npmrc file"
+        fi
+      shell: bash
+
     - name: Publishing release
       if: ${{ !inputs.npm_tag }}
       run: npm publish --access public
