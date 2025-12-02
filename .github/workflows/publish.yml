@@ -54,6 +54,10 @@ jobs:
       - name: Validation
         uses: ./.github/actions/validation
 
+      - name: Update npm
+        run: npm install -g npm@latest
+        shell: bash
+
       - name: Publish to npm
         run: npm publish --access public
         shell: bash
