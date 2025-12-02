@@ -21,6 +21,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Debug npm configuration
+      run: |
+        echo "npm version: $(npm --version)"
+        echo "node version: $(node --version)"
+        npm whoami --registry=https://registry.npmjs.org/ || echo "Not authenticated"
+        cat ~/.npmrc || echo "No .npmrc file"
+      shell: bash
+
     - name: Publishing release
       if: ${{ !inputs.npm_tag }}
       run: npm publish --access public
