@@ -23,18 +23,17 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.DEVTOOLS_GITHUB_TOKEN }}
 
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           always-auth: true
           registry-url: 'https://registry.npmjs.org'
-          scope: '@vkontakte'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
