@@ -38,6 +38,10 @@ jobs:
       - name: Validation
         uses: ./.github/actions/validation
 
+      - name: Publishing release
+        run: npm publish --access public
+        shell: bash
+
       - name: Complete publish
         uses: ./.github/actions/complete-publish
         with:
