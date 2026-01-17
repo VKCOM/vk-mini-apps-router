@@ -81,14 +81,17 @@ export function RouterProvider({
     });
 
     if (useBridge) {
-      bridge.subscribe((event) => {
-        if (event.detail.type === 'VKWebAppChangeFragment') {
-          const location = event.detail.data.location;
-          const hashParams = new URLSearchParams(location);
-          const pathFromHash = hashParams.get(DEFAULT_PATH_PARAM_NAME);
-
-          router.navigate(pathFromHash ?? location, { replace: true });
+      bridge.subscribe(({ detail }) => {
+        if (detail.type !== 'VKWebAppChangeFragment') {
+          return;
         }
+
+        const location = detail.data.location;
+        const hashParams = new URLSearchParams(location);
+        const pathFromHash = hashParams.get(DEFAULT_PATH_PARAM_NAME);
+        const to = pathFromHash || location || '/';
+
+        router.navigate(to, { replace: true });
       });
 
       router.subscribe((state) => {
