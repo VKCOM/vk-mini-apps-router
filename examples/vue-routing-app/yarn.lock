@@ -1568,10 +1568,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vkontakte/vk-bridge@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.9.0.tgz#24aed0217f0c508f4c62ed44fe52ce3fe7f47e53"
-  integrity sha512-fyOdtZq+68Jnp8FNmas3fnJ4b1bjc1fmAovl2afV14VeJ1KG1OwoAaE7zpVL4U4VVZJGhhdANxEsc4tBYUSkxA==
+"@vkontakte/vk-bridge@^2.15.11":
+  version "2.15.11"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.15.11.tgz#b23a3d6b1fe0aad8e719b39c9826db7ae5a97e44"
+  integrity sha512-gFkjqePxV+rBltgxtddL/MMgruG6iGeHr2s1gSTgxKQx7pks5QoafswcQ4kaz1E3AAkC0h/xbyHQApN+vobbvQ==
 
 "@vkontakte/vk-tunnel@^0.1.4":
   version "0.1.4"
