@@ -451,10 +451,10 @@
     "@typescript-eslint/parser" "^5.50.0"
     eslint-config-google "^0.9.1"
 
-"@vkontakte/prettier-config@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/prettier-config/-/prettier-config-0.1.0.tgz#4bb288d12a4a3f38cab1827bf7b94b10888773a9"
-  integrity sha512-Ec0V5C4IUUZm/7cxHX1AowXRdK3lBEoXXCDxZ8Ii6N3MPhYOXDfegen3ld40mmtQA1jMpJdiqpH+E8e8st/zTg==
+"@vkontakte/prettier-config@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@vkontakte/prettier-config/-/prettier-config-0.2.1.tgz#6f55da640b9b09c186507a165e72dee6ae8ca02b"
+  integrity sha512-eKAwPUGccR2zNIH+aEhTLFi1CSphACwYuCvzhcbYbwdwtgfLg+jSylpxN2ecAXga+/WjQeO2Us//N7TnWBGToA==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2666,10 +2666,10 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@^2.7.1:
-  version "2.8.8"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
-  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
+prettier@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.1.tgz#edf48977cf991558f4fcbd8a3ba6015ba2a3a173"
+  integrity sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==
 
 prop-types@^15.8.1:
   version "15.8.1"
