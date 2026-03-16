@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.0.0",
     "@vkontakte/eslint-plugin": "^1.2.0",
-    "@vkontakte/prettier-config": "^0.1.0",
+    "@vkontakte/prettier-config": "^0.2.1",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.1",
@@ -48,7 +48,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "prettier": "^2.7.1",
+    "prettier": "^3.8.1",
     "typescript": "^5.1.6"
   },
   "files": [
