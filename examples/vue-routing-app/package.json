@@ -31,7 +31,7 @@
     "lint-staged": "^13.2.3",
     "prettier": "^3.8.1",
     "sass": "^1.97.3",
-    "sass-loader": "^13.3.2",
+    "sass-loader": "^16.0.7",
     "typescript": "~5.9.3"
   },
   "gitHooks": {
