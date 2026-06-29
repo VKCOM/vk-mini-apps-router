@@ -11,7 +11,7 @@ export function OffencePersikPopout() {
 
     routeNavigator.runSync([
       () => routeNavigator.hidePopout(),
-      () => routeNavigator.replace('/persik/sad/persik_modal/sad', { keepSearchParams: true }), 
+      () => routeNavigator.replace('/persik/sad/persik_modal/sad', { keepSearchParams: true }),
     ]);
   }, [routeNavigator]);
 
@@ -37,7 +37,7 @@ export function OffencePersikPopout() {
         },
       ]}
       actionsLayout="horizontal"
-      onClose={handleClose}
+      onClosed={handleClose}
       title="Еда персика"
       description="Вы уверены, что хотите забрать у персика еду?"
     />
