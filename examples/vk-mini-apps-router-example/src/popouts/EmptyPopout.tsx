@@ -17,7 +17,7 @@ export const EmptyPopout = () => {
         },
       ]}
       actionsLayout="horizontal"
-      onClose={() => routeNavigator.hidePopout()}
+      onClosed={() => routeNavigator.hidePopout()}
       title="Просто попап"
       description="Точно хотите нажать красную кнопку?"
     />
